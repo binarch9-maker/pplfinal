@@ -143,6 +143,8 @@
       display: flex;
       flex-direction: column;
       background: #f5f7fa;
+      min-width: 0;
+      width: calc(100% - 260px);
     }
 
     header {
@@ -151,14 +153,14 @@
       z-index: 999;
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
       background: #fff;
+      width: 100%;
     }
 
     main {
       padding: 2rem;
       flex: 1;
-      width: 100%;
       max-width: 100%;
-      overflow-x: auto;
+      box-sizing: border-box;
     }
 
     /* Responsive */
