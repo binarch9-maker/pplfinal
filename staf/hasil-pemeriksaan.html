@@ -119,22 +119,46 @@
     }
     .vital-signs {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1rem;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
       margin-top: 1rem;
     }
     .vital-card {
       background: #fff;
-      padding: 1rem;
-      border-radius: 8px;
+      padding: 1.25rem;
+      border-radius: 12px;
       text-align: center;
       border: 2px solid #e0e0e0;
+      transition: all 0.3s ease;
+    }
+    .vital-card:hover {
+      border-color: #00796b;
+      box-shadow: 0 4px 12px rgba(0, 121, 107, 0.15);
+      transform: translateY(-2px);
     }
     .vital-card input {
       text-align: center;
       font-size: 1.5rem;
       font-weight: bold;
-      margin: 0.5rem 0;
+      margin: 0.5rem auto;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      transition: border-color 0.3s ease;
+    }
+    .vital-card input:focus {
+      border-color: #00796b;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(0, 121, 107, 0.1);
+    }
+    @media (max-width: 992px) {
+      .vital-signs {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (max-width: 576px) {
+      .vital-signs {
+        grid-template-columns: 1fr;
+      }
     }
     .medication-item {
       background: #fff;
@@ -392,37 +416,38 @@
         <h3 style="margin: 0 0 1rem 0; color: #00796b;">🩺 Tanda-tanda Vital</h3>
         <div class="vital-signs">
           <div class="vital-card">
-            <p style="margin: 0; color: #666; font-size: 0.9rem;">Tekanan Darah</p>
+            <p style="margin: 0 0 0.5rem 0; color: #666; font-size: 0.9rem; font-weight: 500;">Tekanan Darah</p>
             <div style="display: flex; gap: 0.5rem; justify-content: center; align-items: center;">
-              <input type="number" id="systolic" placeholder="120" style="width: 70px;" required> /
-              <input type="number" id="diastolic" placeholder="80" style="width: 70px;" required>
+              <input type="number" id="systolic" placeholder="120" style="width: 70px; text-align: center; font-size: 1.2rem; font-weight: bold; padding: 0.5rem;" required> 
+              <span style="font-size: 1.2rem; font-weight: bold;">/</span>
+              <input type="number" id="diastolic" placeholder="80" style="width: 70px; text-align: center; font-size: 1.2rem; font-weight: bold; padding: 0.5rem;" required>
             </div>
-            <p style="margin: 0.5rem 0 0 0; color: #666; font-size: 0.8rem;">mmHg</p>
+            <p style="margin: 0.5rem 0 0 0; color: #999; font-size: 0.8rem;">mmHg</p>
           </div>
           <div class="vital-card">
-            <p style="margin: 0; color: #666; font-size: 0.9rem;">Nadi</p>
-            <input type="number" id="pulse" placeholder="80" required>
-            <p style="margin: 0.5rem 0 0 0; color: #666; font-size: 0.8rem;">x/menit</p>
+            <p style="margin: 0 0 0.5rem 0; color: #666; font-size: 0.9rem; font-weight: 500;">Nadi</p>
+            <input type="number" id="pulse" placeholder="82" style="width: 100%; max-width: 120px; text-align: center; font-size: 1.5rem; font-weight: bold; padding: 0.5rem; border: 2px solid #e0e0e0; border-radius: 8px;" required>
+            <p style="margin: 0.5rem 0 0 0; color: #999; font-size: 0.8rem;">x/menit</p>
           </div>
           <div class="vital-card">
-            <p style="margin: 0; color: #666; font-size: 0.9rem;">Suhu</p>
-            <input type="number" step="0.1" id="temperature" placeholder="36.5" required>
-            <p style="margin: 0.5rem 0 0 0; color: #666; font-size: 0.8rem;">°C</p>
+            <p style="margin: 0 0 0.5rem 0; color: #666; font-size: 0.9rem; font-weight: 500;">Suhu</p>
+            <input type="number" step="0.1" id="temperature" placeholder="37.2" style="width: 100%; max-width: 120px; text-align: center; font-size: 1.5rem; font-weight: bold; padding: 0.5rem; border: 2px solid #e0e0e0; border-radius: 8px;" required>
+            <p style="margin: 0.5rem 0 0 0; color: #999; font-size: 0.8rem;">°C</p>
           </div>
           <div class="vital-card">
-            <p style="margin: 0; color: #666; font-size: 0.9rem;">Pernapasan</p>
-            <input type="number" id="respiration" placeholder="20" required>
-            <p style="margin: 0.5rem 0 0 0; color: #666; font-size: 0.8rem;">x/menit</p>
+            <p style="margin: 0 0 0.5rem 0; color: #666; font-size: 0.9rem; font-weight: 500;">Pernapasan</p>
+            <input type="number" id="respiration" placeholder="20" style="width: 100%; max-width: 120px; text-align: center; font-size: 1.5rem; font-weight: bold; padding: 0.5rem; border: 2px solid #e0e0e0; border-radius: 8px;" required>
+            <p style="margin: 0.5rem 0 0 0; color: #999; font-size: 0.8rem;">x/menit</p>
           </div>
           <div class="vital-card">
-            <p style="margin: 0; color: #666; font-size: 0.9rem;">Tinggi Badan</p>
-            <input type="number" id="height" placeholder="170">
-            <p style="margin: 0.5rem 0 0 0; color: #666; font-size: 0.8rem;">cm</p>
+            <p style="margin: 0 0 0.5rem 0; color: #666; font-size: 0.9rem; font-weight: 500;">Tinggi Badan</p>
+            <input type="number" id="height" placeholder="170" style="width: 100%; max-width: 120px; text-align: center; font-size: 1.5rem; font-weight: bold; padding: 0.5rem; border: 2px solid #e0e0e0; border-radius: 8px;">
+            <p style="margin: 0.5rem 0 0 0; color: #999; font-size: 0.8rem;">cm</p>
           </div>
           <div class="vital-card">
-            <p style="margin: 0; color: #666; font-size: 0.9rem;">Berat Badan</p>
-            <input type="number" id="weight" placeholder="70">
-            <p style="margin: 0.5rem 0 0 0; color: #666; font-size: 0.8rem;">kg</p>
+            <p style="margin: 0 0 0.5rem 0; color: #666; font-size: 0.9rem; font-weight: 500;">Berat Badan</p>
+            <input type="number" id="weight" placeholder="70" style="width: 100%; max-width: 120px; text-align: center; font-size: 1.5rem; font-weight: bold; padding: 0.5rem; border: 2px solid #e0e0e0; border-radius: 8px;">
+            <p style="margin: 0.5rem 0 0 0; color: #999; font-size: 0.8rem;">kg</p>
           </div>
         </div>
       </div>
