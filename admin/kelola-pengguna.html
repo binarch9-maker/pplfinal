@@ -244,10 +244,10 @@
           <span class="arrow">▸</span>
         </div>
         <div class="submenu open">
-          <a href="kelola-pengguna.html?tab=pasien" class="submenu-link active">Daftar Pasien</a>
-          <a href="kelola-pengguna.html?tab=dokter" class="submenu-link">Dokter</a>
-          <a href="kelola-pengguna.html?tab=tenaga-medis" class="submenu-link">Tenaga Medis</a>
-          <a href="kelola-pengguna.html?tab=admin" class="submenu-link">Administrator</a>
+          <a href="kelola-pengguna.html?tab=pasien" class="submenu-link" id="menu-pasien">Daftar Pasien</a>
+          <a href="kelola-pengguna.html?tab=dokter" class="submenu-link" id="menu-dokter">Dokter</a>
+          <a href="kelola-pengguna.html?tab=tenaga-medis" class="submenu-link" id="menu-tenaga-medis">Tenaga Medis</a>
+          <a href="kelola-pengguna.html?tab=admin" class="submenu-link" id="menu-admin">Administrator</a>
         </div>
       </div>
 
@@ -259,9 +259,9 @@
           <span class="arrow">▸</span>
         </div>
         <div class="submenu">
-          <a href="#" class="submenu-link">Antrean Pasien</a>
-          <a href="#" class="submenu-link">Permohonan Surat</a>
-          <a href="#" class="submenu-link">Validasi Surat</a>
+          <a href="kelola-antrean-pasien.html" class="submenu-link">Antrean Pasien</a>
+          <a href="kelola-permohonan-surat.html" class="submenu-link">Permohonan Surat</a>
+          <a href="kelola-validasi-surat.html" class="submenu-link">Validasi Surat</a>
         </div>
       </div>
 
@@ -787,6 +787,11 @@
   <script>
     // Tab switching function
     function switchUserTab(tabName) {
+      // Update URL without reload
+      const url = new URL(window.location);
+      url.searchParams.set('tab', tabName);
+      window.history.pushState({}, '', url);
+      
       // Hide all tab contents
       document.querySelectorAll('.tab-content').forEach(content => {
         content.style.display = 'none';
@@ -803,25 +808,58 @@
       document.getElementById('tab-' + tabName).style.display = 'block';
       
       // Add active class to clicked button
-      event.target.style.background = '#fff';
-      event.target.style.borderBottomColor = '#00796b';
-      event.target.style.color = '#00796b';
+      if (event && event.target) {
+        event.target.style.background = '#fff';
+        event.target.style.borderBottomColor = '#00796b';
+        event.target.style.color = '#00796b';
+      }
+      
+      // Update sidebar submenu active state
+      document.querySelectorAll('.submenu-link').forEach(link => {
+        link.classList.remove('active');
+      });
+      const activeMenuLink = document.getElementById('menu-' + tabName);
+      if (activeMenuLink) {
+        activeMenuLink.classList.add('active');
+      }
     }
 
     // On page load, check URL parameter to show correct tab
     window.addEventListener('DOMContentLoaded', function() {
       const urlParams = new URLSearchParams(window.location.search);
-      const tab = urlParams.get('tab');
-      if (tab) {
-        switchUserTab(tab);
-        // Update active tab button
-        document.querySelectorAll('.tab-btn').forEach(btn => {
-          if (btn.getAttribute('data-tab') === tab) {
-            btn.style.background = '#fff';
-            btn.style.borderBottomColor = '#00796b';
-            btn.style.color = '#00796b';
-          }
-        });
+      const tab = urlParams.get('tab') || 'pasien'; // Default to pasien if no tab specified
+      
+      // Hide all tabs first
+      document.querySelectorAll('.tab-content').forEach(content => {
+        content.style.display = 'none';
+      });
+      
+      // Show the selected tab
+      const selectedTab = document.getElementById('tab-' + tab);
+      if (selectedTab) {
+        selectedTab.style.display = 'block';
+      }
+      
+      // Update tab buttons
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        if (btn.getAttribute('data-tab') === tab) {
+          btn.style.background = '#fff';
+          btn.style.borderBottomColor = '#00796b';
+          btn.style.color = '#00796b';
+        } else {
+          btn.style.background = 'transparent';
+          btn.style.borderBottomColor = 'transparent';
+          btn.style.color = '#666';
+        }
+      });
+      
+      // Update sidebar submenu active state
+      document.querySelectorAll('.submenu-link').forEach(link => {
+        link.classList.remove('active');
+      });
+      const activeMenuLink = document.getElementById('menu-' + tab);
+      if (activeMenuLink) {
+        activeMenuLink.classList.add('active');
       }
     });
 
