@@ -361,20 +361,51 @@
                 <span class="notification-badge">3</span>
                 <div class="notification-dropdown" id="notificationDropdown">
                   <div class="notification-header">
-                    <h4>🔔 Notifikasi</h4>
-                    <a href="#" class="mark-read" onclick="markAllRead(event)">Tandai semua dibaca</a>
+                    <h4>Notifikasi</h4>
+                    <a href="#" class="mark-read">Tandai Sudah Dibaca</a>
                   </div>
-                  <div class="notification-item unread" onclick="handleNotificationClick(this, 'lab-result')">
-                    <div class="notification-time">10:15 WIB</div>
-                    <div class="notification-message">📝 Hasil lab untuk pasien RM-2025-0189 sudah tersedia</div>
+                  <div class="notification-list-header">
+                    <div class="notification-item-header unread">
+                      <div class="notification-icon-header warning">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/>
+                        </svg>
+                      </div>
+                      <div class="notification-content-header">
+                        <strong>Pasien baru mendaftar</strong>
+                        <p>A-010 telah terdaftar di antrean hari ini</p>
+                        <div class="notification-time-header">5 menit lalu</div>
+                      </div>
+                    </div>
+                    
+                    <div class="notification-item-header unread">
+                      <div class="notification-icon-header info">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+                        </svg>
+                      </div>
+                      <div class="notification-content-header">
+                        <strong>Hasil lab tersedia</strong>
+                        <p>Hasil pemeriksaan lab untuk A-008 sudah tersedia</p>
+                        <div class="notification-time-header">15 menit lalu</div>
+                      </div>
+                    </div>
+                    
+                    <div class="notification-item-header">
+                      <div class="notification-icon-header success">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                        </svg>
+                      </div>
+                      <div class="notification-content-header">
+                        <strong>Jadwal praktik diperbarui</strong>
+                        <p>Jadwal praktik Anda telah diperbarui</p>
+                        <div class="notification-time-header">1 jam lalu</div>
+                      </div>
+                    </div>
                   </div>
-                  <div class="notification-item unread" onclick="handleNotificationClick(this, 'allergy-warning')">
-                    <div class="notification-time">09:45 WIB</div>
-                    <div class="notification-message">⚠️ Pasien A-04 memiliki riwayat alergi obat (Amoxicillin)</div>
-                  </div>
-                  <div class="notification-item unread" onclick="handleNotificationClick(this, 'schedule')">
-                    <div class="notification-time">08:30 WIB</div>
-                    <div class="notification-message">✅ Jadwal praktik hari ini: 23 pasien terdaftar</div>
+                  <div class="notification-footer">
+                    <a href="#">Lihat Semua</a>
                   </div>
                 </div>
               </div>
