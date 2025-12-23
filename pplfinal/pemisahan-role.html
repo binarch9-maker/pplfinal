@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pemisahan Role - Smart Health Center Service</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .role-comparison {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+    .role-box {
+      border: 3px solid;
+      border-radius: 12px;
+      padding: 1.5rem;
+      background: #fff;
+    }
+    .role-box.pasien { border-color: #1976d2; background: linear-gradient(to bottom, #e3f2fd 0%, #fff 100%); }
+    .role-box.staf { border-color: #7b1fa2; background: linear-gradient(to bottom, #f3e5f5 0%, #fff 100%); }
+    .role-box.dokter { border-color: #388e3c; background: linear-gradient(to bottom, #e8f5e9 0%, #fff 100%); }
+    .role-box.admin { border-color: #f57c00; background: linear-gradient(to bottom, #fff3e0 0%, #fff 100%); }
+    .role-header {
+      text-align: center;
+      padding: 1rem;
+      border-radius: 8px;
+      color: #fff;
+      margin-bottom: 1rem;
+    }
+    .role-header.pasien { background: linear-gradient(135deg, #1976d2, #0d47a1); }
+    .role-header.staf { background: linear-gradient(135deg, #7b1fa2, #4a148c); }
+    .role-header.dokter { background: linear-gradient(135deg, #388e3c, #1b5e20); }
+    .role-header.admin { background: linear-gradient(135deg, #f57c00, #e65100); }
+    .feature-list {
+      list-style: none;
+      padding: 0;
+      margin: 1rem 0;
+    }
+    .feature-list li {
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .feature-list li:before {
+      content: "✅ ";
+      margin-right: 0.5rem;
+    }
+    .limitation-list {
+      list-style: none;
+      padding: 0;
+      margin: 1rem 0;
+    }
+    .limitation-list li {
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #f0f0f0;
+      color: #666;
+    }
+    .limitation-list li:before {
+      content: "❌ ";
+      margin-right: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-container">
+      <div class="logo" style="flex-direction: column; align-items: flex-start; gap: 0.25rem;">
+        <img src="img/Smarthealth-Logo.png" alt="Smart Health Logo" style="height: 45px;">
+        <p style="font-size: 0.75rem; margin: 0; color: #5f7a95;">Layanan Digital Puskesmas - Pemisahan Role</p>
+      </div>
+      <div>
+        <a href="index.html" class="btn btn-primary">Kembali ke Beranda</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="page-header">
+      <h2>📋 Pemisahan Role & Hak Akses Sistem</h2>
+      <p>Setiap role memiliki portal, menu, dan akses data yang BERBEDA</p>
+    </div>
+
+    <div class="card" style="background: #e3f2fd; border-left: 4px solid #1976d2;">
+      <h3>✅ Sistem Sudah Benar-Benar Terpisah!</h3>
+      <p style="margin: 1rem 0;">
+        Setiap role (Pasien, Tenaga Medis, Dokter, Admin) memiliki:
+      </p>
+      <ul style="line-height: 2;">
+        <li>✅ <strong>Portal terpisah</strong> dengan URL berbeda</li>
+        <li>✅ <strong>Menu navigasi berbeda</strong> sesuai fungsi role</li>
+        <li>✅ <strong>Akses data berbeda</strong> sesuai kebutuhan</li>
+        <li>✅ <strong>Fitur berbeda</strong> sesuai tanggung jawab</li>
+        <li>✅ <strong>Validasi otomatis</strong> mencegah akses tidak sah</li>
+      </ul>
+    </div>
+
+    <h3 style="text-align: center; margin: 2rem 0;">Perbandingan 4 Role</h3>
+
+    <div class="role-comparison">
+      <!-- PASIEN -->
+      <div class="role-box pasien">
+        <div class="role-header pasien">
+          <div style="font-size: 3rem; margin-bottom: 0.5rem;">👤</div>
+          <h3 style="margin: 0;">PASIEN</h3>
+          <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem;">Ahmad Ridwan</p>
+        </div>
+
+        <h4>📂 Portal</h4>
+        <p><code>/pasien/</code></p>
+
+        <h4>🎯 Akses Data</h4>
+        <p style="background: #fff3cd; padding: 0.75rem; border-radius: 4px; font-weight: bold;">
+          HANYA DATA DIRI SENDIRI
+        </p>
+
+        <h4>📋 Menu (8 halaman)</h4>
+        <ul class="feature-list">
+          <li>Dashboard</li>
+          <li>Daftar Antrean</li>
+          <li>Status Antrean</li>
+          <li>Permohonan Surat</li>
+          <li>Riwayat Surat</li>
+          <li>Jadwal Dokter</li>
+          <li>Chatbot</li>
+          <li>Profil Saya</li>
+        </ul>
+
+        <h4>❌ Tidak Bisa</h4>
+        <ul class="limitation-list">
+          <li>Lihat data pasien lain</li>
+          <li>Kelola antrean</li>
+          <li>Validasi surat</li>
+          <li>Akses menu admin/dokter</li>
+        </ul>
+
+        <a href="pasien/dashboard.html" class="btn btn-primary" style="width: 100%; margin-top: 1rem; text-align: center;">
+          Buka Portal Pasien →
+        </a>
+      </div>
+
+      <!-- TENAGA MEDIS -->
+      <div class="role-box staf">
+        <div class="role-header staf">
+          <div style="font-size: 3rem; margin-bottom: 0.5rem;">👨‍⚕️</div>
+          <h3 style="margin: 0;">TENAGA MEDIS</h3>
+          <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem;">Perawat Sri Wahyuni</p>
+        </div>
+
+        <h4>📂 Portal</h4>
+        <p><code>/staf/</code></p>
+
+        <h4>🎯 Akses Data</h4>
+        <p style="background: #fff3cd; padding: 0.75rem; border-radius: 4px; font-weight: bold;">
+          SEMUA PASIEN DI POLI
+        </p>
+
+        <h4>📋 Menu (5 halaman)</h4>
+        <ul class="feature-list">
+          <li>Dashboard</li>
+          <li>Daftar Antrean</li>
+          <li>Kelola Antrean</li>
+          <li>Validasi Surat</li>
+          <li>Hasil Pemeriksaan</li>
+        </ul>
+
+        <h4>✅ Bisa</h4>
+        <ul class="feature-list">
+          <li>Lihat semua pasien antrean</li>
+          <li>Panggil/skip antrean</li>
+          <li>Validasi surat pasien</li>
+          <li>Input tanda vital</li>
+        </ul>
+
+        <h4>❌ Tidak Bisa</h4>
+        <ul class="limitation-list">
+          <li>Buat diagnosis</li>
+          <li>Buat resep obat</li>
+          <li>Kelola user/jadwal</li>
+        </ul>
+
+        <a href="staf/dashboard.html" class="btn btn-primary" style="width: 100%; margin-top: 1rem; text-align: center; background: #7b1fa2;">
+          Buka Portal Tenaga Medis →
+        </a>
+      </div>
+
+      <!-- DOKTER -->
+      <div class="role-box dokter">
+        <div class="role-header dokter">
+          <div style="font-size: 3rem; margin-bottom: 0.5rem;">🩺</div>
+          <h3 style="margin: 0;">DOKTER</h3>
+          <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem;">dr. Ahmad Wijaya, Sp.PD</p>
+        </div>
+
+        <h4>📂 Portal</h4>
+        <p><code>/dokter/</code></p>
+
+        <h4>🎯 Akses Data</h4>
+        <p style="background: #fff3cd; padding: 0.75rem; border-radius: 4px; font-weight: bold;">
+          PASIEN YANG DITANGANI + REKAM MEDIS
+        </p>
+
+        <h4>📋 Menu (3 halaman)</h4>
+        <ul class="feature-list">
+          <li>Dashboard</li>
+          <li>Daftar Pasien Hari Ini</li>
+          <li>Rekam Medis (EMR)</li>
+        </ul>
+
+        <h4>✅ Bisa</h4>
+        <ul class="feature-list">
+          <li>Periksa pasien</li>
+          <li>Input rekam medis (SOAP)</li>
+          <li>Buat diagnosis + ICD-10</li>
+          <li>Buat resep obat</li>
+          <li>Terbitkan surat keterangan</li>
+          <li>Lihat hasil lab</li>
+        </ul>
+
+        <h4>❌ Tidak Bisa</h4>
+        <ul class="limitation-list">
+          <li>Kelola user sistem</li>
+          <li>Ubah jadwal sendiri</li>
+          <li>Kelola pengumuman</li>
+        </ul>
+
+        <a href="dokter/dashboard.html" class="btn btn-primary" style="width: 100%; margin-top: 1rem; text-align: center; background: #388e3c;">
+          Buka Portal Dokter →
+        </a>
+      </div>
+
+      <!-- ADMIN -->
+      <div class="role-box admin">
+        <div class="role-header admin">
+          <div style="font-size: 3rem; margin-bottom: 0.5rem;">👨‍💼</div>
+          <h3 style="margin: 0;">ADMINISTRATOR</h3>
+          <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem;">Admin Sistem</p>
+        </div>
+
+        <h4>📂 Portal</h4>
+        <p><code>/admin/</code></p>
+
+        <h4>🎯 Akses Data</h4>
+        <p style="background: #fff3cd; padding: 0.75rem; border-radius: 4px; font-weight: bold;">
+          SELURUH SISTEM (FULL ACCESS)
+        </p>
+
+        <h4>📋 Menu (6 halaman)</h4>
+        <ul class="feature-list">
+          <li>Dashboard</li>
+          <li>Kelola Pengguna</li>
+          <li>Kelola Jadwal Dokter</li>
+          <li>Kelola Pengumuman</li>
+          <li>Laporan</li>
+          <li>Pengaturan Sistem</li>
+        </ul>
+
+        <h4>✅ Bisa (Full Control)</h4>
+        <ul class="feature-list">
+          <li>CRUD semua user</li>
+          <li>Atur jadwal dokter</li>
+          <li>Buat pengumuman</li>
+          <li>Lihat semua laporan</li>
+          <li>Ubah pengaturan sistem</li>
+          <li>Backup & restore</li>
+        </ul>
+
+        <h4>❌ Tidak Bisa</h4>
+        <ul class="limitation-list">
+          <li>Periksa pasien (bukan dokter)</li>
+          <li>Buat resep (bukan dokter)</li>
+        </ul>
+
+        <a href="admin/dashboard.html" class="btn btn-primary" style="width: 100%; margin-top: 1rem; text-align: center; background: #f57c00;">
+          Buka Portal Admin →
+        </a>
+      </div>
+    </div>
+
+    <!-- Contoh Skenario -->
+    <div class="card" style="margin-top: 2rem;">
+      <h3>📊 Contoh Skenario: Pasien "Ahmad Ridwan" Antrean</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Role</th>
+            <th>Yang Bisa Dilihat</th>
+            <th>Yang Bisa Dilakukan</th>
+            <th>Yang TIDAK Bisa</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>👤 Pasien<br>(Ahmad login)</strong></td>
+            <td>
+              ✅ Status antrean SENDIRI<br>
+              ✅ Riwayat kunjungan SENDIRI<br>
+              ✅ Surat keterangan SENDIRI
+            </td>
+            <td>
+              ✅ Daftar antrean online<br>
+              ✅ Ajukan surat keterangan<br>
+              ✅ Chat dengan bot
+            </td>
+            <td>
+              ❌ Lihat data pasien lain<br>
+              ❌ Validasi surat<br>
+              ❌ Input pemeriksaan
+            </td>
+          </tr>
+          <tr>
+            <td><strong>👨‍⚕️ Tenaga Medis<br>(Sri login)</strong></td>
+            <td>
+              ✅ Ahmad + SEMUA pasien antrean<br>
+              ✅ Daftar antrean lengkap<br>
+              ✅ Surat yang perlu divalidasi
+            </td>
+            <td>
+              ✅ Panggil antrean Ahmad<br>
+              ✅ Input tanda vital Ahmad<br>
+              ✅ Validasi surat Ahmad
+            </td>
+            <td>
+              ❌ Buat diagnosis Ahmad<br>
+              ❌ Buat resep untuk Ahmad<br>
+              ❌ Edit data user Ahmad
+            </td>
+          </tr>
+          <tr>
+            <td><strong>🩺 Dokter<br>(dr. Ahmad login)</strong></td>
+            <td>
+              ✅ Ahmad di daftar pasien<br>
+              ✅ Rekam medis Ahmad<br>
+              ✅ Hasil lab Ahmad
+            </td>
+            <td>
+              ✅ Periksa Ahmad<br>
+              ✅ Buat diagnosis Ahmad<br>
+              ✅ Buat resep untuk Ahmad<br>
+              ✅ Terbitkan surat Ahmad
+            </td>
+            <td>
+              ❌ Edit akun Ahmad<br>
+              ❌ Suspend akun Ahmad<br>
+              ❌ Lihat laporan keuangan
+            </td>
+          </tr>
+          <tr>
+            <td><strong>👨‍💼 Admin<br>(Admin login)</strong></td>
+            <td>
+              ✅ Ahmad di data pengguna<br>
+              ✅ Statistik (termasuk Ahmad)<br>
+              ✅ Laporan kunjungan Ahmad
+            </td>
+            <td>
+              ✅ Edit/suspend akun Ahmad<br>
+              ✅ Reset password Ahmad<br>
+              ✅ Lihat semua aktivitas Ahmad
+            </td>
+            <td>
+              ❌ Periksa Ahmad (bukan dokter)<br>
+              ❌ Buat resep untuk Ahmad<br>
+              ❌ Input rekam medis Ahmad
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Proteksi Akses -->
+    <div class="card" style="background: #e8f5e9; border-left: 4px solid #388e3c;">
+      <h3>🔐 Mekanisme Proteksi Akses</h3>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-top: 1rem;">
+        <div style="background: #fff; padding: 1rem; border-radius: 8px;">
+          <h4>1️⃣ Session-Based Auth</h4>
+          <p style="color: #666;">Role disimpan di sessionStorage saat login</p>
+        </div>
+        <div style="background: #fff; padding: 1rem; border-radius: 8px;">
+          <h4>2️⃣ Route Protection</h4>
+          <p style="color: #666;">Setiap halaman validasi role saat load</p>
+        </div>
+        <div style="background: #fff; padding: 1rem; border-radius: 8px;">
+          <h4>3️⃣ Auto Redirect</h4>
+          <p style="color: #666;">Redirect otomatis jika role tidak sesuai</p>
+        </div>
+        <div style="background: #fff; padding: 1rem; border-radius: 8px;">
+          <h4>4️⃣ Data Isolation</h4>
+          <p style="color: #666;">Data ditampilkan sesuai hak akses role</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Testing Guide -->
+    <div class="card">
+      <h3>🧪 Panduan Testing Pemisahan Role</h3>
+      <div style="background: #f5f5f5; padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+        <h4>Test 1: Buka Portal Berbeda</h4>
+        <ol style="line-height: 2;">
+          <li>Buka <code>pasien/dashboard.html</code> → Lihat menu Pasien (8 item)</li>
+          <li>Buka <code>staf/dashboard.html</code> → Lihat menu Tenaga Medis (5 item)</li>
+          <li>Buka <code>dokter/dashboard.html</code> → Lihat menu Dokter (3 item)</li>
+          <li>Buka <code>admin/dashboard.html</code> → Lihat menu Admin (6 item)</li>
+        </ol>
+      </div>
+      
+      <div style="background: #f5f5f5; padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+        <h4>Test 2: Cek Info Box di Dashboard</h4>
+        <p style="color: #666;">Setiap dashboard ada info box berwarna yang menjelaskan hak akses role:</p>
+        <ul style="line-height: 2;">
+          <li>Pasien: Box biru "Mode: PASIEN - hanya data pribadi"</li>
+          <li>Staf: Box ungu "Mode: TENAGA MEDIS - kelola semua pasien"</li>
+          <li>Dokter: Box hijau "Mode: DOKTER - periksa & buat resep"</li>
+          <li>Admin: Box orange "Mode: ADMINISTRATOR - akses penuh"</li>
+        </ul>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Smart Health Center Service. All Rights Reserved.</p>
+  </footer>
+</body>
+</html>

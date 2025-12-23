@@ -1,0 +1,1215 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Health Center Service - Layanan Digital Puskesmas</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* Hero Section Enhanced */
+    .hero-enhanced {
+      position: relative;
+      background: linear-gradient(135deg, #1a8bd3 0%, #2c4964 100%);
+      min-height: 650px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .hero-enhanced::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=1200&q=80') center/cover;
+      opacity: 0.15;
+      z-index: 0;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      color: white;
+      width: 100%;
+      padding: 2rem 3rem;
+    }
+    .hero-title {
+      font-size: 3.5rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      text-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+      line-height: 1.2;
+    }
+    .hero-subtitle {
+      font-size: 1.3rem;
+      margin-bottom: 3rem;
+      opacity: 0.95;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.6;
+    }
+    
+    /* Stats Card - Prominent Display */
+    .stats-card {
+      background: rgba(255, 255, 255, 0.98);
+      border-radius: 50px;
+      padding: 2.5rem 3rem;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      gap: 2rem;
+      max-width: 1100px;
+      margin: 0 auto;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+      position: relative;
+      z-index: 2;
+    }
+    .stat-box {
+      text-align: center;
+      flex: 1;
+    }
+    .stat-number {
+      font-size: 3rem;
+      font-weight: 700;
+      color: #2c4964;
+      margin-bottom: 0.5rem;
+      display: block;
+      min-width: 100px;
+    }
+    .stat-label {
+      font-size: 1rem;
+      color: #5f7a95;
+      font-weight: 500;
+      text-transform: capitalize;
+      line-height: 1.4;
+    }
+    .stat-divider {
+      width: 2px;
+      height: 60px;
+      background: linear-gradient(to bottom, transparent, #e0e0e0, transparent);
+    }
+    
+    /* Content Section Background */
+    .content-section {
+      background: linear-gradient(to bottom, #f8f9fa 0%, #ffffff 100%);
+      padding: 5rem 0 3rem;
+    }
+    
+    /* Section Headers */
+    .section-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+    .section-title {
+      font-size: 2.5rem;
+      color: #2c4964;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+    }
+    .section-subtitle {
+      font-size: 1.1rem;
+      color: #5f7a95;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    /* Chatbot Floating Button */
+    .chatbot-toggle {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 60px;
+      height: 60px;
+      background: #1a8bd3;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(26, 139, 211, 0.4);
+      z-index: 1000;
+      transition: all 0.3s ease;
+    }
+    .chatbot-toggle:hover {
+      background: #1577b8;
+      transform: scale(1.1);
+      box-shadow: 0 6px 16px rgba(26, 139, 211, 0.5);
+    }
+    .chatbot-toggle span {
+      font-size: 28px;
+    }
+    .chatbot-label {
+      position: fixed;
+      bottom: 95px;
+      right: 30px;
+      background: #2c4964;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      z-index: 1000;
+      white-space: nowrap;
+    }
+    
+    /* Chatbot Window */
+    .chatbot-window {
+      position: fixed;
+      bottom: 100px;
+      right: 30px;
+      width: 380px;
+      height: 500px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+      display: none;
+      flex-direction: column;
+      z-index: 1001;
+      overflow: hidden;
+    }
+    .chatbot-window.active {
+      display: flex;
+    }
+    .chatbot-header {
+      background: linear-gradient(135deg, #1a8bd3 0%, #2c4964 100%);
+      color: white;
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .chatbot-header h3 {
+      margin: 0;
+      font-size: 1.1rem;
+    }
+    .chatbot-close {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 24px;
+      cursor: pointer;
+      padding: 0;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .chatbot-messages {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      background: #f8f9fa;
+    }
+    .chat-message {
+      margin-bottom: 15px;
+      display: flex;
+      flex-direction: column;
+    }
+    .chat-message.bot {
+      align-items: flex-start;
+    }
+    .chat-message.user {
+      align-items: flex-end;
+    }
+    .message-bubble {
+      max-width: 75%;
+      padding: 12px 16px;
+      border-radius: 18px;
+      font-size: 0.95rem;
+      line-height: 1.4;
+    }
+    .chat-message.bot .message-bubble {
+      background: white;
+      color: #2c4964;
+      border-bottom-left-radius: 4px;
+    }
+    .chat-message.user .message-bubble {
+      background: #1a8bd3;
+      color: white;
+      border-bottom-right-radius: 4px;
+    }
+    .chatbot-input-area {
+      padding: 15px;
+      background: white;
+      border-top: 1px solid #e0e0e0;
+      display: flex;
+      gap: 10px;
+    }
+    .chatbot-input-area input {
+      flex: 1;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 24px;
+      font-size: 0.95rem;
+      outline: none;
+    }
+    .chatbot-input-area input:focus {
+      border-color: #1a8bd3;
+    }
+    .chatbot-send-btn {
+      background: #1a8bd3;
+      color: white;
+      border: none;
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+    .chatbot-send-btn:hover {
+      background: #1577b8;
+    }
+    
+    /* Compact Feature Cards */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+    .feature-card {
+      padding: 1.5rem !important;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+    .feature-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(26, 139, 211, 0.15);
+    }
+    .feature-icon {
+      font-size: 2.5rem !important;
+      margin-bottom: 1rem !important;
+    }
+    .feature-card h3 {
+      font-size: 1.1rem !important;
+      margin-bottom: 0.5rem !important;
+      color: #2c4964;
+    }
+    .feature-card p {
+      font-size: 0.9rem !important;
+      color: #5f7a95;
+      line-height: 1.5;
+    }
+    
+    /* Compact Feature Cards */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.25rem;
+      margin-top: 2rem;
+    }
+    .feature-card {
+      padding: 1.5rem 1.25rem !important;
+      text-align: center;
+      transition: all 0.3s ease;
+      background: white;
+      border: 1px solid #e8ecef;
+      position: relative;
+      overflow: hidden;
+    }
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #1a8bd3, #2c4964);
+      transform: scaleX(0);
+      transition: transform 0.3s ease;
+    }
+    .feature-card::after {
+      content: '';
+      position: absolute;
+      bottom: -50%;
+      right: -50%;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle, rgba(26, 139, 211, 0.05) 0%, transparent 70%);
+      transition: all 0.5s ease;
+    }
+    .feature-card:hover::before {
+      transform: scaleX(1);
+    }
+    .feature-card:hover::after {
+      bottom: -20%;
+      right: -20%;
+    }
+    .feature-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 30px rgba(26, 139, 211, 0.15);
+      border-color: #1a8bd3;
+    }
+    .feature-illustration {
+      width: 90px;
+      height: 90px;
+      margin: 0 auto 1rem;
+      background: linear-gradient(135deg, rgba(26, 139, 211, 0.1), rgba(44, 73, 100, 0.1));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+    .feature-illustration::before {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #1a8bd3, #2c4964);
+      border-radius: 50%;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .feature-card:hover .feature-illustration::before {
+      opacity: 0.1;
+    }
+    .feature-illustration svg,
+    .feature-illustration img {
+      width: 55px;
+      height: 55px;
+      position: relative;
+      z-index: 1;
+      transition: transform 0.3s ease;
+    }
+    .feature-card:hover .feature-illustration svg,
+    .feature-card:hover .feature-illustration img {
+      transform: scale(1.1);
+    }
+    .feature-icon {
+      font-size: 3.5rem !important;
+      margin-bottom: 0 !important;
+      display: inline-block;
+      transition: transform 0.3s ease;
+    }
+    .feature-card:hover .feature-icon {
+      transform: scale(1.1);
+    }
+    .feature-card h3 {
+      font-size: 1.05rem !important;
+      margin-bottom: 0.6rem !important;
+      color: #2c4964;
+      font-weight: 600;
+      position: relative;
+    }
+    .feature-card p {
+      font-size: 0.88rem !important;
+      color: #5f7a95;
+      line-height: 1.5;
+      position: relative;
+    }
+    
+    /* Enhanced Why Choose Section */
+    .why-choose-section {
+      background: white;
+      padding: 4rem 2rem;
+      margin: 4rem 0;
+      position: relative;
+    }
+    .why-choose-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #1a8bd3, transparent);
+    }
+    
+    /* Announcement Cards */
+    .announcements-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+    .announcement-card.see-more {
+      border: 2px dashed #d5e4f0;
+      border-left-color: #1a8bd3;
+      background: linear-gradient(135deg, rgba(26, 139, 211, 0.05), rgba(44, 73, 100, 0.03));
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .announcement-card {
+      background: white;
+      border-radius: 12px;
+      padding: 1.75rem;
+      border-left: 4px solid #1a8bd3;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .announcement-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 80px;
+      height: 80px;
+      background: radial-gradient(circle, rgba(26, 139, 211, 0.1) 0%, transparent 70%);
+      border-radius: 0 0 0 100%;
+    }
+    .announcement-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(26, 139, 211, 0.15);
+      border-left-color: #2c4964;
+    }
+    .announcement-card.warning {
+      border-left-color: #ff9800;
+    }
+    .announcement-card.success {
+      border-left-color: #4caf50;
+    }
+    .announcement-card.info {
+      border-left-color: #2196f3;
+    }
+    .announcement-icon {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, rgba(26, 139, 211, 0.1), rgba(44, 73, 100, 0.1));
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+      position: relative;
+    }
+    .announcement-icon svg {
+      width: 36px;
+      height: 36px;
+    }
+    .announcement-card.warning .announcement-icon {
+      background: linear-gradient(135deg, rgba(255, 152, 0, 0.1), rgba(245, 124, 0, 0.1));
+    }
+    .announcement-card.success .announcement-icon {
+      background: linear-gradient(135deg, rgba(76, 175, 80, 0.1), rgba(46, 125, 50, 0.1));
+    }
+    .announcement-card.info .announcement-icon {
+      background: linear-gradient(135deg, rgba(33, 150, 243, 0.1), rgba(21, 101, 192, 0.1));
+    }
+    .announcement-title {
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: #2c4964;
+      margin-bottom: 0.75rem;
+    }
+    .announcement-content {
+      color: #5f7a95;
+      line-height: 1.6;
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+    }
+    .see-more-copy {
+      color: #5f7a95;
+      line-height: 1.6;
+      font-size: 0.95rem;
+      margin: 0;
+    }
+    .see-more-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: #1a8bd3;
+      color: white;
+      padding: 0.75rem 1.25rem;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 600;
+      width: fit-content;
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+    .see-more-button:hover {
+      background: #2c4964;
+      transform: translateY(-2px);
+    }
+    .see-more-button::after {
+      content: '>';
+      font-weight: 700;
+      font-size: 1rem;
+    }
+    .announcement-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+    }
+    .announcement-badge.warning {
+      background: #fff3e0;
+      color: #f57c00;
+    }
+    .announcement-badge.success {
+      background: #e8f5e9;
+      color: #2e7d32;
+    }
+    .announcement-badge.info {
+      background: #e3f2fd;
+      color: #1565c0;
+    }
+    .announcement-date {
+      font-size: 0.85rem;
+      color: #9e9e9e;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .announcement-date::before {
+      content: '📅';
+      font-size: 0.9rem;
+    }
+    .why-choose-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2.5rem;
+      max-width: 1200px;
+      margin: 2rem auto 0;
+    }
+    .why-item {
+      display: flex;
+      gap: 1.25rem;
+      align-items: flex-start;
+      padding: 1.5rem;
+      border-radius: 12px;
+      transition: all 0.3s ease;
+    }
+    .why-item:hover {
+      background: #f8f9fa;
+      transform: translateX(8px);
+    }
+    .why-icon {
+      font-size: 2.5rem;
+      min-width: 60px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, rgba(26, 139, 211, 0.1), rgba(44, 73, 100, 0.1));
+      border-radius: 12px;
+    }
+    .why-content h4 {
+      color: #2c4964;
+      margin-bottom: 0.5rem;
+      font-size: 1.15rem;
+      font-weight: 600;
+    }
+    .why-content p {
+      color: #5f7a95;
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+    
+    /* CTA Section Enhanced */
+    .cta-section {
+      background: linear-gradient(135deg, rgba(26, 139, 211, 0.05) 0%, rgba(44, 73, 100, 0.05) 100%);
+      border: 2px solid #e8ecef;
+      border-radius: 20px;
+      padding: 4rem 3rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-section::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle, rgba(26, 139, 211, 0.1) 0%, transparent 70%);
+    }
+    .cta-title {
+      font-size: 2.5rem;
+      color: #2c4964;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      position: relative;
+    }
+    .cta-description {
+      font-size: 1.15rem;
+      color: #5f7a95;
+      margin-bottom: 2.5rem;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    /* Info Cards Enhanced */
+    .info-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .info-card {
+      background: white;
+      padding: 2.5rem 2rem;
+      border-radius: 16px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      text-align: center;
+      transition: all 0.3s ease;
+      border: 1px solid #e8ecef;
+    }
+    .info-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(26, 139, 211, 0.15);
+      border-color: #1a8bd3;
+    }
+    .info-card h3 {
+      color: #2c4964;
+      font-size: 1.3rem;
+      margin-bottom: 1.25rem;
+      font-weight: 600;
+    }
+    .info-card p {
+      color: #5f7a95;
+      line-height: 1.8;
+      font-size: 1rem;
+    }
+
+    .pengumuman-banner {
+      background-color: #1a8bd3;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.4rem 3rem;
+      font-size: 0.9rem;
+      min-width: 100%;
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .pengumuman-label {
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      white-space: nowrap;
+    }
+
+    .pengumuman-text-wrapper {
+      flex: 1;
+      overflow: hidden;
+      white-space: nowrap;
+      position: relative;
+    }
+
+    /* The clickable text that slides horizontally */
+    .pengumuman-link {
+      display: inline-block;
+      white-space: nowrap;
+      color: #ffffff;
+      text-decoration: none;
+      transform: translateX(0);
+      opacity: 1;
+      transition: transform 0.35s ease, opacity 0.35s ease;
+      cursor: pointer;
+    }
+
+    /* Slide out to the left */
+    .pengumuman-link.is-leaving {
+      transform: translateX(-24px);
+      opacity: 0;
+    }
+
+    /* Initial "enter from right" state (we remove this class to trigger the slide-in) */
+    .pengumuman-link.is-entering {
+      transform: translateX(24px);
+      opacity: 0;
+    }
+
+    .pengumuman-link:hover {
+      text-decoration: underline;
+    }
+
+    /* Optional: tighter on mobile */
+    @media (max-width: 768px) {
+      .pengumuman-banner {
+        padding: 0.4rem 1rem;
+        font-size: 0.8rem;
+      }
+    }
+
+
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-container">
+      <div class="logo" style="flex-direction: column; align-items: flex-start; gap: 0.25rem;">
+        <img src="img/Smarthealth-Logo.png" alt="Smart Health Logo" style="height: 45px;">
+        <p style="font-size: 0.75rem; margin: 0; color: #5f7a95;">Layanan Digital Puskesmas</p>
+      </div>
+      <div class="btn-group" style="gap: 0.75rem;">
+        <a href="#pengumuman" class="btn btn-secondary" style="padding: 8px 18px; font-size: 0.9rem;">📢 Pengumuman</a>
+        <a href="javascript:void(0)" onclick="loginPasien()" class="btn btn-primary" style="padding: 8px 18px; font-size: 0.9rem;">Login</a>
+        <a href="register.html" class="btn btn-secondary" style="padding: 8px 18px; font-size: 0.9rem;">Registrasi</a>
+      </div>
+    </div>
+    <div class="pengumuman-banner">
+      <span class="pengumuman-label">📢 PENGUMUMAN :</span>
+      <div class="pengumuman-text-wrapper" aria-live="polite">
+        <!-- Clickable text, URL will rotate with the message -->
+        <a class="pengumuman-link" href="#pengumuman" target="_self" rel="noopener"></a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero Section with Stats -->
+    <section class="hero-enhanced">
+      <div class="hero-content">
+        <h1 class="hero-title">Smart Health Center Service</h1>
+        <p class="hero-subtitle">Platform kesehatan digital terpadu untuk kemudahan akses layanan puskesmas. Daftar antrean, konsultasi dokter, dan kelola kesehatan Anda dengan mudah dan cepat.</p>
+        
+        <!-- Stats Card - Prominent -->
+        <div class="stats-card">
+          <div class="stat-box">
+            <span class="stat-number">5K+</span>
+            <span class="stat-label">Pasien Terdaftar</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-box">
+            <span class="stat-number">20+</span>
+            <span class="stat-label">Dokter & Tenaga Medis</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-box">
+            <span class="stat-number">15K+</span>
+            <span class="stat-label">Antrean Online</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-box">
+            <span class="stat-number">24/7</span>
+            <span class="stat-label">Layanan Digital</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="content-section">
+      <div style="width: 100%; padding: 0 3rem;">
+        <div class="section-header">
+          <h2 class="section-title">Layanan Kami</h2>
+          <p class="section-subtitle">Berbagai kemudahan untuk kebutuhan kesehatan Anda dalam satu platform digital</p>
+        </div>
+        <div class="features-grid">
+          <div class="feature-card card">
+            <div class="feature-illustration">
+              <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="20" y="15" width="60" height="70" rx="3" fill="#1a8bd3" opacity="0.2"/>
+                <rect x="30" y="25" width="40" height="8" rx="2" fill="#1a8bd3"/>
+                <rect x="30" y="38" width="40" height="4" rx="1" fill="#5f7a95" opacity="0.5"/>
+                <rect x="30" y="46" width="30" height="4" rx="1" fill="#5f7a95" opacity="0.5"/>
+                <rect x="30" y="54" width="35" height="4" rx="1" fill="#5f7a95" opacity="0.5"/>
+                <circle cx="35" cy="70" r="3" fill="#1a8bd3"/>
+                <text x="42" y="73" font-size="8" fill="#2c4964" font-weight="600">1</text>
+              </svg>
+            </div>
+            <h3>Pendaftaran Antrean Online</h3>
+            <p>Daftar antrean dari rumah, hemat waktu tunggu di puskesmas</p>
+          </div>
+          <div class="feature-card card">
+            <div class="feature-illustration">
+              <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="50" cy="50" r="35" stroke="#1a8bd3" stroke-width="4" opacity="0.2"/>
+                <circle cx="50" cy="50" r="25" stroke="#1a8bd3" stroke-width="3" opacity="0.4"/>
+                <circle cx="50" cy="50" r="15" fill="#1a8bd3"/>
+                <line x1="50" y1="35" x2="50" y2="50" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                <line x1="50" y1="50" x2="60" y2="55" stroke="white" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <h3>Status Antrean Real-time</h3>
+            <p>Pantau posisi antrean Anda secara langsung dan real-time</p>
+          </div>
+          <div class="feature-card card">
+            <div class="feature-illustration">
+              <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="25" y="20" width="50" height="65" rx="2" fill="#1a8bd3" opacity="0.2"/>
+                <rect x="30" y="28" width="40" height="3" rx="1" fill="#1a8bd3"/>
+                <rect x="30" y="35" width="40" height="2" rx="1" fill="#5f7a95" opacity="0.4"/>
+                <rect x="30" y="40" width="35" height="2" rx="1" fill="#5f7a95" opacity="0.4"/>
+                <rect x="30" y="45" width="30" height="2" rx="1" fill="#5f7a95" opacity="0.4"/>
+                <path d="M 60 65 L 65 70 L 75 55" stroke="#1a8bd3" stroke-width="3" fill="none" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <h3>Permohonan Surat</h3>
+            <p>Ajukan surat sehat, sakit, atau rujukan secara online</p>
+          </div>
+          <div class="feature-card card">
+            <div class="feature-illustration">
+              <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="50" cy="35" r="12" fill="#1a8bd3" opacity="0.3"/>
+                <circle cx="50" cy="35" r="8" fill="#1a8bd3"/>
+                <path d="M 35 55 Q 35 48 42 48 L 58 48 Q 65 48 65 55 L 65 75 Q 65 80 60 80 L 40 80 Q 35 80 35 75 Z" fill="#1a8bd3" opacity="0.2"/>
+                <circle cx="45" cy="60" r="2" fill="#1a8bd3"/>
+                <circle cx="55" cy="60" r="2" fill="#1a8bd3"/>
+                <rect x="42" y="68" width="16" height="2" rx="1" fill="#1a8bd3"/>
+              </svg>
+            </div>
+            <h3>Jadwal Dokter</h3>
+            <p>Lihat jadwal praktik dokter yang tersedia</p>
+          </div>
+          <div class="feature-card card">
+            <div class="feature-illustration">
+              <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="30" y="25" width="40" height="55" rx="5" fill="#1a8bd3" opacity="0.2"/>
+                <rect x="35" y="30" width="30" height="45" rx="2" fill="white"/>
+                <rect x="40" y="35" width="20" height="3" rx="1" fill="#1a8bd3"/>
+                <rect x="40" y="42" width="20" height="2" rx="1" fill="#5f7a95" opacity="0.4"/>
+                <rect x="40" y="48" width="15" height="2" rx="1" fill="#5f7a95" opacity="0.4"/>
+                <circle cx="50" cy="62" r="6" fill="#1a8bd3" opacity="0.3"/>
+                <circle cx="50" cy="62" r="3" fill="#1a8bd3"/>
+              </svg>
+            </div>
+            <h3>Akses Mudah</h3>
+            <p>Akses dari mana saja, kapan saja melalui perangkat Anda</p>
+          </div>
+          <div class="feature-card card">
+            <div class="feature-illustration">
+              <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="50" cy="45" r="20" fill="#1a8bd3" opacity="0.2"/>
+                <rect x="42" y="55" width="16" height="25" rx="2" fill="#1a8bd3" opacity="0.2"/>
+                <rect x="45" y="38" width="10" height="15" rx="2" fill="#1a8bd3"/>
+                <circle cx="50" cy="43" r="3" fill="white"/>
+                <rect x="47" y="48" width="6" height="3" rx="1" fill="white"/>
+              </svg>
+            </div>
+            <h3>Aman & Terpercaya</h3>
+            <p>Data kesehatan Anda tersimpan dengan aman dan terenkripsi</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pengumuman Section -->
+    <section id="pengumuman" style="width: 100%; margin: 4rem 0; padding: 0 3rem;">
+      <div class="section-header">
+        <h2 class="section-title">📢 Pengumuman Terbaru</h2>
+        <p class="section-subtitle">Informasi penting dari puskesmas untuk Anda</p>
+      </div>
+      
+      <div class="announcements-grid">
+        <!-- Jadwal Operasional -->
+        <div class="announcement-card">
+          <div class="announcement-icon">
+            <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="50" cy="50" r="35" stroke="#1a8bd3" stroke-width="4" opacity="0.3"/>
+              <circle cx="50" cy="50" r="30" fill="#1a8bd3" opacity="0.1"/>
+              <line x1="50" y1="30" x2="50" y2="50" stroke="#1a8bd3" stroke-width="3" stroke-linecap="round"/>
+              <line x1="50" y1="50" x2="65" y2="50" stroke="#1a8bd3" stroke-width="3" stroke-linecap="round"/>
+              <circle cx="50" cy="50" r="3" fill="#1a8bd3"/>
+              <line x1="50" y1="20" x2="50" y2="25" stroke="#2c4964" stroke-width="2"/>
+              <line x1="50" y1="75" x2="50" y2="80" stroke="#2c4964" stroke-width="2"/>
+              <line x1="20" y1="50" x2="25" y2="50" stroke="#2c4964" stroke-width="2"/>
+              <line x1="75" y1="50" x2="80" y2="50" stroke="#2c4964" stroke-width="2"/>
+            </svg>
+          </div>
+          <h3 class="announcement-title">Jadwal Operasional</h3>
+          <div class="announcement-content">
+            <p><strong>Senin - Jumat:</strong> 08:00 - 16:00 WIB</p>
+            <p><strong>Sabtu:</strong> 08:00 - 13:00 WIB</p>
+            <p><strong>Minggu:</strong> Tutup</p>
+          </div>
+          <div class="announcement-date">20 November 2025</div>
+        </div>
+
+        <!-- Libur Nasional -->
+        <div class="announcement-card warning">
+          <div class="announcement-icon">
+            <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M 50 15 L 60 40 L 85 40 L 65 55 L 75 80 L 50 65 L 25 80 L 35 55 L 15 40 L 40 40 Z" fill="#ff9800" opacity="0.2"/>
+              <circle cx="50" cy="50" r="25" stroke="#ff9800" stroke-width="3" fill="none"/>
+              <path d="M 50 35 L 50 55 M 50 62 L 50 67" stroke="#ff9800" stroke-width="4" stroke-linecap="round"/>
+              <circle cx="50" cy="50" r="35" stroke="#ff9800" stroke-width="2" opacity="0.3" stroke-dasharray="5,5"/>
+            </svg>
+          </div>
+          <div class="announcement-badge warning">PENTING</div>
+          <h3 class="announcement-title">Libur Nasional</h3>
+          <div class="announcement-content">
+            <p>Puskesmas akan tutup pada tanggal <strong>1 Desember 2025</strong> dalam rangka Hari Besar Nasional.</p>
+          </div>
+          <div class="announcement-date">25 November 2025</div>
+        </div>
+
+        <!-- Vaksinasi Gratis -->
+        <div class="announcement-card success">
+          <div class="announcement-icon">
+            <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="35" y="20" width="8" height="50" rx="2" fill="#4caf50" opacity="0.3"/>
+              <rect x="57" y="20" width="8" height="50" rx="2" fill="#4caf50" opacity="0.3"/>
+              <rect x="30" y="65" width="40" height="8" rx="2" fill="#4caf50"/>
+              <circle cx="50" cy="35" r="8" fill="#4caf50" opacity="0.2"/>
+              <line x1="40" y1="45" x2="60" y2="45" stroke="#4caf50" stroke-width="3"/>
+              <line x1="40" y1="55" x2="60" y2="55" stroke="#4caf50" stroke-width="3"/>
+              <path d="M 45 25 L 48 28 L 55 21" stroke="#4caf50" stroke-width="2" fill="none" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="announcement-badge success">PROGRAM BARU</div>
+          <h3 class="announcement-title">Vaksinasi Gratis</h3>
+          <div class="announcement-content">
+            <p>Program vaksinasi influenza gratis untuk lansia (60+ tahun) setiap hari Rabu pukul 09:00 - 12:00. Daftar di loket pendaftaran.</p>
+          </div>
+          <div class="announcement-date">15 November 2025</div>
+        </div>
+
+        <!-- Pemeliharaan Sistem -->
+        <div class="announcement-card info">
+          <div class="announcement-icon">
+            <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="25" y="30" width="50" height="45" rx="3" fill="#2196f3" opacity="0.1"/>
+              <circle cx="50" cy="52" r="15" fill="#2196f3" opacity="0.2"/>
+              <path d="M 35 45 L 45 55 L 55 45 L 65 55" stroke="#2196f3" stroke-width="3" fill="none" stroke-linecap="round"/>
+              <rect x="30" y="25" width="15" height="8" rx="2" fill="#2196f3" opacity="0.3"/>
+              <rect x="55" y="25" width="15" height="8" rx="2" fill="#2196f3" opacity="0.3"/>
+              <path d="M 40 60 L 45 65 L 55 65 L 60 60" stroke="#2196f3" stroke-width="2" fill="none"/>
+              <circle cx="42" cy="48" r="2" fill="#2196f3"/>
+              <circle cx="58" cy="48" r="2" fill="#2196f3"/>
+            </svg>
+          </div>
+          <div class="announcement-badge info">INFORMASI</div>
+          <h3 class="announcement-title">Pemeliharaan Sistem</h3>
+          <div class="announcement-content">
+            <p>Sistem pendaftaran online akan mengalami pemeliharaan pada <strong>30 November 2025, pukul 22:00 - 24:00 WIB</strong>. Mohon maaf atas ketidaknyamanannya.</p>
+          </div>
+          <div class="announcement-date">27 November 2025</div>
+        </div>
+
+        <!-- Lihat Pengumuman Lainnya -->
+        <div class="announcement-card see-more">
+          <div class="announcement-icon">
+            <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="50" cy="50" r="34" stroke="#1a8bd3" stroke-width="3" opacity="0.25"/>
+              <path d="M 40 50 L 60 50 M 50 40 L 50 60" stroke="#1a8bd3" stroke-width="4" stroke-linecap="round"/>
+              <path d="M 35 70 C 40 63 60 63 65 70" stroke="#2c4964" stroke-width="3" stroke-linecap="round" opacity="0.4"/>
+            </svg>
+          </div>
+          <h3 class="announcement-title">Pengumuman Lainnya</h3>
+          <p class="see-more-copy">Butuh melihat pengumuman lama atau informasi lain? Temukan arsip lengkapnya di sini.</p>
+          <a class="see-more-button" href="#arsip-pengumuman" aria-label="Lihat arsip pengumuman">Lihat pengumuman lainnya</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Info Section -->
+    <section style="width: 100%; margin: 4rem 0 3rem; padding: 0 3rem;">
+      <div class="info-cards-grid">
+        <div class="info-card">
+          <h3>📍 Alamat Kami</h3>
+          <p>Jl. Kesehatan No. 123<br>Kota Sehat, Provinsi Sejahtera<br>Indonesia 12345</p>
+        </div>
+        <div class="info-card">
+          <h3>📞 Hubungi Kami</h3>
+          <p>Telepon: (021) 1234-5678<br>Email: info@smarthealthcenter.id<br>WhatsApp: 0812-3456-7890</p>
+        </div>
+        <div class="info-card">
+          <h3>⏰ Jam Pelayanan</h3>
+          <p>Senin - Jumat: 08:00 - 16:00<br>Sabtu: 08:00 - 13:00<br>Minggu & Libur Nasional: Tutup</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Chatbot Floating Button -->
+  <div class="chatbot-label">Hubungi Kami</div>
+  <div class="chatbot-toggle" onclick="toggleChatbot()">
+    <span>💬</span>
+  </div>
+
+  <!-- Chatbot Window -->
+  <div class="chatbot-window" id="chatbotWindow">
+    <div class="chatbot-header">
+      <h3>💬 Chatbot Smart Health</h3>
+      <button class="chatbot-close" onclick="toggleChatbot()">×</button>
+    </div>
+    <div class="chatbot-messages" id="chatbotMessages">
+      <div class="chat-message bot">
+        <div class="message-bubble">
+          Halo! Selamat datang di Smart Health Center Service. Ada yang bisa saya bantu?
+        </div>
+      </div>
+      <div class="chat-message bot">
+        <div class="message-bubble">
+          Anda dapat menanyakan tentang:<br>
+          • Jadwal dokter<br>
+          • Cara pendaftaran antrean<br>
+          • Layanan yang tersedia<br>
+          • Jam operasional
+        </div>
+      </div>
+    </div>
+    <div class="chatbot-input-area">
+      <input type="text" id="chatInput" placeholder="Ketik pesan Anda..." onkeypress="handleChatKeyPress(event)">
+      <button class="chatbot-send-btn" onclick="sendMessage()">➤</button>
+    </div>
+  </div>
+
+  <script>
+    function loginPasien() {
+      sessionStorage.setItem('selectedPortal', 'pasien');
+      window.location.href = 'login.html';
+    }
+
+    function toggleChatbot() {
+      const chatWindow = document.getElementById('chatbotWindow');
+      chatWindow.classList.toggle('active');
+      if (chatWindow.classList.contains('active')) {
+        document.getElementById('chatInput').focus();
+      }
+    }
+
+    function handleChatKeyPress(event) {
+      if (event.key === 'Enter') {
+        sendMessage();
+      }
+    }
+
+    function sendMessage() {
+      const input = document.getElementById('chatInput');
+      const message = input.value.trim();
+      
+      if (message === '') return;
+      
+      // Add user message
+      addMessage(message, 'user');
+      input.value = '';
+      
+      // Simulate bot response
+      setTimeout(() => {
+        const response = getBotResponse(message.toLowerCase());
+        addMessage(response, 'bot');
+      }, 500);
+    }
+
+    function addMessage(text, sender) {
+      const messagesContainer = document.getElementById('chatbotMessages');
+      const messageDiv = document.createElement('div');
+      messageDiv.className = `chat-message ${sender}`;
+      
+      const bubbleDiv = document.createElement('div');
+      bubbleDiv.className = 'message-bubble';
+      bubbleDiv.innerHTML = text;
+      
+      messageDiv.appendChild(bubbleDiv);
+      messagesContainer.appendChild(messageDiv);
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+
+    function getBotResponse(message) {
+      if (message.includes('jadwal') || message.includes('dokter')) {
+        return 'Untuk melihat jadwal dokter, silakan login dan akses menu "Jadwal Dokter". Anda juga bisa menghubungi kami di (021) 1234-5678.';
+      } else if (message.includes('antrean') || message.includes('daftar')) {
+        return 'Untuk mendaftar antrean online, silakan login terlebih dahulu. Jika belum punya akun, klik tombol "Registrasi" di bagian atas halaman.';
+      } else if (message.includes('jam') || message.includes('buka') || message.includes('operasional')) {
+        return 'Jam operasional kami:<br>• Senin - Jumat: 08:00 - 16:00 WIB<br>• Sabtu: 08:00 - 13:00 WIB<br>• Minggu & Libur: Tutup';
+      } else if (message.includes('surat') || message.includes('kesehatan')) {
+        return 'Anda dapat mengajukan permohonan surat kesehatan secara online melalui menu "Permohonan Surat" setelah login.';
+      } else if (message.includes('lokasi') || message.includes('alamat')) {
+        return 'Alamat kami di Jl. Kesehatan No. 123, Kota Sehat, Provinsi Sejahtera 12345. Telepon: (021) 1234-5678';
+      } else if (message.includes('terima kasih') || message.includes('thanks')) {
+        return 'Sama-sama! Senang bisa membantu Anda. Jika ada pertanyaan lain, jangan ragu untuk bertanya. 😊';
+      } else {
+        return 'Maaf, saya belum memahami pertanyaan Anda. Silakan hubungi kami di (021) 1234-5678 atau email info@smarthealthcenter.id untuk bantuan lebih lanjut.';
+      }
+    }
+
+        // === Pengumuman Banner Rotator (horizontal slide + rotating links) ===
+    const pengumumanItems = [
+      {
+        text: 'Jam operasional: Senin–Jumat 08.00–16.00, Sabtu 08.00–13.00 (Minggu & libur tutup).',
+        url: '#pengumuman' // section on the same page
+      },
+      {
+        text: 'Libur Nasional 1 Desember 2025: layanan puskesmas TIDAK beroperasi.',
+        url: '#pengumuman'
+      },
+      {
+        text: 'Program vaksinasi influenza gratis untuk lansia (60+) setiap Rabu, 09.00–12.00.',
+        url: '#pengumuman'
+      },
+      {
+        text: 'Pemeliharaan sistem pendaftaran online 30 November 2025, pukul 22.00–24.00 WIB.',
+        url: '#pengumuman'
+      }
+    ];
+
+    (function initPengumumanBanner() {
+      const linkEl = document.querySelector('.pengumuman-link');
+      if (!linkEl || pengumumanItems.length === 0) return;
+
+      let index = 0;
+
+      function applyItem(i) {
+        const item = pengumumanItems[i];
+        linkEl.textContent = item.text;
+        linkEl.href = item.url || '#';
+        linkEl.target = item.url && item.url.startsWith('http')
+          ? '_blank'
+          : '_self';
+
+        // If no URL, make it look non-clickable
+        linkEl.style.pointerEvents = item.url ? 'auto' : 'none';
+      }
+
+      // Set initial item
+      applyItem(index);
+
+      function showNextItem() {
+        // Slide current text out to the left
+        linkEl.classList.add('is-leaving');
+
+        setTimeout(() => {
+          // Move to next item
+          index = (index + 1) % pengumumanItems.length;
+
+          // Prepare "enter from right" state
+          linkEl.classList.remove('is-leaving');
+          linkEl.classList.add('is-entering');
+
+          // Update text + link
+          applyItem(index);
+
+          // Force reflow so the browser recognizes the starting state
+          void linkEl.offsetWidth;
+
+          // Remove entering class to trigger slide-in to center
+          linkEl.classList.remove('is-entering');
+        }, 350); // match CSS transition duration
+      }
+
+      // Auto-rotate every 5 seconds
+      setInterval(showNextItem, 5000);
+
+      // OPTIONAL: also rotate when clicking (without navigation)
+      // If you want this behavior, uncomment the lines below:
+      /*
+      linkEl.addEventListener('click', function(e) {
+        e.preventDefault(); // prevent navigation
+        showNextItem();
+      });
+      */
+    })();
+
+
+  </script>
+
+  <footer>
+    <p>&copy; 2025 Smart Health Center Service. All Rights Reserved.</p>
+    <p style="font-size: 0.9rem; margin-top: 0.5rem; opacity: 0.8;">
+      Sistem Informasi Layanan Kesehatan Digital
+    </p>
+  </footer>
+</body>
+</html>

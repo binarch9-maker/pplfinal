@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panduan Penggunaan - Smart Health Center Service</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .demo-card {
+      background: #fff;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      transition: all 0.3s ease;
+    }
+    .demo-card:hover {
+      border-color: #00796b;
+      box-shadow: 0 4px 12px rgba(0,121,107,0.2);
+    }
+    .role-badge {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-weight: bold;
+      margin-right: 0.5rem;
+    }
+    .badge-pasien { background: #e3f2fd; color: #1976d2; }
+    .badge-staf { background: #f3e5f5; color: #7b1fa2; }
+    .badge-dokter { background: #e8f5e9; color: #388e3c; }
+    .badge-admin { background: #fff3e0; color: #f57c00; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-container">
+      <div class="logo" style="flex-direction: column; align-items: flex-start; gap: 0.25rem;">
+        <img src="img/Smarthealth-Logo.png" alt="Smart Health Logo" style="height: 45px;">
+        <p style="font-size: 0.75rem; margin: 0; color: #5f7a95;">Layanan Digital Puskesmas - Panduan</p>
+      </div>
+      <div>
+        <a href="index.html" class="btn btn-primary">Kembali ke Beranda</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="page-header">
+      <h2>📖 Panduan Penggunaan Aplikasi</h2>
+      <p>Petunjuk lengkap untuk menggunakan Smart Health Center Service</p>
+    </div>
+
+    <!-- Quick Start -->
+    <div class="card">
+      <h3>🚀 Cara Cepat Memulai</h3>
+      <ol style="line-height: 2;">
+        <li>Klik tombol <strong>"Mulai Sekarang"</strong> di halaman utama atau buka <a href="login.html">halaman login</a></li>
+        <li>Pilih salah satu akun demo di bawah sesuai role yang ingin dicoba</li>
+        <li>Masukkan <strong>username</strong> dan <strong>password</strong></li>
+        <li><strong style="color: #d32f2f;">PENTING:</strong> Pilih role yang sesuai di dropdown "Login Sebagai"</li>
+        <li>Klik tombol <strong>"Login"</strong></li>
+        <li>Anda akan diarahkan ke dashboard sesuai role yang dipilih</li>
+      </ol>
+    </div>
+
+    <!-- Demo Accounts -->
+    <div class="card">
+      <h3>🔑 Akun Demo untuk Testing</h3>
+      <p style="color: #666; margin-bottom: 1.5rem;">Gunakan salah satu akun berikut untuk mencoba sistem:</p>
+
+      <!-- Pasien -->
+      <div class="demo-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+          <div style="flex: 1; min-width: 250px;">
+            <span class="role-badge badge-pasien">👤 PASIEN</span>
+            <h4 style="margin: 1rem 0 0.5rem 0;">Akun Pasien</h4>
+            <p style="margin: 0; color: #666;">
+              <strong>Username:</strong> pasien atau pasien@email.com<br>
+              <strong>Password:</strong> pasien123<br>
+              <strong>Role Login:</strong> Pilih "Pasien"
+            </p>
+          </div>
+          <div>
+            <a href="login.html" class="btn btn-primary">Login sebagai Pasien →</a>
+          </div>
+        </div>
+        <div style="margin-top: 1rem; padding: 1rem; background: #e3f2fd; border-radius: 4px;">
+          <strong>Akses ke:</strong> Dashboard Pasien, Daftar Antrean, Status Antrean, Permohonan Surat, Riwayat Surat, Jadwal Dokter, Chatbot, Profil
+        </div>
+      </div>
+
+      <!-- Tenaga Medis -->
+      <div class="demo-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+          <div style="flex: 1; min-width: 250px;">
+            <span class="role-badge badge-staf">👨‍⚕️ TENAGA MEDIS</span>
+            <h4 style="margin: 1rem 0 0.5rem 0;">Akun Tenaga Medis</h4>
+            <p style="margin: 0; color: #666;">
+              <strong>Username:</strong> staf atau staf@email.com<br>
+              <strong>Password:</strong> staf123<br>
+              <strong>Role Login:</strong> Pilih "Tenaga Medis"
+            </p>
+          </div>
+          <div>
+            <a href="login.html" class="btn btn-primary">Login sebagai Tenaga Medis →</a>
+          </div>
+        </div>
+        <div style="margin-top: 1rem; padding: 1rem; background: #f3e5f5; border-radius: 4px;">
+          <strong>Akses ke:</strong> Dashboard Staf, Daftar Antrean, Kelola Antrean, Validasi Surat, Hasil Pemeriksaan
+        </div>
+      </div>
+
+      <!-- Dokter -->
+      <div class="demo-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+          <div style="flex: 1; min-width: 250px;">
+            <span class="role-badge badge-dokter">🩺 DOKTER</span>
+            <h4 style="margin: 1rem 0 0.5rem 0;">Akun Dokter</h4>
+            <p style="margin: 0; color: #666;">
+              <strong>Username:</strong> dokter atau dokter@email.com<br>
+              <strong>Password:</strong> dokter123<br>
+              <strong>Role Login:</strong> Pilih "Dokter"
+            </p>
+          </div>
+          <div>
+            <a href="login.html" class="btn btn-primary">Login sebagai Dokter →</a>
+          </div>
+        </div>
+        <div style="margin-top: 1rem; padding: 1rem; background: #e8f5e9; border-radius: 4px;">
+          <strong>Akses ke:</strong> Dashboard Dokter, Daftar Pasien Hari Ini, Rekam Medis Elektronik
+        </div>
+      </div>
+
+      <!-- Admin -->
+      <div class="demo-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+          <div style="flex: 1; min-width: 250px;">
+            <span class="role-badge badge-admin">👨‍💼 ADMIN</span>
+            <h4 style="margin: 1rem 0 0.5rem 0;">Akun Administrator</h4>
+            <p style="margin: 0; color: #666;">
+              <strong>Username:</strong> admin atau admin@email.com<br>
+              <strong>Password:</strong> admin123<br>
+              <strong>Role Login:</strong> Pilih "Admin"
+            </p>
+          </div>
+          <div>
+            <a href="login.html" class="btn btn-primary">Login sebagai Admin →</a>
+          </div>
+        </div>
+        <div style="margin-top: 1rem; padding: 1rem; background: #fff3e0; border-radius: 4px;">
+          <strong>Akses ke:</strong> Dashboard Admin, Kelola Pengguna, Kelola Jadwal, Kelola Pengumuman, Laporan, Pengaturan Sistem
+        </div>
+      </div>
+    </div>
+
+    <!-- Security Info -->
+    <div class="card" style="border: 2px solid #00796b;">
+      <h3>🔐 Keamanan & Proteksi Akses</h3>
+      <p>Sistem dilengkapi dengan <strong>Role-Based Access Control (RBAC)</strong>:</p>
+      <ul style="line-height: 2;">
+        <li>✅ Setiap portal hanya bisa diakses oleh role yang sesuai</li>
+        <li>✅ Jika login sebagai Pasien, tidak bisa akses portal Admin/Dokter/Staf</li>
+        <li>✅ Validasi otomatis saat membuka halaman</li>
+        <li>✅ Alert peringatan jika mencoba akses tanpa izin</li>
+        <li>✅ Auto-redirect ke halaman login jika tidak valid</li>
+        <li>✅ Session management untuk tracking user yang login</li>
+      </ul>
+      <div style="margin-top: 1rem; padding: 1rem; background: #fff3cd; border-left: 4px solid #f57c00; border-radius: 4px;">
+        <strong>⚠️ Catatan:</strong> Jika mendapat pesan "Akses ditolak", pastikan Anda sudah memilih role yang benar saat login. Gunakan tombol Logout untuk keluar dan login ulang dengan role yang sesuai.
+      </div>
+    </div>
+
+    <!-- Features by Role -->
+    <div class="card">
+      <h3>✨ Fitur Berdasarkan Role</h3>
+      
+      <h4 style="color: #1976d2;">👤 Portal Pasien (11 Halaman)</h4>
+      <ul style="line-height: 2; margin-bottom: 2rem;">
+        <li>📊 <strong>Dashboard</strong> - Ringkasan status antrean, riwayat kunjungan, pengumuman</li>
+        <li>📋 <strong>Daftar Antrean</strong> - Pendaftaran antrean online pilih poli & tanggal</li>
+        <li>⏱️ <strong>Status Antrean</strong> - Tracking real-time nomor antrean</li>
+        <li>📄 <strong>Permohonan Surat</strong> - Ajukan surat sakit/sehat/rujukan online</li>
+        <li>📚 <strong>Riwayat Surat</strong> - Lihat status & download surat keterangan</li>
+        <li>👨‍⚕️ <strong>Jadwal Dokter</strong> - Cek jadwal praktek semua dokter</li>
+        <li>💬 <strong>Chatbot</strong> - Asisten virtual untuk bantuan cepat</li>
+        <li>👤 <strong>Profil</strong> - Kelola data pribadi & ubah password</li>
+      </ul>
+
+      <h4 style="color: #7b1fa2;">👨‍⚕️ Portal Tenaga Medis (5 Halaman)</h4>
+      <ul style="line-height: 2; margin-bottom: 2rem;">
+        <li>📊 <strong>Dashboard</strong> - Monitoring antrean & statistik hari ini</li>
+        <li>📋 <strong>Daftar Antrean</strong> - Lihat semua antrean per poli</li>
+        <li>🎯 <strong>Kelola Antrean</strong> - Panggil, skip, selesaikan antrean</li>
+        <li>✅ <strong>Validasi Surat</strong> - Approve/reject surat keterangan pasien</li>
+        <li>📝 <strong>Hasil Pemeriksaan</strong> - Input tanda vital & catatan awal</li>
+      </ul>
+
+      <h4 style="color: #388e3c;">🩺 Portal Dokter (3 Halaman)</h4>
+      <ul style="line-height: 2; margin-bottom: 2rem;">
+        <li>📊 <strong>Dashboard</strong> - Overview pasien hari ini & jadwal praktek</li>
+        <li>👥 <strong>Daftar Pasien</strong> - Pasien hari ini dengan tanda vital lengkap</li>
+        <li>📋 <strong>Rekam Medis</strong> - EMR lengkap (SOAP), resep, lab, surat</li>
+      </ul>
+
+      <h4 style="color: #f57c00;">👨‍💼 Portal Admin (6 Halaman)</h4>
+      <ul style="line-height: 2;">
+        <li>📊 <strong>Dashboard</strong> - Statistik sistem & monitoring aktivitas</li>
+        <li>👥 <strong>Kelola Pengguna</strong> - CRUD user semua role (pasien, dokter, staf, admin)</li>
+        <li>📅 <strong>Kelola Jadwal</strong> - Atur jadwal praktek dokter per poli</li>
+        <li>📢 <strong>Kelola Pengumuman</strong> - Buat & kelola pengumuman sistem</li>
+        <li>📈 <strong>Laporan</strong> - Analytics, statistik, laporan keuangan</li>
+        <li>⚙️ <strong>Pengaturan</strong> - Konfigurasi sistem lengkap (antrean, notifikasi, backup, dll)</li>
+      </ul>
+    </div>
+
+    <!-- Troubleshooting -->
+    <div class="card" style="background: #ffebee; border: 2px solid #d32f2f;">
+      <h3 style="color: #d32f2f;">🐛 Troubleshooting</h3>
+      
+      <div style="margin: 1rem 0; padding: 1rem; background: #fff; border-radius: 4px;">
+        <h4 style="margin: 0 0 0.5rem 0;">Problem: Login tapi masuk ke portal yang salah</h4>
+        <p style="margin: 0; color: #666;"><strong>Solusi:</strong></p>
+        <ol style="margin: 0.5rem 0 0 1.5rem;">
+          <li>Pastikan memilih role yang benar di dropdown "Login Sebagai"</li>
+          <li>Buka <a href="logout.html">halaman logout</a> untuk clear session</li>
+          <li>Login ulang dengan role yang sesuai</li>
+        </ol>
+      </div>
+
+      <div style="margin: 1rem 0; padding: 1rem; background: #fff; border-radius: 4px;">
+        <h4 style="margin: 0 0 0.5rem 0;">Problem: Muncul alert "Akses ditolak"</h4>
+        <p style="margin: 0; color: #666;"><strong>Solusi:</strong></p>
+        <ol style="margin: 0.5rem 0 0 1.5rem;">
+          <li>Klik <a href="logout.html">Logout</a> untuk menghapus session</li>
+          <li>Clear cache browser (Ctrl+Shift+Delete)</li>
+          <li>Login ulang dengan role yang benar</li>
+        </ol>
+      </div>
+
+      <div style="margin: 1rem 0; padding: 1rem; background: #fff; border-radius: 4px;">
+        <h4 style="margin: 0 0 0.5rem 0;">Problem: CSS/tampilan berantakan</h4>
+        <p style="margin: 0; color: #666;"><strong>Solusi:</strong></p>
+        <ol style="margin: 0.5rem 0 0 1.5rem;">
+          <li>Pastikan file <code>css/style.css</code> ada di folder yang benar</li>
+          <li>Refresh halaman dengan Ctrl+F5 (hard refresh)</li>
+          <li>Coba buka di browser lain (Chrome/Firefox/Edge)</li>
+        </ol>
+      </div>
+    </div>
+
+    <!-- Technical Info -->
+    <div class="card">
+      <h3>💻 Informasi Teknis</h3>
+      <table>
+        <tr>
+          <td style="width: 200px;"><strong>Total Halaman</strong></td>
+          <td>25 halaman HTML</td>
+        </tr>
+        <tr>
+          <td><strong>Teknologi</strong></td>
+          <td>HTML5, CSS3, Vanilla JavaScript</td>
+        </tr>
+        <tr>
+          <td><strong>Framework</strong></td>
+          <td>Tidak ada (Pure HTML/CSS/JS)</td>
+        </tr>
+        <tr>
+          <td><strong>Responsive</strong></td>
+          <td>✅ Ya, mobile-friendly</td>
+        </tr>
+        <tr>
+          <td><strong>Backend</strong></td>
+          <td>❌ Tidak ada (Frontend only / Prototype)</td>
+        </tr>
+        <tr>
+          <td><strong>Database</strong></td>
+          <td>❌ Tidak ada (Data hardcoded)</td>
+        </tr>
+        <tr>
+          <td><strong>Browser Support</strong></td>
+          <td>Chrome, Firefox, Edge, Safari (modern browsers)</td>
+        </tr>
+      </table>
+
+      <div style="margin-top: 1.5rem; padding: 1rem; background: #e3f2fd; border-left: 4px solid #1976d2; border-radius: 4px;">
+        <strong>ℹ️ Catatan:</strong> Ini adalah prototype/demo dengan data statis. Untuk production, diperlukan backend API, database, dan sistem keamanan yang lebih robust.
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="card" style="text-align: center; background: linear-gradient(135deg, #00796b 0%, #004d40 100%); color: #fff;">
+      <h3 style="color: #fff;">🎯 Siap Mencoba?</h3>
+      <p style="font-size: 1.1rem; margin: 1rem 0 2rem 0;">Pilih role dan mulai eksplorasi fitur-fitur Smart Health Center Service!</p>
+      <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+        <a href="login.html" class="btn btn-primary" style="background: #fff; color: #00796b;">🔐 Login Sekarang</a>
+        <a href="index.html" class="btn btn-secondary">🏠 Kembali ke Beranda</a>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Smart Health Center Service. All Rights Reserved.</p>
+  </footer>
+</body>
+</html>

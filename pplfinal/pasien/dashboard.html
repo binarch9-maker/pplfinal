@@ -1,0 +1,962 @@
+﻿<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Pasien - Smart Health Center Service</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/header-styles.css">
+  <style>
+    body {
+      display: flex;
+      min-height: 100vh;
+      flex-direction: column;
+      margin: 0;
+    }
+
+    /* Sidebar Styles */
+    .sidebar {
+      width: 260px;
+      background: #ffffff;
+      color: #2c3e50;
+      position: fixed;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      overflow-y: auto;
+      overflow-x: hidden;
+      z-index: 1000;
+      transition: all 0.3s ease;
+      box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    }
+
+    .sidebar-header {
+      padding: 0.875rem;
+      background: #ffffff;
+      border-bottom: 1px solid #e0e0e0;
+      text-align: center;
+    }
+
+    .sidebar-menu {
+      padding: 1rem 0;
+    }
+
+    .menu-item {
+      margin: 0.25rem 0;
+    }
+
+    .menu-link {
+      display: flex;
+      align-items: center;
+      padding: 0.75rem 0.875rem;
+      color: #2c3e50;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      user-select: none;
+      font-size: 0.95rem;
+    }
+
+    .menu-link:hover {
+      background: rgba(0,0,0,0.08);
+      padding-left: 1rem;
+    }
+
+    .menu-link.active {
+      background: #3498db;
+      color: #fff;
+      border-left: 4px solid #2980b9;
+      padding-left: 0.625rem;
+    }
+
+    .menu-link i {
+      margin-right: 0.625rem;
+      font-size: 1rem;
+      width: 18px;
+      text-align: center;
+      font-style: normal;
+    }
+
+    .main-content {
+      margin-left: 260px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: #f5f7fa;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      background: #fff;
+    }
+
+    main {
+      padding: 2rem;
+      flex: 1;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+      }
+      .sidebar.mobile-open {
+        transform: translateX(0);
+      }
+      .main-content {
+        margin-left: 0;
+      }
+    }
+
+    /* Header Notification Styles */
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+    .notification-bell {
+      position: relative;
+      cursor: pointer;
+      padding: 0.5rem;
+      border-radius: 8px;
+      transition: background 0.3s;
+    }
+    .notification-bell:hover {
+      background: rgba(26, 139, 211, 0.1);
+    }
+    .notification-bell svg {
+      width: 24px;
+      height: 24px;
+      fill: #2c4964;
+    }
+    .notification-badge {
+      position: absolute;
+      top: 0;
+      right: 0;
+      background: #d32f2f;
+      color: white;
+      font-size: 0.65rem;
+      font-weight: bold;
+      padding: 0.15rem 0.4rem;
+      border-radius: 10px;
+      min-width: 18px;
+      text-align: center;
+    }
+    .notification-dropdown {
+      position: absolute;
+      top: calc(100% + 0.5rem);
+      right: 0;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+      width: 380px;
+      max-height: 500px;
+      overflow-y: auto;
+      display: none;
+      z-index: 1000;
+    }
+    .notification-dropdown.show {
+      display: block;
+    }
+    .notification-header {
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid #e0e0e0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .notification-header h4 {
+      margin: 0;
+      font-size: 1rem;
+      color: #2c4964;
+    }
+    .mark-read {
+      color: #1a8bd3;
+      font-size: 0.85rem;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .mark-read:hover {
+      text-decoration: underline;
+    }
+    .notification-list-header {
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    .notification-item-header {
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid #f0f0f0;
+      cursor: pointer;
+      transition: background 0.2s;
+      display: flex;
+      gap: 1rem;
+    }
+    .notification-item-header:hover {
+      background: #f5f9fc;
+    }
+    .notification-item-header.unread {
+      background: #f0f7ff;
+    }
+    .notification-icon-header {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .notification-icon-header.error {
+      background: #ffebee;
+      color: #d32f2f;
+    }
+    .notification-icon-header.success {
+      background: #e8f5e9;
+      color: #00897b;
+    }
+    .notification-icon-header.info {
+      background: #e3f2fd;
+      color: #1a8bd3;
+    }
+    .notification-icon-header.warning {
+      background: #fff3e0;
+      color: #ff9800;
+    }
+    .notification-content-header {
+      flex: 1;
+    }
+    .notification-content-header strong {
+      display: block;
+      color: #2c4964;
+      font-size: 0.9rem;
+      margin-bottom: 0.25rem;
+    }
+    .notification-content-header p {
+      color: #5f7a95;
+      font-size: 0.85rem;
+      margin: 0;
+      line-height: 1.4;
+    }
+    .notification-time-header {
+      font-size: 0.75rem;
+      color: #999;
+      margin-top: 0.25rem;
+    }
+    .notification-footer {
+      padding: 0.75rem 1.25rem;
+      text-align: center;
+      border-top: 1px solid #e0e0e0;
+    }
+    .notification-footer a {
+      color: #1a8bd3;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+    .notification-footer a:hover {
+      text-decoration: underline;
+    }
+    
+    /* User Profile Dropdown */
+    .user-profile {
+      position: relative;
+    }
+    .user-profile-toggle {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.5rem 1rem;
+      background: white;
+      border: 1px solid #e0e0e0;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .user-profile-toggle:hover {
+      border-color: #1a8bd3;
+      box-shadow: 0 2px 8px rgba(26, 139, 211, 0.1);
+    }
+    .user-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #1a8bd3, #2c4964);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    .user-info {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .user-name {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #2c4964;
+    }
+    .user-role {
+      font-size: 0.75rem;
+      color: #5f7a95;
+    }
+    .dropdown-arrow {
+      width: 16px;
+      height: 16px;
+      fill: #5f7a95;
+      transition: transform 0.3s;
+    }
+    .user-profile.active .dropdown-arrow {
+      transform: rotate(180deg);
+    }
+    .user-dropdown {
+      position: absolute;
+      top: calc(100% + 0.5rem);
+      right: 0;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+      width: 240px;
+      display: none;
+      z-index: 1000;
+      overflow: hidden;
+    }
+    .user-dropdown.show {
+      display: block;
+    }
+    .user-dropdown-item {
+      padding: 0.875rem 1.25rem;
+      color: #2c4964;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      transition: background 0.2s;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .user-dropdown-item:last-child {
+      border-bottom: none;
+    }
+    .user-dropdown-item:hover {
+      background: #f5f9fc;
+    }
+    .user-dropdown-item.logout {
+      color: #d32f2f;
+      font-weight: 600;
+    }
+    .user-dropdown-item.logout:hover {
+      background: #ffebee;
+    }
+
+    /* Modern Dashboard Styles */
+    .welcome-banner {
+      background: linear-gradient(135deg, #6B9BD1 0%, #5A8BC1 100%);
+      color: white;
+      padding: 2.5rem;
+      border-radius: 16px;
+      margin-bottom: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .welcome-banner::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -20%;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+    .welcome-banner h1 {
+      font-size: 1.8rem;
+      margin-bottom: 0.5rem;
+      position: relative;
+    }
+    .welcome-banner p {
+      font-size: 1.1rem;
+      opacity: 0.9;
+      position: relative;
+    }
+    
+    /* Enhanced Status Card */
+    .status-antrean-card {
+      background: linear-gradient(135deg, #6B9BD1 0%, #5A8BC1 100%);
+      color: white;
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(107, 155, 209, 0.2);
+      margin-bottom: 2rem;
+    }
+    .status-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      margin-top: 1.5rem;
+    }
+    .status-item h4 {
+      font-size: 0.9rem;
+      opacity: 0.9;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+    .status-value {
+      font-size: 2rem;
+      font-weight: 700;
+      margin: 0.5rem 0;
+    }
+    .status-detail {
+      font-size: 0.9rem;
+      opacity: 0.85;
+    }
+    
+    /* Enhanced Stats Cards */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .stat-card {
+      background: white;
+      padding: 1.75rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+      border-left: 4px solid white;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .stat-card::after {
+      content: '';
+      position: absolute;
+      bottom: -30%;
+      right: -30%;
+      width: 100px;
+      height: 100px;
+      background: radial-gradient(circle, rgba(107, 155, 209, 0.08) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+    .stat-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(107, 155, 209, 0.12);
+    }
+    .stat-card h3 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #2c4964;
+      margin-bottom: 0.5rem;
+    }
+    .stat-card p {
+      color: #5f7a95;
+      font-size: 0.95rem;
+      margin: 0;
+    }
+    .stat-card .stat-icon {
+      font-size: 2rem;
+      margin-bottom: 0.75rem;
+    }
+    
+    /* Quick Actions Enhanced */
+    .quick-actions-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.25rem;
+      margin-bottom: 2rem;
+    }
+    .action-card {
+      background: white;
+      padding: 1.75rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+      text-align: center;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      border: 2px solid transparent;
+    }
+    .action-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(107, 155, 209, 0.15);
+      border-color: #6B9BD1;
+    }
+    .action-icon {
+      width: 70px;
+      height: 70px;
+      background: linear-gradient(135deg, rgba(107, 155, 209, 0.15), rgba(107, 155, 209, 0.08));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1rem;
+      font-size: 2rem;
+      color: #6B9BD1;
+      transition: all 0.3s ease;
+    }
+    .action-card:hover .action-icon {
+      background: linear-gradient(135deg, rgba(107, 155, 209, 0.25), rgba(107, 155, 209, 0.15));
+      transform: scale(1.1);
+    }
+    .action-card h4 {
+      color: #2c4964;
+      margin-bottom: 0.5rem;
+      font-size: 1.1rem;
+    }
+    .action-card p {
+      color: #5f7a95;
+      font-size: 0.9rem;
+    }
+    
+    /* Notification List Enhanced */
+    .notification-card {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    }
+    .notification-item {
+      padding: 1rem;
+      border-left: 3px solid #1a8bd3;
+      background: #f8f9fa;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      transition: all 0.3s ease;
+    }
+    .notification-item:hover {
+      background: #e8f4f8;
+      transform: translateX(4px);
+    }
+    .notification-item strong {
+      color: #2c4964;
+      display: block;
+      margin-bottom: 0.25rem;
+    }
+  </style>
+  <script>
+    // Proteksi akses - hanya untuk role pasien
+    window.addEventListener('DOMContentLoaded', function() {
+      const userRole = sessionStorage.getItem('userRole');
+      const isLoggedIn = sessionStorage.getItem('isLoggedIn');
+      
+      // Jika belum login, set default sebagai pasien (untuk kemudahan demo)
+      if (!isLoggedIn) {
+        sessionStorage.setItem('userRole', 'pasien');
+        sessionStorage.setItem('isLoggedIn', 'true');
+        sessionStorage.setItem('username', 'Demo Pasien');
+      }
+      // Jika login sebagai role lain, redirect
+      else if (userRole !== 'pasien') {
+        alert('⚠️ Anda login sebagai ' + userRole + '\n\nAkan diarahkan ke portal yang sesuai.');
+        if (userRole === 'tenaga_medis') window.location.href = '../staf/dashboard.html';
+        else if (userRole === 'dokter') window.location.href = '../dokter/dashboard.html';
+        else if (userRole === 'admin') window.location.href = '../admin/dashboard.html';
+      }
+    });
+  </script>
+</head>
+<body>
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem; text-align: center;">
+        <img src="../img/Smarthealth-Logo.png" alt="Smart Health Logo" style="height: 50px;">
+      </div>
+    </div>
+
+    <div class="sidebar-menu">
+      <!-- Beranda -->
+      <div class="menu-item">
+        <a href="dashboard.html" class="menu-link active">
+          <i>🏠</i>
+          <span>Beranda</span>
+        </a>
+      </div>
+
+      <!-- Jadwal Dokter -->
+      <div class="menu-item">
+        <a href="jadwal-dokter.html" class="menu-link">
+          <i>📅</i>
+          <span>Jadwal Dokter</span>
+        </a>
+      </div>
+
+      <!-- Antrean -->
+      <div class="menu-item">
+        <a href="antrean.html" class="menu-link">
+          <i>🎫</i>
+          <span>Antrean</span>
+        </a>
+      </div>
+
+      <!-- Status Antrean -->
+      <div class="menu-item">
+        <a href="status-antrean.html" class="menu-link">
+          <i>📋</i>
+          <span>Status Antrean</span>
+        </a>
+      </div>
+
+      <!-- Permohonan Surat -->
+      <div class="menu-item">
+        <a href="permohonan-surat.html" class="menu-link">
+          <i>📄</i>
+          <span>Permohonan Surat</span>
+        </a>
+      </div>
+
+      <!-- Riwayat Surat -->
+      <div class="menu-item">
+        <a href="riwayat-surat.html" class="menu-link">
+          <i>📜</i>
+          <span>Riwayat Surat</span>
+        </a>
+      </div>
+
+      <!-- Chatbot -->
+      <div class="menu-item">
+        <a href="chatbot.html" class="menu-link">
+          <i>💬</i>
+          <span>Chatbot</span>
+        </a>
+      </div>
+
+      <hr style="border: none; border-top: 1px solid rgba(0,0,0,0.1); margin: 1rem 0;">
+
+      <!-- Logout -->
+      <div class="menu-item">
+        <a href="../login-pasien.html" class="menu-link" style="color: #e74c3c;">
+          <i>🚪</i>
+          <span>Logout</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+  <header>
+    <div class="header-container">
+      <div class="logo" style="flex-direction: column; align-items: flex-start; gap: 0.25rem;">
+        <h2 style="margin: 0; font-size: 1.5rem; color: #2c3e50;">Dashboard Pasien</h2>
+        <p style="font-size: 0.85rem; margin: 0; color: #7f8c8d;">Kelola kesehatan Anda dengan mudah</p>
+      </div>
+
+      <nav style="flex: 1; margin-left: 2rem;">
+      </nav>
+      
+      <div class="header-right">
+        <!-- Notification Bell -->
+        <div class="notification-bell" onclick="toggleNotification()">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/>
+          </svg>
+          <span class="notification-badge">4</span>
+          
+          <div class="notification-dropdown" id="notificationDropdown">
+            <div class="notification-header">
+              <h4>Notifikasi</h4>
+              <a href="#" class="mark-read">Tandai Sudah Dibaca</a>
+            </div>
+            <div class="notification-list-header">
+              <div class="notification-item-header unread">
+                <div class="notification-icon-header success">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                  </svg>
+                </div>
+                <div class="notification-content-header">
+                  <strong>Surat Sehat Anda telah diterbitkan</strong>
+                  <p>Silakan unduh di menu Riwayat Surat</p>
+                  <div class="notification-time-header">10 menit lalu</div>
+                </div>
+              </div>
+              
+              <div class="notification-item-header unread">
+                <div class="notification-icon-header info">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+                  </svg>
+                </div>
+                <div class="notification-content-header">
+                  <strong>Nomor antrean Anda: A-012</strong>
+                  <p>Silakan menunggu, saat ini posisi ke-3</p>
+                  <div class="notification-time-header">25 menit lalu</div>
+                </div>
+              </div>
+              
+              <div class="notification-item-header">
+                <div class="notification-icon-header warning">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/>
+                  </svg>
+                </div>
+                <div class="notification-content-header">
+                  <strong>Jadwal kontrol: 5 Desember 2025</strong>
+                  <p>Jangan lupa jadwal kontrol dengan dr. Siti Aminah</p>
+                  <div class="notification-time-header">2 hari lalu</div>
+                </div>
+              </div>
+              
+              <div class="notification-item-header">
+                <div class="notification-icon-header info">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+                  </svg>
+                </div>
+                <div class="notification-content-header">
+                  <strong>Permohonan surat sakit diproses</strong>
+                  <p>Tenaga medis sedang memvalidasi permohonan Anda</p>
+                  <div class="notification-time-header">3 hari lalu</div>
+                </div>
+              </div>
+            </div>
+            <div class="notification-footer">
+              <a href="#">Lihat Semua</a>
+            </div>
+          </div>
+        </div>
+        
+        <!-- User Profile Dropdown -->
+        <div class="user-profile" id="userProfile">
+          <button class="user-profile-toggle" onclick="toggleUserDropdown()">
+            <div class="user-avatar">DP</div>
+            <div class="user-info">
+              <span class="user-name" id="headerUserName">Demo Pasien</span>
+              <span class="user-role">Pasien</span>
+            </div>
+            <svg class="dropdown-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path d="M7 10l5 5 5-5z"/>
+            </svg>
+          </button>
+          
+          <div class="user-dropdown" id="userDropdown">
+            <a href="profil.html" class="user-dropdown-item">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+              </svg>
+              Profil Saya
+            </a>
+            <div style="border-top: 1px solid #f0f0f0; margin: 0.5rem 0;"></div>
+            <a href="../logout.html" class="user-dropdown-item logout">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/>
+              </svg>
+              Logout
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+
+
+  <main>
+    <!-- Welcome Banner -->
+    <div class="welcome-banner">
+      <h1>Halo, <span id="userName">Demo Pasien</span>! 👋</h1>
+      <p>Kelola kesehatan Anda dengan mudah melalui dashboard ini</p>
+    </div>
+
+    <!-- Status Antrean Aktif -->
+    <div class="status-antrean-card">
+      <h3 style="color: #fff; display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem; font-size: 1.25rem;">
+        <span>📋</span> Status Antrean Anda Saat Ini
+      </h3>
+      <div class="status-grid">
+        <div class="status-item">
+          <h4>Nomor Antrean</h4>
+          <div class="status-value">A-012</div>
+        </div>
+        <div class="status-item">
+          <h4>Status</h4>
+          <div class="status-value" style="font-size: 1.8rem;">Menunggu</div>
+          <div class="status-detail">Posisi: 3 dari 15</div>
+        </div>
+        <div class="status-item">
+          <h4>Estimasi Waktu</h4>
+          <div class="status-value" style="font-size: 1.8rem;">~15 menit</div>
+          <div class="status-detail">Waktu daftar: 09:30 WIB</div>
+        </div>
+        <div class="status-item">
+          <h4>Poli Tujuan</h4>
+          <div class="status-value" style="font-size: 1.8rem;">Poli Umum</div>
+          <a href="status-antrean.html" class="btn btn-success" style="margin-top: 0.75rem; background: rgba(255,255,255,0.2); border: 2px solid white;">Lihat Detail</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Stats -->
+    <h3 style="color: #2c4964; margin-bottom: 1.5rem; font-size: 1.2rem; margin-top: 2rem;">Ringkasan Data</h3>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon">📅</div>
+        <div class="stat-info">
+          <h3>5</h3>
+          <p>Kunjungan Bulan Ini</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">⏱️</div>
+        <div class="stat-info">
+          <h3>2</h3>
+          <p>Surat Menunggu Validasi</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">✅</div>
+        <div class="stat-info">
+          <h3>12</h3>
+          <p>Total Surat Diterbitkan</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">📆</div>
+        <div class="stat-info">
+          <h3>1</h3>
+          <p>Jadwal Kontrol Mendatang</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <h3 style="color: #2c4964; margin-bottom: 1.5rem; font-size: 1.2rem; margin-top: 2rem;">Akses Cepat</h3>
+    <div class="quick-actions-grid">
+      <a href="antrean.html" class="action-card">
+        <div class="action-icon">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 11l3 3L22 4M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+        </div>
+        <h4>Daftar Antrean</h4>
+        <p>Buat antrean untuk kunjungan Anda</p>
+      </a>
+      
+      <a href="permohonan-surat.html" class="action-card">
+        <div class="action-icon">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+        </div>
+        <h4>Permohonan Surat</h4>
+        <p>Ajukan surat kesehatan online</p>
+      </a>
+      
+      <a href="jadwal-dokter.html" class="action-card">
+        <div class="action-icon">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+          </svg>
+        </div>
+        <h4>Jadwal Dokter</h4>
+        <p>Lihat jadwal praktik dokter</p>
+      </a>
+      
+      <a href="chatbot.html" class="action-card">
+        <div class="action-icon">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+          </svg>
+        </div>
+        <h4>Tanya Chatbot</h4>
+        <p>Konsultasi dengan asisten virtual</p>
+      </a>
+    </div>
+
+    <!-- Riwayat Kunjungan Terakhir -->
+    <h3 style="color: #2c4964; margin-bottom: 1.5rem; font-size: 1.2rem; margin-top: 2rem;">Riwayat Kunjungan Terbaru</h3>
+    <div class="card" style="overflow-x: auto;">
+      <table style="border-collapse: collapse; width: 100%; min-width: 600px;">
+        <thead>
+          <tr style="background: linear-gradient(135deg, #1a8bd3 0%, #2c4964 100%);">
+            <th style="color: white; padding: 1rem; text-align: left; font-weight: 600;">Tanggal</th>
+            <th style="color: white; padding: 1rem; text-align: left; font-weight: 600;">Poli</th>
+            <th style="color: white; padding: 1rem; text-align: left; font-weight: 600;">Dokter</th>
+            <th style="color: white; padding: 1rem; text-align: left; font-weight: 600;">Diagnosis</th>
+            <th style="color: white; padding: 1rem; text-align: left; font-weight: 600;">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom: 1px solid #e0e0e0; transition: background 0.3s;" onmouseover="this.style.background='#f5f9fc'" onmouseout="this.style.background='white'">
+            <td style="padding: 1rem;">25 Nov 2025</td>
+            <td style="padding: 1rem;">Poli Umum</td>
+            <td style="padding: 1rem;">dr. Ahmad Fauzi</td>
+            <td style="padding: 1rem;">Influenza</td>
+            <td style="padding: 1rem;"><span class="badge badge-success">Selesai</span></td>
+          </tr>
+          <tr style="border-bottom: 1px solid #e0e0e0; transition: background 0.3s;" onmouseover="this.style.background='#f5f9fc'" onmouseout="this.style.background='white'">
+            <td style="padding: 1rem;">20 Nov 2025</td>
+            <td style="padding: 1rem;">Poli Gigi</td>
+            <td style="padding: 1rem;">drg. Siti Nurhaliza</td>
+            <td style="padding: 1rem;">Pembersihan Karang Gigi</td>
+            <td style="padding: 1rem;"><span class="badge badge-success">Selesai</span></td>
+          </tr>
+          <tr style="border-bottom: 1px solid #e0e0e0; transition: background 0.3s;" onmouseover="this.style.background='#f5f9fc'" onmouseout="this.style.background='white'">
+            <td style="padding: 1rem;">15 Nov 2025</td>
+            <td style="padding: 1rem;">Poli Umum</td>
+            <td style="padding: 1rem;">dr. Budi Santoso</td>
+            <td style="padding: 1rem;">Kontrol Hipertensi</td>
+            <td style="padding: 1rem;"><span class="badge badge-success">Selesai</span></td>
+          </tr>
+          <tr style="border-bottom: 1px solid #e0e0e0; transition: background 0.3s;" onmouseover="this.style.background='#f5f9fc'" onmouseout="this.style.background='white'">
+            <td style="padding: 1rem;">10 Nov 2025</td>
+            <td style="padding: 1rem;">Laboratorium</td>
+            <td style="padding: 1rem;">-</td>
+            <td style="padding: 1rem;">Cek Darah Lengkap</td>
+            <td style="padding: 1rem;"><span class="badge badge-success">Selesai</span></td>
+          </tr>
+          <tr style="transition: background 0.3s;" onmouseover="this.style.background='#f5f9fc'" onmouseout="this.style.background='white'">
+            <td style="padding: 1rem;">5 Nov 2025</td>
+            <td style="padding: 1rem;">Poli Umum</td>
+            <td style="padding: 1rem;">dr. Ahmad Fauzi</td>
+            <td style="padding: 1rem;">Demam & Batuk</td>
+            <td style="padding: 1rem;"><span class="badge badge-success">Selesai</span></td>
+          </tr>
+        </tbody>
+      </table>
+      <a href="#" class="btn btn-secondary" style="margin-top: 1.5rem; display: inline-block;">Lihat Riwayat Lengkap</a>
+    </div>
+
+    <!-- Jadwal Mendatang -->
+    <div class="card">
+      <h3 style="font-size: 1.1rem;">Jadwal Kontrol Berikutnya</h3>
+      <div style="position: relative; padding-left: 50px; margin-top: 2rem;">
+        <div style="position: absolute; left: 20px; top: 0; bottom: 0; width: 3px; background: linear-gradient(180deg, #1a8bd3 0%, transparent 100%);"></div>
+        <div style="position: absolute; left: 11px; top: 8px; width: 20px; height: 20px; background: white; border: 4px solid #1a8bd3; border-radius: 50%; z-index: 1;"></div>
+        <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; border-left: 3px solid #1a8bd3;">
+          <h4 style="color: #2c4964; font-size: 1.1rem; margin-bottom: 0.75rem;">5 Desember 2025 - 10:00 WIB</h4>
+          <p style="margin: 0.5rem 0;"><strong style="color: #2c4964;">Kontrol Hipertensi</strong></p>
+          <p style="margin: 0.5rem 0; color: #5f7a95;">Dokter: dr. Siti Aminah, Sp.PD</p>
+          <p style="margin: 0.5rem 0; color: #5f7a95;">Poli: Poli Penyakit Dalam</p>
+          <span class="badge badge-warning" style="margin-top: 0.75rem; display: inline-block;">Menunggu Konfirmasi</span>
+        </div>
+      </div>
+      <p class="text-muted" style="margin-top: 1.5rem;">Tidak ada jadwal lainnya</p>
+    </div>
+
+    <!-- Info Penting -->
+    <div class="card" style="background: #fff3cd; border-left: 4px solid #f57c00;">
+      <h3 style="color: #e65100; font-size: 1.1rem;">Informasi Penting</h3>
+      <ul style="line-height: 2; color: #666; margin-top: 1rem;">
+        <li>Harap datang <strong>15 menit sebelum</strong> nomor antrean Anda dipanggil</li>
+        <li>Bawa <strong>KTP dan Kartu BPJS</strong> (jika ada) saat berkunjung</li>
+        <li>Gunakan <strong>masker</strong> selama berada di area puskesmas</li>
+        <li>Untuk pertanyaan, gunakan fitur <a href="chatbot.html" style="color: #00796b;">Chatbot</a></li>
+      </ul>
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Smart Health Center Service. All Rights Reserved.</p>
+  </footer>
+  </div>
+
+  <script src="../js/header-common.js"></script>
+  <script src="../js/chatbot-knowledge-base.js"></script>
+  <script src="../js/chatbot-widget.js"></script>
+</body>
+</html>

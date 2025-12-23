@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registrasi Pasien - Smart Health Center Service</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header>
+    <div class="header-container">
+      <div class="logo" style="flex-direction: column; align-items: flex-start; gap: 0.25rem;">
+        <img src="img/Smarthealth-Logo.png" alt="Smart Health Logo" style="height: 45px;">
+        <p style="font-size: 0.75rem; margin: 0; color: #5f7a95;">Layanan Digital Puskesmas</p>
+      </div>
+      <div>
+        <a href="index.html" class="btn btn-secondary">Kembali ke Beranda</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="page-header">
+      <h2>Registrasi Pasien Baru</h2>
+      <p>Lengkapi formulir di bawah ini untuk membuat akun</p>
+    </div>
+
+    <div class="form-container">
+      <form action="login.html" method="get">
+        <h3 style="color: #00796b; margin-bottom: 1.5rem;">Data Pribadi</h3>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="nik">NIK (Nomor Induk Kependudukan) *</label>
+            <input type="text" id="nik" name="nik" placeholder="16 digit NIK" maxlength="16" required>
+          </div>
+
+          <div class="form-group">
+            <label for="no_kk">Nomor Kartu Keluarga *</label>
+            <input type="text" id="no_kk" name="no_kk" placeholder="16 digit Nomor KK" maxlength="16" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="nama_lengkap">Nama Lengkap *</label>
+          <input type="text" id="nama_lengkap" name="nama_lengkap" placeholder="Sesuai KTP" required>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="tempat_lahir">Tempat Lahir *</label>
+            <input type="text" id="tempat_lahir" name="tempat_lahir" placeholder="Kota kelahiran" required>
+          </div>
+
+          <div class="form-group">
+            <label for="tanggal_lahir">Tanggal Lahir *</label>
+            <input type="date" id="tanggal_lahir" name="tanggal_lahir" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="jenis_kelamin">Jenis Kelamin *</label>
+            <select id="jenis_kelamin" name="jenis_kelamin" required>
+              <option value="">-- Pilih --</option>
+              <option value="L">Laki-laki</option>
+              <option value="P">Perempuan</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="golongan_darah">Golongan Darah</label>
+            <select id="golongan_darah" name="golongan_darah">
+              <option value="">-- Pilih --</option>
+              <option value="A">A</option>
+              <option value="B">B</option>
+              <option value="AB">AB</option>
+              <option value="O">O</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="alamat">Alamat Lengkap *</label>
+          <textarea id="alamat" name="alamat" placeholder="Jalan, RT/RW, Kelurahan, Kecamatan" required></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="kota">Kota/Kabupaten *</label>
+            <input type="text" id="kota" name="kota" required>
+          </div>
+
+          <div class="form-group">
+            <label for="provinsi">Provinsi *</label>
+            <input type="text" id="provinsi" name="provinsi" required>
+          </div>
+
+          <div class="form-group">
+            <label for="kode_pos">Kode Pos</label>
+            <input type="text" id="kode_pos" name="kode_pos" maxlength="5" placeholder="12345">
+          </div>
+        </div>
+
+        <h3 style="color: #00796b; margin: 2rem 0 1.5rem 0;">Kontak</h3>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="no_telp">Nomor Telepon *</label>
+            <input type="tel" id="no_telp" name="no_telp" placeholder="081234567890" required>
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email *</label>
+            <input type="email" id="email" name="email" placeholder="nama@email.com" required>
+          </div>
+        </div>
+
+        <h3 style="color: #00796b; margin: 2rem 0 1.5rem 0;">Informasi Akun</h3>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="username">Username *</label>
+            <input type="text" id="username" name="username" placeholder="Username untuk login" required>
+          </div>
+
+          <div class="form-group">
+            <label for="password">Password *</label>
+            <input type="password" id="password" name="password" placeholder="Minimal 8 karakter" minlength="8" required>
+          </div>
+
+          <div class="form-group">
+            <label for="confirm_password">Konfirmasi Password *</label>
+            <input type="password" id="confirm_password" name="confirm_password" placeholder="Ulangi password" required>
+          </div>
+        </div>
+
+        <h3 style="color: #00796b; margin: 2rem 0 1.5rem 0;">Informasi Tambahan</h3>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="pekerjaan">Pekerjaan</label>
+            <input type="text" id="pekerjaan" name="pekerjaan" placeholder="Pekerjaan saat ini">
+          </div>
+
+          <div class="form-group">
+            <label for="status_pernikahan">Status Pernikahan</label>
+            <select id="status_pernikahan" name="status_pernikahan">
+              <option value="">-- Pilih --</option>
+              <option value="belum_menikah">Belum Menikah</option>
+              <option value="menikah">Menikah</option>
+              <option value="cerai">Cerai</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="alergi">Riwayat Alergi (jika ada)</label>
+          <textarea id="alergi" name="alergi" placeholder="Contoh: Alergi obat penisilin, alergi seafood, dll." rows="3"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="penyakit_bawaan">Riwayat Penyakit (jika ada)</label>
+          <textarea id="penyakit_bawaan" name="penyakit_bawaan" placeholder="Contoh: Diabetes, hipertensi, asma, dll." rows="3"></textarea>
+        </div>
+
+        <div class="form-group" style="margin-top: 2rem;">
+          <div style="display: flex; align-items: flex-start; gap: 0.5rem;">
+            <input type="checkbox" id="agree" name="agree" style="width: auto; margin-top: 0.25rem;" required>
+            <label for="agree" style="margin: 0;">
+              Saya menyetujui <a href="#" style="color: #00796b;">syarat dan ketentuan</a> yang berlaku dan memberikan izin untuk penggunaan data saya dalam sistem Smart Health Center Service.
+            </label>
+          </div>
+        </div>
+
+        <div class="btn-group mt-2">
+          <button type="submit" class="btn btn-primary">
+            Daftar Sekarang
+          </button>
+          <button type="reset" class="btn btn-secondary">
+            Reset Form
+          </button>
+        </div>
+
+        <p class="text-center mt-2 text-muted">
+          Sudah punya akun? <a href="javascript:void(0)" onclick="loginPasien()" style="color: #1a8bd3; font-weight: 600; text-decoration: none;">Login di sini</a>
+        </p>
+      </form>
+    </div>
+
+    <script>
+      function loginPasien() {
+        // Set portal pasien di sessionStorage
+        sessionStorage.setItem('selectedPortal', 'pasien');
+        // Redirect ke halaman login
+        window.location.href = 'login.html';
+      }
+    </script>
+
+    <!-- Info Box -->
+    <div class="card mt-2">
+      <h3>ℹ️ Informasi Penting</h3>
+      <ul style="line-height: 2; color: #666;">
+        <li>Pastikan semua data yang diisi adalah <strong>data yang benar dan valid</strong></li>
+        <li>NIK dan Nomor KK akan diverifikasi oleh sistem</li>
+        <li>Email dan nomor telepon akan digunakan untuk notifikasi layanan</li>
+        <li>Password minimal 8 karakter, kombinasi huruf dan angka lebih aman</li>
+        <li>Data yang bertanda (*) wajib diisi</li>
+      </ul>
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Smart Health Center Service. All Rights Reserved.</p>
+  </footer>
+</body>
+</html>

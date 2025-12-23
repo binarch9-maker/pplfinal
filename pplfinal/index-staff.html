@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal Staff Medis - Smart Health Center Service</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header>
+    <div class="header-container">
+      <div class="logo" style="flex-direction: column; align-items: flex-start; gap: 0.25rem;">
+        <img src="img/Smarthealth-Logo.png" alt="Smart Health Logo" style="height: 45px;">
+        <p style="font-size: 0.75rem; margin: 0; color: #5f7a95;">Layanan Digital Puskesmas - Portal Staff</p>
+      </div>
+      <div class="btn-group">
+        <a href="index.html" class="btn btn-secondary">Portal Pasien</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero Section -->
+    <section class="hero" style="position: relative; background: linear-gradient(135deg, rgba(26, 139, 211, 0.85) 0%, rgba(44, 73, 100, 0.85) 100%), url('https://images.unsplash.com/photo-1631815588090-d4bfec5b1ccb?w=1200&q=80') center/cover; background-attachment: fixed; min-height: 500px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+      <h1 style="font-size: 2.5rem; margin-bottom: 1rem;">Portal Staff Medis</h1>
+      <p style="font-size: 1.2rem;">Sistem manajemen layanan kesehatan profesional</p>
+      <div class="btn-group" style="justify-content: center; gap: 1rem;">
+        <button onclick="loginStaff('dokter')" class="btn btn-success" style="font-size: 1.1rem; padding: 1rem 2rem;">
+          🩺 Login sebagai Dokter
+        </button>
+        <button onclick="loginStaff('tenaga_medis')" class="btn btn-primary" style="font-size: 1.1rem; padding: 1rem 2rem;">
+          👨‍⚕️ Login sebagai Tenaga Medis
+        </button>
+      </div>
+    </section>
+
+    <script>
+      function loginStaff(role) {
+        sessionStorage.setItem('selectedPortal', role);
+        window.location.href = 'login.html';
+      }
+    </script>
+
+    <!-- Features untuk Staff -->
+    <section>
+      <h2 class="text-center mb-2">Fitur untuk Staff Medis</h2>
+      <div class="features-grid">
+        <div class="feature-card card">
+          <div class="feature-icon">📋</div>
+          <h3>Manajemen Antrean</h3>
+          <p>Kelola antrean pasien dengan efisien dan real-time</p>
+        </div>
+        <div class="feature-card card">
+          <div class="feature-icon">📊</div>
+          <h3>Rekam Medis Digital</h3>
+          <p>Akses dan update rekam medis pasien secara elektronik</p>
+        </div>
+        <div class="feature-card card">
+          <div class="feature-icon">✅</div>
+          <h3>Validasi Surat</h3>
+          <p>Proses validasi surat keterangan kesehatan</p>
+        </div>
+        <div class="feature-card card">
+          <div class="feature-icon">📈</div>
+          <h3>Laporan Harian</h3>
+          <p>Pantau statistik dan laporan aktivitas harian</p>
+        </div>
+        <div class="feature-card card">
+          <div class="feature-icon">👥</div>
+          <h3>Data Pasien</h3>
+          <p>Kelola database pasien dengan mudah</p>
+        </div>
+        <div class="feature-card card">
+          <div class="feature-icon">🔔</div>
+          <h3>Notifikasi Real-time</h3>
+          <p>Terima notifikasi untuk setiap aktivitas penting</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Info Section -->
+    <section class="mt-2">
+      <div class="card">
+        <h3>ℹ️ Informasi untuk Staff</h3>
+        <ul style="line-height: 2; color: #5f7a95;">
+          <li><strong>Dokter:</strong> Akses penuh ke rekam medis, diagnosa, dan resep pasien</li>
+          <li><strong>Tenaga Medis:</strong> Manajemen antrean, validasi surat, dan hasil pemeriksaan</li>
+          <li>Gunakan kredensial yang diberikan oleh administrator sistem</li>
+          <li>Hubungi IT Support jika mengalami kesulitan akses</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Contact Info -->
+    <section class="mt-2">
+      <div class="card-grid">
+        <div class="card">
+          <h3>📞 IT Support</h3>
+          <p>Email: itsupport@smarthealthcenter.id<br>
+          Ext: 123<br>
+          WhatsApp: 0812-3456-7891</p>
+        </div>
+        <div class="card">
+          <h3>⏰ Jam Operasional</h3>
+          <p>Senin - Jumat: 08:00 - 16:00<br>
+          Sabtu: 08:00 - 13:00<br>
+          Minggu: Tutup</p>
+        </div>
+        <div class="card">
+          <h3>📖 Bantuan</h3>
+          <p><a href="panduan.html" style="color: #1a8bd3; text-decoration: none;">Panduan Penggunaan Sistem</a><br>
+          <a href="pemisahan-role.html" style="color: #1a8bd3; text-decoration: none;">Hak Akses & Role</a></p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Smart Health Center Service. All Rights Reserved.</p>
+    <p style="font-size: 0.9rem; margin-top: 0.5rem; opacity: 0.8;">
+      Sistem Informasi Layanan Kesehatan Digital - Portal Staff Medis
+    </p>
+  </footer>
+</body>
+</html>

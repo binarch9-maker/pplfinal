@@ -1,0 +1,285 @@
+═══════════════════════════════════════════════════════════════════════
+   📋 ALUR PENERBITAN SURAT KETERANGAN - SISTEM YANG BENAR
+═══════════════════════════════════════════════════════════════════════
+
+✅ ALUR YANG BENAR:
+
+1. PASIEN → Mengajukan Permohonan Surat
+   ────────────────────────────────────
+   • Pasien login ke portal pasien
+   • Menu: "📄 Permohonan Surat"
+   • Pilih jenis surat (Sehat/Sakit/Rujukan)
+   • Isi form permohonan
+   • Submit permohonan
+   • Status: Menunggu Validasi
+
+2. PASIEN → Datang ke Puskesmas untuk Pemeriksaan
+   ───────────────────────────────────────────────
+   • Daftar antrean
+   • Menunggu dipanggil
+
+3. TENAGA MEDIS → Input Tanda Vital
+   ─────────────────────────────────
+   • Menu: "📝 Hasil Pemeriksaan"
+   • Input tekanan darah, suhu, nadi, BB, TB
+   • Pasien siap diperiksa dokter
+
+4. DOKTER → Melakukan Pemeriksaan
+   ───────────────────────────────
+   • Menu: "📋 Rekam Medis"
+   • Periksa pasien
+   • Input diagnosis (SOAP format)
+   • Buat resep obat (jika perlu)
+   • TIDAK menerbitkan surat langsung
+
+5. TENAGA MEDIS → Validasi & Terbitkan Surat
+   ──────────────────────────────────────────
+   • Menu: "✅ Validasi Surat"
+   • Review permohonan surat dari pasien
+   • Lihat hasil pemeriksaan dokter
+   • Preview PDF surat
+   • Setujui & Cetak surat
+   • Surat diterbitkan
+
+6. PASIEN → Download Surat
+   ────────────────────────
+   • Menu: "📚 Riwayat Surat"
+   • Lihat surat yang sudah disetujui
+   • Preview PDF
+   • Download surat
+
+
+═══════════════════════════════════════════════════════════════════════
+🎯 PEMBAGIAN TUGAS YANG JELAS:
+═══════════════════════════════════════════════════════════════════════
+
+┌──────────────┬────────────────────────────────────────────────┐
+│ ROLE         │ TANGGUNG JAWAB                                 │
+├──────────────┼────────────────────────────────────────────────┤
+│ PASIEN       │ • Mengajukan permohonan surat                  │
+│              │ • Datang untuk pemeriksaan                     │
+│              │ • Download surat yang sudah jadi               │
+├──────────────┼────────────────────────────────────────────────┤
+│ TENAGA MEDIS │ • Input tanda vital pasien                     │
+│              │ • VALIDASI permohonan surat                    │
+│              │ • TERBITKAN surat setelah disetujui            │
+│              │ • Cetak surat untuk pasien                     │
+├──────────────┼────────────────────────────────────────────────┤
+│ DOKTER       │ • Periksa pasien                               │
+│              │ • Buat diagnosis (rekam medis)                 │
+│              │ • Tulis resep obat                             │
+│              │ • TIDAK menerbitkan surat                      │
+├──────────────┼────────────────────────────────────────────────┤
+│ ADMIN        │ • Kelola user                                  │
+│              │ • Kelola jadwal dokter                         │
+│              │ • Lihat laporan                                │
+│              │ • TIDAK terlibat penerbitan surat              │
+└──────────────┴────────────────────────────────────────────────┘
+
+
+═══════════════════════════════════════════════════════════════════════
+❌ YANG DIHAPUS:
+═══════════════════════════════════════════════════════════════════════
+
+FILE DIHAPUS:
+• dokter/terbitkan-surat.html ❌
+
+MENU DIHAPUS:
+• "📄 Terbitkan Surat" dari navigasi dokter ❌
+
+ALASAN:
+• Dokter fokus pada pemeriksaan medis
+• Penerbitan surat adalah tugas administrasi (tenaga medis)
+• Pemisahan tugas yang jelas sesuai SOP puskesmas
+
+
+═══════════════════════════════════════════════════════════════════════
+✅ MENU DOKTER SEKARANG (3 MENU):
+═══════════════════════════════════════════════════════════════════════
+
+🩺 PORTAL DOKTER
+├── 🏠 Dashboard
+├── 👥 Daftar Pasien Hari Ini
+├── 📋 Rekam Medis (EMR)
+└── 🚪 Logout
+
+FOKUS DOKTER:
+• Memeriksa pasien
+• Input rekam medis lengkap (SOAP)
+• Menulis resep obat
+• Memberikan rujukan (jika perlu)
+
+
+═══════════════════════════════════════════════════════════════════════
+✅ MENU TENAGA MEDIS SEKARANG (5 MENU):
+═══════════════════════════════════════════════════════════════════════
+
+👨‍⚕️ PORTAL TENAGA MEDIS
+├── 🏠 Dashboard
+├── 📋 Daftar Antrean
+├── ⚙️ Kelola Antrean
+├── ✅ Validasi Surat ⭐ (PENERBITAN SURAT DI SINI)
+├── 📝 Hasil Pemeriksaan
+└── 🚪 Logout
+
+FOKUS TENAGA MEDIS:
+• Kelola antrean pasien
+• Input tanda vital
+• Validasi permohonan surat
+• Terbitkan surat dengan preview PDF
+
+
+═══════════════════════════════════════════════════════════════════════
+🔄 FLOW DIAGRAM LENGKAP:
+═══════════════════════════════════════════════════════════════════════
+
+┌─────────────┐
+│   PASIEN    │
+│             │
+│ 1. Ajukan   │
+│    Surat    │
+└──────┬──────┘
+       │
+       ▼
+┌─────────────┐
+│ Permohonan  │
+│  Masuk      │
+│  Sistem     │
+└──────┬──────┘
+       │
+       ▼
+┌─────────────┐
+│   PASIEN    │
+│             │
+│ 2. Datang   │
+│    Periksa  │
+└──────┬──────┘
+       │
+       ▼
+┌─────────────┐
+│  TNG MEDIS  │
+│             │
+│ 3. Input    │
+│    Vital    │
+└──────┬──────┘
+       │
+       ▼
+┌─────────────┐
+│   DOKTER    │
+│             │
+│ 4. Periksa  │
+│    + EMR    │
+└──────┬──────┘
+       │
+       ▼
+┌─────────────┐
+│  TNG MEDIS  │
+│             │
+│ 5. Validasi │
+│    Surat    │
+│             │
+│ 6. Preview  │
+│    PDF      │
+│             │
+│ 7. Terbit   │
+│    Surat    │
+└──────┬──────┘
+       │
+       ▼
+┌─────────────┐
+│   PASIEN    │
+│             │
+│ 8. Download │
+│    Surat    │
+└─────────────┘
+
+
+═══════════════════════════════════════════════════════════════════════
+📍 FITUR PREVIEW PDF YANG TETAP ADA:
+═══════════════════════════════════════════════════════════════════════
+
+1. PASIEN - Riwayat Surat ✅
+   • pasien/riwayat-surat.html
+   • Preview surat yang sudah diterbitkan
+   • Download PDF
+
+2. TENAGA MEDIS - Validasi Surat ✅
+   • staf/validasi-surat.html
+   • Preview permohonan surat
+   • Validasi & terbitkan surat
+   • Download PDF
+
+3. DOKTER - Terbitkan Surat ❌
+   • dokter/terbitkan-surat.html
+   • DIHAPUS (tidak sesuai alur)
+
+
+═══════════════════════════════════════════════════════════════════════
+💡 KENAPA ALUR INI LEBIH BAIK?
+═══════════════════════════════════════════════════════════════════════
+
+1. SESUAI SOP PUSKESMAS
+   • Dokter fokus pada diagnosis medis
+   • Perawat/staf admin yang menerbitkan surat
+   • Pemisahan tugas klinis dan administratif
+
+2. MENCEGAH DUPLIKASI
+   • Dokter tidak perlu input data dua kali
+   • Data sudah ada dari rekam medis
+   • Tenaga medis tinggal validasi
+
+3. EFISIENSI WAKTU
+   • Dokter bisa fokus periksa lebih banyak pasien
+   • Tenaga medis handle administrasi
+   • Workflow lebih cepat
+
+4. KONTROL KUALITAS
+   • Tenaga medis bisa cek ulang data
+   • Preview PDF sebelum terbit
+   • Mengurangi error
+
+
+═══════════════════════════════════════════════════════════════════════
+📊 PERBANDINGAN:
+═══════════════════════════════════════════════════════════════════════
+
+ALUR SALAH (SEBELUMNYA):
+❌ Pasien → Ajukan Surat
+❌ Dokter → Terbitkan Surat Langsung
+❌ Pasien → Download
+
+MASALAH:
+• Dokter terlalu banyak tugas admin
+• Data pasien harus diinput ulang
+• Tidak ada validasi dari tenaga medis
+• Tidak sesuai prosedur puskesmas
+
+
+ALUR BENAR (SEKARANG):
+✅ Pasien → Ajukan Surat
+✅ Dokter → Periksa + Diagnosis
+✅ Tenaga Medis → Validasi + Terbitkan Surat
+✅ Pasien → Download
+
+KEUNTUNGAN:
+• Dokter fokus pemeriksaan
+• Data terintegrasi dari EMR
+• Tenaga medis validasi administrasi
+• Sesuai SOP kesehatan
+
+
+═══════════════════════════════════════════════════════════════════════
+✅ KESIMPULAN:
+═══════════════════════════════════════════════════════════════════════
+
+✅ Menu "Terbitkan Surat" DIHAPUS dari portal dokter
+✅ File dokter/terbitkan-surat.html DIHAPUS
+✅ Navigasi dokter kembali ke 3 menu (Dashboard, Pasien, EMR)
+✅ Penerbitan surat TETAP di portal Tenaga Medis
+✅ Alur sesuai dengan SOP puskesmas yang benar
+✅ Pemisahan tugas klinis dan administratif jelas
+
+SISTEM SEKARANG LEBIH REALISTIS! 🎯
+
+
+═══════════════════════════════════════════════════════════════════════

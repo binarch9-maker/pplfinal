@@ -1,0 +1,339 @@
+═══════════════════════════════════════════════════════════════════════
+   📄 FITUR PREVIEW DAN DOWNLOAD SURAT PDF - PANDUAN PENGGUNAAN
+═══════════════════════════════════════════════════════════════════════
+
+✅ FITUR YANG TELAH DITAMBAHKAN:
+
+1. PREVIEW SURAT DALAM FORMAT PDF
+   --------------------------------
+   • Semua surat dapat dipre view sebelum diunduh
+   • Format PDF profesional dengan kop surat Puskesmas
+   • Tampilan modal full screen untuk review detail
+   • Support 3 jenis surat:
+     - Surat Keterangan Sehat
+     - Surat Keterangan Sakit
+     - Surat Rujukan
+
+2. DOWNLOAD SURAT PDF
+   --------------------
+   • Download langsung ke komputer dalam format PDF
+   • Nama file otomatis sesuai nomor surat
+   • Format: SKS-2025-1125-045.pdf
+   • Ukuran file efisien (~50-100KB)
+
+3. LIBRARY YANG DIGUNAKAN
+   -----------------------
+   • jsPDF v2.5.1 (dari CDN CloudFlare)
+   • Tidak perlu instalasi tambahan
+   • Berfungsi di semua browser modern
+   • Koneksi internet diperlukan untuk load library
+
+
+═══════════════════════════════════════════════════════════════════════
+📍 HALAMAN YANG SUDAH MEMILIKI FITUR PDF:
+═══════════════════════════════════════════════════════════════════════
+
+1. PASIEN - Riwayat Surat
+   -----------------------
+   📁 File: pasien/riwayat-surat.html
+   
+   FITUR:
+   • Tombol "👁️ Lihat" - Preview surat di modal
+   • Tombol "📥 Unduh PDF" - Download langsung
+   • Data surat lengkap (3 contoh surat tersedia)
+   • Filter dan pencarian surat
+   
+   CARA MENGGUNAKAN:
+   1. Buka halaman Riwayat Surat
+   2. Pada tabel surat yang sudah diterbitkan
+   3. Klik "👁️ Lihat" untuk preview
+   4. Klik "📥 Unduh PDF" untuk download langsung
+   5. Atau di modal preview, klik "Download PDF"
+
+
+2. TENAGA MEDIS - Validasi Surat
+   ------------------------------
+   📁 File: staf/validasi-surat.html
+   
+   FITUR:
+   • Preview permohonan surat dari pasien
+   • Lihat detail sebelum approval
+   • Modal preview dengan format profesional
+   
+   CARA MENGGUNAKAN:
+   1. Buka halaman Validasi Surat
+   2. Klik nama surat untuk preview
+   3. Review isi surat di modal
+   4. Approve atau tolak permohonan
+
+
+3. DOKTER - Terbitkan Surat (BARU!)
+   ---------------------------------
+   📁 File: dokter/terbitkan-surat.html
+   
+   FITUR LENGKAP:
+   • Form input 3 jenis surat
+   • Preview real-time sebelum terbitkan
+   • Generate nomor surat otomatis
+   • Download PDF setelah terbitkan
+   
+   CARA MENGGUNAKAN:
+   1. Login sebagai dokter
+   2. Menu navigasi → "📄 Terbitkan Surat"
+   3. Pilih jenis surat (Sehat/Sakit/Rujukan)
+   4. Isi form yang muncul
+   5. Klik "👁️ Preview PDF" untuk melihat hasil
+   6. Review di modal preview
+   7. Klik "✅ Terbitkan & Download" untuk finalisasi
+   8. PDF otomatis terdownload
+   
+
+═══════════════════════════════════════════════════════════════════════
+🎯 CONTOH SURAT YANG TERSEDIA (PASIEN):
+═══════════════════════════════════════════════════════════════════════
+
+1. Surat Keterangan Sehat
+   -----------------------
+   Nomor: SKS/2025/1125/045
+   Pasien: Ahmad Ridwan
+   Keperluan: Lamaran Kerja - PT. ABC Indonesia
+   Dokter: dr. Ahmad Fauzi
+   
+   ISI:
+   • Data pasien lengkap
+   • Hasil pemeriksaan (TD, Nadi, Suhu, BB, TB)
+   • Kesimpulan: SEHAT
+   • Tanda tangan dokter
+
+
+2. Surat Keterangan Sakit
+   -----------------------
+   Nomor: SKSK/2025/1120/089
+   Pasien: Ahmad Ridwan
+   Diagnosis: ISPA
+   Istirahat: 3 hari (20-22 Nov 2025)
+   Dokter: dr. Budi Santoso
+   
+   ISI:
+   • Data pasien
+   • Diagnosis penyakit
+   • Lama istirahat
+   • Keperluan (Izin Kerja)
+   • Ditujukan kepada perusahaan
+
+
+3. Surat Rujukan
+   ---------------
+   Nomor: SR/2025/1118/023
+   Pasien: Ahmad Ridwan
+   Rujuk ke: RSUD Kota Bandung
+   Bagian: Spesialis Penyakit Dalam
+   Dokter: dr. Siti Aminah, Sp.PD
+   
+   ISI:
+   • Data pasien
+   • Diagnosis sementara
+   • Tindakan yang diperlukan
+   • Alasan rujukan
+
+
+═══════════════════════════════════════════════════════════════════════
+💡 CARA TESTING FITUR PDF:
+═══════════════════════════════════════════════════════════════════════
+
+TEST 1: Preview Surat (Pasien)
+------------------------------
+1. Buka: pasien/riwayat-surat.html
+2. Scroll ke tabel "Surat yang Sudah Diterbitkan"
+3. Klik tombol "👁️ Lihat" pada baris pertama
+4. Modal akan muncul dengan preview surat
+5. Verifikasi:
+   ✓ Kop surat Puskesmas tampil
+   ✓ Data pasien benar
+   ✓ Format rapi dan profesional
+6. Klik "Download PDF" untuk unduh
+7. Buka file PDF yang terdownload
+8. Verifikasi PDF dapat dibuka dan dibaca
+
+
+TEST 2: Download Langsung (Pasien)
+----------------------------------
+1. Buka: pasien/riwayat-surat.html
+2. Scroll ke tabel surat
+3. Klik tombol "📥 Unduh PDF" langsung
+4. File PDF otomatis terdownload
+5. Cek folder Downloads
+6. Nama file: SKS-2025-1125-045.pdf
+7. Buka dan verifikasi isi
+
+
+TEST 3: Terbitkan Surat Baru (Dokter)
+------------------------------------
+1. Buka: login.html
+2. Login sebagai Dokter
+3. Klik menu "📄 Terbitkan Surat"
+4. Pilih "Surat Keterangan Sehat"
+5. Isi form:
+   - Pilih pasien: Ahmad Ridwan
+   - Keperluan: Test Preview PDF
+   - TD: 120/80 mmHg
+   - Nadi: 78 x/menit
+   - Suhu: 36.5°C
+   - BB: 68 kg
+   - TB: 170 cm
+   - Kesimpulan: Sehat walafiat
+6. Klik "👁️ Preview PDF"
+7. Modal muncul dengan preview
+8. Verifikasi semua data benar
+9. Klik "Download PDF" atau "✅ Terbitkan Surat"
+10. File PDF terdownload
+11. Buka dan cek hasilnya
+
+
+TEST 4: Validasi Surat (Tenaga Medis)
+------------------------------------
+1. Buka: staf/validasi-surat.html
+2. Lihat permohonan surat menunggu validasi
+3. Klik untuk preview
+4. Modal muncul
+5. Review detail permohonan
+
+
+═══════════════════════════════════════════════════════════════════════
+🔧 FITUR TEKNIS:
+═══════════════════════════════════════════════════════════════════════
+
+1. GENERATE NOMOR SURAT OTOMATIS
+   Format: [PREFIX]/[TAHUN]/[BULAN+TANGGAL]/[RANDOM]
+   
+   Contoh:
+   • SKS/2025/1127/045  (Surat Keterangan Sehat)
+   • SKSK/2025/1127/089 (Surat Keterangan Sakit)
+   • SR/2025/1127/023   (Surat Rujukan)
+
+
+2. KOP SURAT PROFESIONAL
+   • Header: PUSKESMAS SMART HEALTH CENTER
+   • Alamat lengkap
+   • Telepon & Email
+   • Garis pembatas tebal + tipis
+
+
+3. LAYOUT PDF
+   • Margin: 20mm semua sisi
+   • Font: Helvetica (built-in PDF)
+   • Ukuran kertas: A4
+   • Orientasi: Portrait
+   • Tanda tangan dokter dengan nama & SIP
+
+
+4. VALIDASI FORM
+   • Semua field required wajib diisi
+   • Validasi HTML5 native
+   • Alert jika ada field kosong
+   • Preview hanya muncul jika form valid
+
+
+═══════════════════════════════════════════════════════════════════════
+❓ TROUBLESHOOTING:
+═══════════════════════════════════════════════════════════════════════
+
+MASALAH 1: Modal Preview Tidak Muncul
+SOLUSI:
+• Cek console browser (F12)
+• Pastikan jsPDF library berhasil diload
+• Cek koneksi internet
+• Refresh halaman (Ctrl+F5)
+
+MASALAH 2: PDF Tidak Terdownload
+SOLUSI:
+• Cek popup blocker browser
+• Izinkan download dari localhost/file system
+• Coba browser lain (Chrome/Firefox)
+• Cek pengaturan download folder
+
+MASALAH 3: Data Tidak Muncul di Preview
+SOLUSI:
+• Pastikan semua field form sudah diisi
+• Cek console untuk error JavaScript
+• Pilih pasien dari dropdown
+• Isi ulang form jika perlu
+
+MASALAH 4: Format PDF Berantakan
+SOLUSI:
+• Pastikan menggunakan jsPDF versi 2.5.1
+• Jangan edit kode generate PDF
+• Cek apakah library terload penuh
+• Clear cache browser
+
+
+═══════════════════════════════════════════════════════════════════════
+📊 STATISTIK FITUR:
+═══════════════════════════════════════════════════════════════════════
+
+Total Halaman dengan Fitur PDF: 3
+• pasien/riwayat-surat.html     ✅
+• staf/validasi-surat.html      ✅
+• dokter/terbitkan-surat.html   ✅
+
+Jenis Surat Support: 3
+• Surat Keterangan Sehat        ✅
+• Surat Keterangan Sakit        ✅
+• Surat Rujukan                 ✅
+
+Fungsi JavaScript:
+• generatePDF()                  ✅
+• previewSurat()                 ✅
+• downloadPDF()                  ✅
+• terbitkanSurat()               ✅
+
+Library External:
+• jsPDF 2.5.1 (CDN)              ✅
+
+
+═══════════════════════════════════════════════════════════════════════
+🎉 KESIMPULAN:
+═══════════════════════════════════════════════════════════════════════
+
+✅ Semua surat dapat dipre view dalam format PDF profesional
+✅ Download PDF berfungsi dengan baik
+✅ Form dokter untuk terbitkan surat sudah lengkap
+✅ Data surat tersimpan dalam format yang benar
+✅ UI/UX user-friendly dengan modal preview
+✅ Validasi form mencegah error input
+✅ Nomor surat generate otomatis
+✅ Support 3 jenis surat lengkap
+
+SIAP DIGUNAKAN! 🚀
+
+
+═══════════════════════════════════════════════════════════════════════
+📝 UPDATE LOG:
+═══════════════════════════════════════════════════════════════════════
+
+Tanggal: 27 November 2025
+
+PERUBAHAN:
+1. ✅ Tambah jsPDF library ke pasien/riwayat-surat.html
+2. ✅ Tambah fungsi generatePDF() untuk 3 jenis surat
+3. ✅ Tambah modal preview dengan styling profesional
+4. ✅ Tambah fungsi lihatSurat() dan unduhSurat()
+5. ✅ Update staf/validasi-surat.html dengan fitur preview
+6. ✅ Buat dokter/terbitkan-surat.html (halaman baru)
+7. ✅ Update navigasi dokter di 3 halaman
+8. ✅ Test semua fungsi PDF berjalan normal
+
+FILE YANG DIMODIFIKASI:
+• pasien/riwayat-surat.html      (update)
+• staf/validasi-surat.html       (update)
+• dokter/terbitkan-surat.html    (baru)
+• dokter/dashboard.html          (update nav)
+• dokter/daftar-pasien.html      (update nav)
+• dokter/rekam-medis.html        (update nav)
+
+TOTAL: 6 file diupdate/dibuat
+
+
+═══════════════════════════════════════════════════════════════════════
+✨ SELAMAT MENGGUNAKAN FITUR PREVIEW & DOWNLOAD SURAT PDF! ✨
+═══════════════════════════════════════════════════════════════════════

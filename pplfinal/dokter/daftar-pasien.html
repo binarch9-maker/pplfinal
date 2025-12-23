@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daftar Pasien - Smart Health Center Service</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    body {
+      display: flex;
+      min-height: 100vh;
+      flex-direction: column;
+      margin: 0;
+    }
+
+    /* Sidebar Styles */
+    .sidebar {
+      width: 260px;
+      background: #ffffff;
+      color: #2c3e50;
+      position: fixed;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      overflow-y: auto;
+      overflow-x: hidden;
+      z-index: 1000;
+      transition: all 0.3s ease;
+      box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    }
+
+    .sidebar-header {
+      padding: 1.5rem 0.875rem;
+      background: #ffffff;
+      border-bottom: 1px solid #e0e0e0;
+      text-align: center;
+    }
+
+    .sidebar-menu {
+      padding: 1rem 0;
+    }
+
+    .menu-item {
+      margin: 0.25rem 0;
+    }
+
+    .menu-link {
+      display: flex;
+      align-items: center;
+      padding: 0.75rem 0.875rem;
+      color: #2c3e50;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      user-select: none;
+      font-size: 0.95rem;
+    }
+
+    .menu-link:hover {
+      background: rgba(0,0,0,0.08);
+      padding-left: 1rem;
+    }
+
+    .menu-link.active {
+      background: #3498db;
+      color: #fff;
+      border-left: 4px solid #2980b9;
+      padding-left: 0.625rem;
+    }
+
+    .menu-link i {
+      margin-right: 0.625rem;
+      font-size: 1rem;
+      width: 18px;
+      text-align: center;
+      font-style: normal;
+    }
+
+    .main-content {
+      margin-left: 260px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: #f5f7fa;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      background: #fff;
+    }
+
+    main {
+      padding: 2rem;
+      flex: 1;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+      }
+      .sidebar.mobile-open {
+        transform: translateX(0);
+      }
+      .main-content {
+        margin-left: 0;
+      }
+    }
+
+    .notification-bell {
+      position: relative;
+      cursor: pointer;
+      padding: 0.5rem;
+      border-radius: 8px;
+      transition: background 0.3s;
+    }
+    .notification-bell:hover {
+      background: rgba(26, 139, 211, 0.1);
+    }
+    .notification-bell svg {
+      width: 24px;
+      height: 24px;
+      fill: #2c4964;
+    }
+    .notification-badge {
+      position: absolute;
+      top: 0;
+      right: 0;
+      background: #d32f2f;
+      color: white;
+      font-size: 0.65rem;
+      font-weight: bold;
+      padding: 0.15rem 0.4rem;
+      border-radius: 10px;
+      min-width: 18px;
+      text-align: center;
+    }
+    .notification-dropdown {
+      position: absolute;
+      top: calc(100% + 0.5rem);
+      right: 0;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+      width: 380px;
+      max-height: 500px;
+      overflow-y: auto;
+      display: none;
+      z-index: 1000;
+    }
+    .notification-dropdown.show {
+      display: block;
+    }
+    .notification-header {
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid #e0e0e0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .notification-header h4 {
+      margin: 0;
+      font-size: 1rem;
+      color: #2c4964;
+    }
+    .mark-read {
+      color: #1a8bd3;
+      font-size: 0.85rem;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .mark-read:hover {
+      text-decoration: underline;
+    }
+    .notification-item {
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid #f0f0f0;
+      transition: background 0.2s;
+      cursor: pointer;
+    }
+    .notification-item:hover {
+      background: #f8f9fa;
+    }
+    .notification-item.unread {
+      background: #e3f2fd;
+    }
+    .notification-time {
+      font-size: 0.8rem;
+      color: #999;
+      margin-bottom: 0.3rem;
+    }
+    .notification-message {
+      font-size: 0.9rem;
+      color: #2c4964;
+      line-height: 1.4;
+    }
+    .no-notifications {
+      padding: 3rem 1.25rem;
+      text-align: center;
+      color: #999;
+    }
+
+    .patient-card {
+      background: #fff;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      transition: all 0.3s ease;
+    }
+    .patient-card:hover {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transform: translateY(-2px);
+    }
+    .patient-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .patient-number {
+      background: linear-gradient(135deg, #00796b 0%, #004d40 100%);
+      color: #fff;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-size: 1.5rem;
+      font-weight: bold;
+      min-width: 80px;
+      text-align: center;
+    }
+    .patient-info {
+      flex: 1;
+      margin-left: 1.5rem;
+    }
+    .vital-signs {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1rem;
+      margin: 1rem 0;
+      padding: 1rem;
+      background: #f5f5f5;
+      border-radius: 8px;
+    }
+    .vital-item {
+      text-align: center;
+    }
+    .vital-value {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #00796b;
+      display: block;
+    }
+    .vital-label {
+      font-size: 0.85rem;
+      color: #666;
+      display: block;
+      margin-top: 0.25rem;
+    }
+    .complaint-box {
+      background: #fff3cd;
+      border-left: 4px solid #f57c00;
+      padding: 1rem;
+      margin: 1rem 0;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
+        <img src="../img/Smarthealth-Logo.png" alt="Smart Health Logo" style="height: 50px;">
+      </div>
+    </div>
+
+    <div class="sidebar-menu">
+      <!-- Beranda -->
+      <div class="menu-item">
+        <a href="dashboard-dokter.html" class="menu-link">
+          <i>🏠</i>
+          <span>Beranda</span>
+        </a>
+      </div>
+
+      <!-- Daftar Pasien -->
+      <div class="menu-item">
+        <a href="daftar-pasien.html" class="menu-link active">
+          <i>👥</i>
+          <span>Daftar Pasien</span>
+        </a>
+      </div>
+
+      <!-- Rekam Medis -->
+      <div class="menu-item">
+        <a href="rekam-medis.html" class="menu-link">
+          <i>📋</i>
+          <span>Rekam Medis</span>
+        </a>
+      </div>
+
+      <!-- Jadwal Praktik -->
+      <div class="menu-item">
+        <a href="jadwal-praktik.html" class="menu-link">
+          <i>📅</i>
+          <span>Jadwal Praktik</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <header>
+      <div class="header-container">
+        <div class="logo" style="flex-direction: column; align-items: flex-start; gap: 0.25rem;">
+          <h2 style="margin: 0; font-size: 1.5rem; color: #2c3e50;">Daftar Pasien</h2>
+          <p style="font-size: 0.85rem; margin: 0; color: #7f8c8d;">Kelola pasien hari ini</p>
+        </div>
+        <nav style="margin-left: auto;">
+          <div class="nav-container">
+            <div class="nav-actions" style="display: flex; align-items: center; gap: 1.5rem;">
+              <div class="notification-bell" onclick="toggleNotification()">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                  <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2zm-2 1H8v-6c0-2.48 1.51-4.5 4-4.5s4 2.02 4 4.5v6z"/>
+                </svg>
+                <span class="notification-badge">2</span>
+                <div class="notification-dropdown" id="notificationDropdown">
+                  <div class="notification-header">
+                    <h4>🔔 Notifikasi</h4>
+                    <a href="#" class="mark-read" onclick="markAllRead(event)">Tandai semua dibaca</a>
+                  </div>
+                  <div class="notification-item unread" onclick="handleNotificationClick(this, 'new-patient')">
+                    <div class="notification-time">11:20 WIB</div>
+                    <div class="notification-message">👥 Pasien baru A-009 telah terdaftar dalam antrean</div>
+                  </div>
+                  <div class="notification-item unread" onclick="handleNotificationClick(this, 'urgent')">
+                    <div class="notification-time">10:45 WIB</div>
+                    <div class="notification-message">⚠️ Pasien A-006 memiliki kondisi mendesak</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+    <div class="page-header">
+      <h2>👥 Daftar Pasien Hari Ini</h2>
+      <p>Rabu, 27 November 2025 - Poli Umum</p>
+    </div>
+
+    <!-- Filter and Search -->
+    <div class="card">
+      <div style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;">
+        <div class="form-group" style="flex: 1; min-width: 250px; margin: 0;">
+          <input type="text" id="searchPatient" placeholder="🔍 Cari nama atau nomor RM pasien..." onkeyup="filterPatients()">
+        </div>
+        <select id="filterStatus" onchange="filterPatients()" style="padding: 0.75rem; border: 1px solid #ddd; border-radius: 4px;">
+          <option value="all">Semua Status</option>
+          <option value="waiting">Menunggu</option>
+          <option value="inprogress">Sedang Diperiksa</option>
+          <option value="completed">Selesai</option>
+        </select>
+        <select id="filterPayment" onchange="filterPatients()" style="padding: 0.75rem; border: 1px solid #ddd; border-radius: 4px;">
+          <option value="all">Semua Pembayaran</option>
+          <option value="bpjs">BPJS</option>
+          <option value="umum">Umum</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Summary Stats -->
+    <div class="stats-container" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin: 1.5rem 0;">
+      <div class="stat-box" style="background: #f5f5dc; padding: 2rem; border-radius: 12px; color: #2c3e50; box-shadow: 0 4px 12px rgba(0,0,0,0.1); text-align: center;">
+        <div class="stat-info">
+          <h3 style="margin: 0; font-size: 2.5rem; font-weight: 700; color: #1976d2;">18</h3>
+          <p style="margin: 0.5rem 0 0 0; font-size: 1rem; font-weight: 500;">Total Pasien</p>
+        </div>
+      </div>
+      <div class="stat-box" style="background: #f5f5dc; padding: 2rem; border-radius: 12px; color: #2c3e50; box-shadow: 0 4px 12px rgba(0,0,0,0.1); text-align: center;">
+        <div class="stat-info">
+          <h3 style="margin: 0; font-size: 2.5rem; font-weight: 700; color: #f57c00;">5</h3>
+          <p style="margin: 0.5rem 0 0 0; font-size: 1rem; font-weight: 500;">Menunggu</p>
+        </div>
+      </div>
+      <div class="stat-box" style="background: #f5f5dc; padding: 2rem; border-radius: 12px; color: #2c3e50; box-shadow: 0 4px 12px rgba(0,0,0,0.1); text-align: center;">
+        <div class="stat-info">
+          <h3 style="margin: 0; font-size: 2.5rem; font-weight: 700; color: #7b1fa2;">1</h3>
+          <p style="margin: 0.5rem 0 0 0; font-size: 1rem; font-weight: 500;">Sedang Diperiksa</p>
+        </div>
+      </div>
+      <div class="stat-box" style="background: #f5f5dc; padding: 2rem; border-radius: 12px; color: #2c3e50; box-shadow: 0 4px 12px rgba(0,0,0,0.1); text-align: center;">
+        <div class="stat-info">
+          <h3 style="margin: 0; font-size: 2.5rem; font-weight: 700; color: #388e3c;">12</h3>
+          <p style="margin: 0.5rem 0 0 0; font-size: 1rem; font-weight: 500;">Selesai</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabs Navigation -->
+    <div style="background: #fff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); overflow: hidden;">
+      <div style="display: flex; border-bottom: 2px solid #e0e0e0;">
+        <button class="tab-btn active" onclick="switchTab('sedang-diperiksa')" id="tab-sedang-diperiksa" style="flex: 1; padding: 1rem 1.5rem; background: #fff; border: none; border-bottom: 3px solid #1976d2; color: #1976d2; font-weight: 600; font-size: 1rem; cursor: pointer; transition: all 0.3s;">
+          🔄 Sedang Diperiksa (1)
+        </button>
+        <button class="tab-btn" onclick="switchTab('menunggu')" id="tab-menunggu" style="flex: 1; padding: 1rem 1.5rem; background: #fff; border: none; border-bottom: 3px solid transparent; color: #666; font-weight: 600; font-size: 1rem; cursor: pointer; transition: all 0.3s;">
+          ⏳ Menunggu (5)
+        </button>
+        <button class="tab-btn" onclick="switchTab('selesai')" id="tab-selesai" style="flex: 1; padding: 1rem 1.5rem; background: #fff; border: none; border-bottom: 3px solid transparent; color: #666; font-weight: 600; font-size: 1rem; cursor: pointer; transition: all 0.3s;">
+          ✅ Selesai (12)
+        </button>
+      </div>
+
+      <!-- Tab Content: Sedang Diperiksa -->
+      <div id="content-sedang-diperiksa" class="tab-content" style="padding: 1.5rem; display: block;">
+        <table style="width: 100%; border-collapse: collapse; background: #fff;">
+          <thead>
+            <tr style="background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%); color: #fff;">
+              <th style="padding: 1.2rem 1rem; text-align: left; font-size: 0.95rem; font-weight: 600; border: 1px solid #1565c0;">No. Antrean</th>
+              <th style="padding: 1.2rem 1rem; text-align: left; font-size: 0.95rem; font-weight: 600; border: 1px solid #1565c0;">Nama Pasien</th>
+              <th style="padding: 1.2rem 1rem; text-align: left; font-size: 0.95rem; font-weight: 600; border: 1px solid #1565c0;">No. RM</th>
+              <th style="padding: 1.2rem 1rem; text-align: left; font-size: 0.95rem; font-weight: 600; border: 1px solid #1565c0;">Usia/JK</th>
+              <th style="padding: 1.2rem 1rem; text-align: left; font-size: 0.95rem; font-weight: 600; border: 1px solid #1565c0;">Vital Signs</th>
+              <th style="padding: 1.2rem 1rem; text-align: left; font-size: 0.95rem; font-weight: 600; border: 1px solid #1565c0;">Keluhan</th>
+              <th style="padding: 1.2rem 1rem; text-align: center; font-size: 0.95rem; font-weight: 600; border: 1px solid #1565c0;">Waktu</th>
+              <th style="padding: 1.2rem 1rem; text-align: center; font-size: 0.95rem; font-weight: 600; border: 1px solid #1565c0; min-width: 280px;">Aksi</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom: 1px solid #e0e0e0; background: #fff;">
+              <td style="padding: 1.2rem 1rem; font-weight: 700; color: #1976d2; font-size: 1.3rem; border: 1px solid #e0e0e0; vertical-align: top;">A-005</td>
+              <td style="padding: 1.2rem 1rem; border: 1px solid #e0e0e0; vertical-align: top;">
+                <strong style="font-size: 1.1rem; color: #2c3e50;">Siti Rahmawati</strong>
+                <div style="margin-top: 0.4rem; display: flex; gap: 0.4rem; align-items: center;">
+                  <span class="badge badge-info" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;">BPJS</span>
+                  <span class="badge badge-warning" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;">Kontrol Rutin</span>
+                </div>
+              </td>
+              <td style="padding: 1.2rem 1rem; color: #555; font-size: 1rem; border: 1px solid #e0e0e0; vertical-align: top;">2025-001234</td>
+              <td style="padding: 1.2rem 1rem; color: #555; font-size: 1rem; border: 1px solid #e0e0e0; vertical-align: top; white-space: nowrap;">35 th / P</td>
+              <td style="padding: 1.2rem 1rem; font-size: 0.95rem; line-height: 1.8; border: 1px solid #e0e0e0; vertical-align: top;">
+                <div style="color: #2c3e50;"><strong>TD:</strong> <span style="color: #00796b;">120/80</span></div>
+                <div style="color: #2c3e50;"><strong>Nadi:</strong> <span style="color: #00796b;">72 bpm</span></div>
+                <div style="color: #2c3e50;"><strong>Suhu:</strong> <span style="color: #00796b;">36.5°C</span></div>
+                <div style="color: #2c3e50;"><strong>BB:</strong> <span style="color: #00796b;">65 kg</span></div>
+              </td>
+              <td style="padding: 1.2rem 1rem; border: 1px solid #e0e0e0; vertical-align: top; max-width: 250px;">
+                <div style="background: #fff8e1; padding: 0.7rem 0.9rem; border-left: 3px solid #ffa726; border-radius: 4px; font-size: 0.9rem; line-height: 1.5; color: #2c3e50;">
+                  Kontrol rutin diabetes mellitus. Pasien mengeluh sering merasa lelah dan haus.
+                </div>
+              </td>
+              <td style="padding: 1.2rem 1rem; text-align: center; border: 1px solid #e0e0e0; vertical-align: top;">
+                <div style="background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%); color: #fff; padding: 0.6rem 0.8rem; border-radius: 8px; font-size: 0.95rem;">
+                  <strong style="font-size: 1.1rem; display: block;">10:30</strong>
+                  <div style="font-size: 0.8rem; margin-top: 0.3rem; opacity: 0.9;">Dimulai 15 menit lalu</div>
+                </div>
+              </td>
+              <td style="padding: 1.2rem 1rem; text-align: center; border: 1px solid #e0e0e0; vertical-align: top;">
+                <div style="display: flex; flex-direction: column; gap: 0.5rem; align-items: stretch;">
+                  <button class="btn btn-primary" onclick="openMedicalRecord('2025-001234')" style="font-size: 0.9rem; padding: 0.6rem 1rem; white-space: nowrap;">📋 Rekam Medis</button>
+                  <button class="btn btn-secondary" onclick="createPrescription('2025-001234')" style="font-size: 0.9rem; padding: 0.6rem 1rem; white-space: nowrap;">💊 Buat Resep</button>
+                  <button class="btn btn-success" onclick="completeExamination('2025-001234')" style="font-size: 0.9rem; padding: 0.6rem 1rem; white-space: nowrap;">✅ Selesai</button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Tab Content: Menunggu -->
+      <div id="content-menunggu" class="tab-content" style="padding: 1.5rem; display: none;">
+        <table style="width: 100%; border-collapse: collapse; background: #fff;">
+          <thead>
+            <tr style="background: linear-gradient(135deg, #f57c00 0%, #ef6c00 100%); color: #fff;">
+              <th style="padding: 1.2rem 1rem; text-align: left; font-size: 0.95rem; font-weight: 600; border: 1px solid #ef6c00;">No. Antrean</th>
+              <th style="padding: 1.2rem 1rem; text-align: left; font-size: 0.95rem; font-weight: 600; border: 1px solid #ef6c00;">Nama Pasien</th>
+              <th style="padding: 1.2rem 1rem; text-align: left; font-size: 0.95rem; font-weight: 600; border: 1px solid #ef6c00;">No. RM</th>
+              <th style="padding: 1.2rem 1rem; text-align: left; font-size: 0.95rem; font-weight: 600; border: 1px solid #ef6c00;">Usia/JK</th>
+              <th style="padding: 1.2rem 1rem; text-align: left; font-size: 0.95rem; font-weight: 600; border: 1px solid #ef6c00;">Vital Signs</th>
+              <th style="padding: 1.2rem 1rem; text-align: left; font-size: 0.95rem; font-weight: 600; border: 1px solid #ef6c00;">Keluhan</th>
+              <th style="padding: 1.2rem 1rem; text-align: center; font-size: 0.95rem; font-weight: 600; border: 1px solid #ef6c00;">Waktu</th>
+              <th style="padding: 1.2rem 1rem; text-align: center; font-size: 0.95rem; font-weight: 600; border: 1px solid #ef6c00; min-width: 280px;">Aksi</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom: 1px solid #e0e0e0; background: #fff;" data-status="waiting" data-payment="umum">
+              <td style="padding: 1.2rem 1rem; font-weight: 700; color: #f57c00; font-size: 1.3rem; border: 1px solid #e0e0e0; vertical-align: top;">A-006</td>
+              <td style="padding: 1.2rem 1rem; border: 1px solid #e0e0e0; vertical-align: top;">
+                <strong style="font-size: 1.1rem; color: #2c3e50;">Budi Santoso</strong>
+                <div style="margin-top: 0.4rem; display: flex; gap: 0.4rem; align-items: center;">
+                  <span class="badge badge-primary" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;">Umum</span>
+                  <span class="badge badge-danger" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;">Pasien Baru</span>
+                </div>
+              </td>
+              <td style="padding: 1.2rem 1rem; color: #555; font-size: 1rem; border: 1px solid #e0e0e0; vertical-align: top;">2025-001235</td>
+              <td style="padding: 1.2rem 1rem; color: #555; font-size: 1rem; border: 1px solid #e0e0e0; vertical-align: top; white-space: nowrap;">42 th / L</td>
+              <td style="padding: 1.2rem 1rem; font-size: 0.95rem; line-height: 1.8; border: 1px solid #e0e0e0; vertical-align: top;">
+                <div style="color: #2c3e50;"><strong>TD:</strong> <span style="color: #00796b;">130/90</span></div>
+                <div style="color: #2c3e50;"><strong>Nadi:</strong> <span style="color: #00796b;">80 bpm</span></div>
+                <div style="color: #2c3e50;"><strong>Suhu:</strong> <span style="color: #00796b;">37.8°C</span></div>
+                <div style="color: #2c3e50;"><strong>BB:</strong> <span style="color: #00796b;">72 kg</span></div>
+              </td>
+              <td style="padding: 1.2rem 1rem; border: 1px solid #e0e0e0; vertical-align: top; max-width: 250px;">
+                <div style="background: #fff8e1; padding: 0.7rem 0.9rem; border-left: 3px solid #ffa726; border-radius: 4px; font-size: 0.9rem; line-height: 1.5; color: #2c3e50;">
+                  Demam sejak 2 hari yang lalu, disertai batuk dan pilek. Suhu badan naik turun.
+                </div>
+              </td>
+              <td style="padding: 1.2rem 1rem; text-align: center; border: 1px solid #e0e0e0; vertical-align: top;">
+                <div style="background: linear-gradient(135deg, #f57c00 0%, #ef6c00 100%); color: #fff; padding: 0.6rem 0.8rem; border-radius: 8px; font-size: 0.95rem;">
+                  <strong style="font-size: 1.1rem; display: block;">10:45</strong>
+                  <div style="font-size: 0.8rem; margin-top: 0.3rem; opacity: 0.9;">Terdaftar</div>
+                </div>
+              </td>
+              <td style="padding: 1.2rem 1rem; text-align: center; border: 1px solid #e0e0e0; vertical-align: top;">
+                <div style="display: flex; flex-direction: column; gap: 0.5rem; align-items: stretch;">
+                  <button class="btn btn-primary" onclick="callPatient('2025-001235')" style="font-size: 0.9rem; padding: 0.6rem 1rem; white-space: nowrap;">📢 Panggil Pasien</button>
+                  <button class="btn btn-secondary" onclick="viewHistory('2025-001235')" style="font-size: 0.9rem; padding: 0.6rem 1rem; white-space: nowrap;">📜 Lihat Riwayat</button>
+                </div>
+              </td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e0e0e0; background: #fff;" data-status="waiting" data-payment="bpjs">
+              <td style="padding: 1.2rem 1rem; font-weight: 700; color: #f57c00; font-size: 1.3rem; border: 1px solid #e0e0e0; vertical-align: top;">A-007</td>
+              <td style="padding: 1.2rem 1rem; border: 1px solid #e0e0e0; vertical-align: top;">
+                <strong style="font-size: 1.1rem; color: #2c3e50;">Rina Kusuma</strong>
+                <div style="margin-top: 0.4rem; display: flex; gap: 0.4rem; align-items: center;">
+                  <span class="badge badge-info" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;">BPJS</span>
+                  <span class="badge badge-warning" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;">Rujukan Puskesmas</span>
+                </div>
+              </td>
+              <td style="padding: 1.2rem 1rem; color: #555; font-size: 1rem; border: 1px solid #e0e0e0; vertical-align: top;">2025-001236</td>
+              <td style="padding: 1.2rem 1rem; color: #555; font-size: 1rem; border: 1px solid #e0e0e0; vertical-align: top; white-space: nowrap;">28 th / P</td>
+              <td style="padding: 1.2rem 1rem; font-size: 0.95rem; line-height: 1.8; border: 1px solid #e0e0e0; vertical-align: top;">
+                <div style="color: #2c3e50;"><strong>TD:</strong> <span style="color: #00796b;">110/70</span></div>
+                <div style="color: #2c3e50;"><strong>Nadi:</strong> <span style="color: #00796b;">68 bpm</span></div>
+                <div style="color: #2c3e50;"><strong>Suhu:</strong> <span style="color: #00796b;">36.2°C</span></div>
+                <div style="color: #2c3e50;"><strong>BB:</strong> <span style="color: #00796b;">58 kg</span></div>
+              </td>
+              <td style="padding: 1.2rem 1rem; border: 1px solid #e0e0e0; vertical-align: top; max-width: 250px;">
+                <div style="background: #fff8e1; padding: 0.7rem 0.9rem; border-left: 3px solid #ffa726; border-radius: 4px; font-size: 0.9rem; line-height: 1.5; color: #2c3e50;">
+                  Nyeri perut bagian bawah, mual. Rujukan dari Puskesmas untuk pemeriksaan lebih lanjut.
+                </div>
+              </td>
+              <td style="padding: 1.2rem 1rem; text-align: center; border: 1px solid #e0e0e0; vertical-align: top;">
+                <div style="background: linear-gradient(135deg, #f57c00 0%, #ef6c00 100%); color: #fff; padding: 0.6rem 0.8rem; border-radius: 8px; font-size: 0.95rem;">
+                  <strong style="font-size: 1.1rem; display: block;">11:00</strong>
+                  <div style="font-size: 0.8rem; margin-top: 0.3rem; opacity: 0.9;">Terdaftar</div>
+                </div>
+              </td>
+              <td style="padding: 1.2rem 1rem; text-align: center; border: 1px solid #e0e0e0; vertical-align: top;">
+                <div style="display: flex; flex-direction: column; gap: 0.5rem; align-items: stretch;">
+                  <button class="btn btn-primary" onclick="callPatient('2025-001236')" style="font-size: 0.9rem; padding: 0.6rem 1rem; white-space: nowrap;">📢 Panggil Pasien</button>
+                  <button class="btn btn-secondary" onclick="viewHistory('2025-001236')" style="font-size: 0.9rem; padding: 0.6rem 1rem; white-space: nowrap;">📜 Lihat Riwayat</button>
+                </div>
+              </td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e0e0e0; background: #fff;" data-status="waiting" data-payment="umum">
+              <td style="padding: 1.2rem 1rem; font-weight: 700; color: #f57c00; font-size: 1.3rem; border: 1px solid #e0e0e0; vertical-align: top;">A-008</td>
+              <td style="padding: 1.2rem 1rem; border: 1px solid #e0e0e0; vertical-align: top;">
+                <strong style="font-size: 1.1rem; color: #2c3e50;">Agus Setiawan</strong>
+                <div style="margin-top: 0.4rem; display: flex; gap: 0.4rem; align-items: center;">
+                  <span class="badge badge-primary" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;">Umum</span>
+                  <span class="badge badge-danger" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;">Hipertensi</span>
+                </div>
+              </td>
+              <td style="padding: 1.2rem 1rem; color: #555; font-size: 1rem; border: 1px solid #e0e0e0; vertical-align: top;">2025-001237</td>
+              <td style="padding: 1.2rem 1rem; color: #555; font-size: 1rem; border: 1px solid #e0e0e0; vertical-align: top; white-space: nowrap;">55 th / L</td>
+              <td style="padding: 1.2rem 1rem; font-size: 0.95rem; line-height: 1.8; border: 1px solid #e0e0e0; vertical-align: top;">
+                <div style="color: #2c3e50;"><strong>TD:</strong> <span style="color: #d32f2f;">150/95 ⚠️</span></div>
+                <div style="color: #2c3e50;"><strong>Nadi:</strong> <span style="color: #00796b;">88 bpm</span></div>
+                <div style="color: #2c3e50;"><strong>Suhu:</strong> <span style="color: #00796b;">36.7°C</span></div>
+                <div style="color: #2c3e50;"><strong>BB:</strong> <span style="color: #00796b;">78 kg</span></div>
+              </td>
+              <td style="padding: 1.2rem 1rem; border: 1px solid #e0e0e0; vertical-align: top; max-width: 250px;">
+                <div style="background: #fff8e1; padding: 0.7rem 0.9rem; border-left: 3px solid #ffa726; border-radius: 4px; font-size: 0.9rem; line-height: 1.5; color: #2c3e50;">
+                  Kontrol rutin hipertensi. Pasien mengeluh pusing dan tengkuk terasa berat.
+                </div>
+              </td>
+              <td style="padding: 1.2rem 1rem; text-align: center; border: 1px solid #e0e0e0; vertical-align: top;">
+                <div style="background: linear-gradient(135deg, #f57c00 0%, #ef6c00 100%); color: #fff; padding: 0.6rem 0.8rem; border-radius: 8px; font-size: 0.95rem;">
+                  <strong style="font-size: 1.1rem; display: block;">11:15</strong>
+                  <div style="font-size: 0.8rem; margin-top: 0.3rem; opacity: 0.9;">Terdaftar</div>
+                </div>
+              </td>
+              <td style="padding: 1.2rem 1rem; text-align: center; border: 1px solid #e0e0e0; vertical-align: top;">
+                <div style="display: flex; flex-direction: column; gap: 0.5rem; align-items: stretch;">
+                  <button class="btn btn-primary" onclick="callPatient('2025-001237')" style="font-size: 0.9rem; padding: 0.6rem 1rem; white-space: nowrap;">📢 Panggil Pasien</button>
+                  <button class="btn btn-secondary" onclick="viewHistory('2025-001237')" style="font-size: 0.9rem; padding: 0.6rem 1rem; white-space: nowrap;">📜 Lihat Riwayat</button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="8" style="text-align: center; color: #666; padding: 1rem; background: #f5f5f5; border: 1px solid #e0e0e0;">
+                + 2 pasien lagi dalam antrean
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Tab Content: Selesai -->
+      <div id="content-selesai" class="tab-content" style="padding: 1.5rem; display: none;">
+      <table style="width: 100%; border-collapse: collapse;">
+        <thead>
+          <tr>
+            <th>No. Antrean</th>
+            <th>Nama Pasien</th>
+            <th>No. RM</th>
+            <th>Diagnosis</th>
+            <th>Waktu Selesai</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-status="completed" data-payment="bpjs">
+            <td><strong>A-004</strong></td>
+            <td>Ahmad Fauzi</td>
+            <td>2025-001233</td>
+            <td>ISPA (J06.9)</td>
+            <td>10:25</td>
+            <td>
+              <button class="btn btn-sm btn-secondary" onclick="viewDetails('2025-001233')">👁️ Detail</button>
+            </td>
+          </tr>
+          <tr data-status="completed" data-payment="umum">
+            <td><strong>A-003</strong></td>
+            <td>Sari Melati</td>
+            <td>2025-001232</td>
+            <td>Gastritis (K29.7)</td>
+            <td>10:15</td>
+            <td>
+              <button class="btn btn-sm btn-secondary" onclick="viewDetails('2025-001232')">👁️ Detail</button>
+            </td>
+          </tr>
+          <tr data-status="completed" data-payment="bpjs">
+            <td><strong>A-002</strong></td>
+            <td>Rudi Hartono</td>
+            <td>2025-001231</td>
+            <td>Hipertensi (I10)</td>
+            <td>10:00</td>
+            <td>
+              <button class="btn btn-sm btn-secondary" onclick="viewDetails('2025-001231')">👁️ Detail</button>
+            </td>
+          </tr>
+          <tr data-status="completed" data-payment="umum">
+            <td><strong>A-001</strong></td>
+            <td>Lina Wijaya</td>
+            <td>2025-001230</td>
+            <td>Flu (J11.1)</td>
+            <td>09:45</td>
+            <td>
+              <button class="btn btn-sm btn-secondary" onclick="viewDetails('2025-001230')">👁️ Detail</button>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="6" style="text-align: center; color: #666; padding: 1rem;">
+              + 8 pasien lagi sudah selesai diperiksa
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+    </main>
+
+    <footer>
+      <p>&copy; 2025 Smart Health Center Service. All Rights Reserved.</p>
+    </footer>
+  </div>
+
+  <script>
+    function toggleNotification() {
+      const dropdown = document.getElementById('notificationDropdown');
+      dropdown.classList.toggle('show');
+    }
+
+    function markAllRead(event) {
+      event.preventDefault();
+      event.stopPropagation();
+      const unreadItems = document.querySelectorAll('.notification-item.unread');
+      unreadItems.forEach(item => item.classList.remove('unread'));
+      const badge = document.querySelector('.notification-badge');
+      if (badge) badge.style.display = 'none';
+    }
+
+    function handleNotificationClick(element, type) {
+      element.classList.remove('unread');
+      const unreadCount = document.querySelectorAll('.notification-item.unread').length;
+      const badge = document.querySelector('.notification-badge');
+      if (badge) {
+        if (unreadCount === 0) {
+          badge.style.display = 'none';
+        } else {
+          badge.textContent = unreadCount;
+        }
+      }
+    }
+
+    document.addEventListener('click', function(event) {
+      const notifBell = document.querySelector('.notification-bell');
+      const dropdown = document.getElementById('notificationDropdown');
+      if (notifBell && dropdown && !notifBell.contains(event.target)) {
+        dropdown.classList.remove('show');
+      }
+    });
+
+    function switchTab(tabName) {
+      // Hide all tab contents
+      document.querySelectorAll('.tab-content').forEach(content => {
+        content.style.display = 'none';
+      });
+      
+      // Remove active class from all tabs
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.style.borderBottomColor = 'transparent';
+        btn.style.color = '#666';
+      });
+      
+      // Show selected tab content
+      document.getElementById('content-' + tabName).style.display = 'block';
+      
+      // Add active class to selected tab
+      const activeTab = document.getElementById('tab-' + tabName);
+      if (tabName === 'sedang-diperiksa') {
+        activeTab.style.borderBottomColor = '#1976d2';
+        activeTab.style.color = '#1976d2';
+      } else if (tabName === 'menunggu') {
+        activeTab.style.borderBottomColor = '#f57c00';
+        activeTab.style.color = '#f57c00';
+      } else if (tabName === 'selesai') {
+        activeTab.style.borderBottomColor = '#388e3c';
+        activeTab.style.color = '#388e3c';
+      }
+    }
+
+    function filterPatients() {
+      const searchValue = document.getElementById('searchPatient').value.toLowerCase();
+      const statusFilter = document.getElementById('filterStatus').value;
+      const paymentFilter = document.getElementById('filterPayment').value;
+      
+      const cards = document.querySelectorAll('.patient-card');
+      const rows = document.querySelectorAll('table tbody tr');
+      
+      cards.forEach(card => {
+        const text = card.textContent.toLowerCase();
+        const status = card.getAttribute('data-status');
+        const payment = card.getAttribute('data-payment');
+        
+        const matchSearch = text.includes(searchValue);
+        const matchStatus = statusFilter === 'all' || status === statusFilter;
+        const matchPayment = paymentFilter === 'all' || payment === paymentFilter;
+        
+        if (matchSearch && matchStatus && matchPayment) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      rows.forEach(row => {
+        const text = row.textContent.toLowerCase();
+        const status = row.getAttribute('data-status');
+        const payment = row.getAttribute('data-payment');
+        
+        if (!status) return; // Skip summary rows
+        
+        const matchSearch = text.includes(searchValue);
+        const matchStatus = statusFilter === 'all' || status === statusFilter;
+        const matchPayment = paymentFilter === 'all' || payment === paymentFilter;
+        
+        if (matchSearch && matchStatus && matchPayment) {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none';
+        }
+      });
+    }
+
+    function callPatient(rm) {
+      if (confirm(`📢 Panggil pasien dengan No. RM ${rm}?\n\nNotifikasi akan dikirim ke:\n- Speaker di ruang tunggu\n- Aplikasi mobile pasien\n- SMS (jika diaktifkan)`)) {
+        alert(`✅ Pasien berhasil dipanggil!\n\nPasien akan segera masuk ke ruang periksa.`);
+        setTimeout(() => {
+          location.reload();
+        }, 1000);
+      }
+    }
+
+    function openMedicalRecord(rm) {
+      window.location.href = `rekam-medis.html?rm=${rm}`;
+    }
+
+    function createPrescription(rm) {
+      alert(`💊 Buat Resep untuk RM ${rm}\n\n[Form resep akan dibuka]\n\nFitur:\n- Pilih obat dari database\n- Atur dosis & aturan pakai\n- Tambah catatan khusus\n- Cetak/kirim ke apotek`);
+    }
+
+    function createLetter(rm) {
+      alert(`📄 Buat Surat Keterangan untuk RM ${rm}\n\n[Form surat akan dibuka]\n\nJenis surat:\n- Surat Sakit\n- Surat Sehat\n- Surat Rujukan\n- Surat Keterangan Lainnya`);
+    }
+
+    function completeExamination(rm) {
+      if (confirm(`✅ Selesaikan pemeriksaan untuk RM ${rm}?\n\nPastikan Anda telah:\n✓ Melakukan anamnesa lengkap\n✓ Pemeriksaan fisik\n✓ Menentukan diagnosis\n✓ Memberikan terapi/resep\n✓ Edukasi pasien`)) {
+        alert('✅ Pemeriksaan selesai!\n\nData tersimpan dan pasien dapat melanjutkan ke kasir/apotek.');
+        location.reload();
+      }
+    }
+
+    function viewHistory(rm) {
+      alert(`📜 Riwayat Kunjungan RM ${rm}\n\n[Data riwayat akan ditampilkan]\n\n- Kunjungan terakhir\n- Diagnosis sebelumnya\n- Obat yang pernah diberikan\n- Alergi obat\n- Riwayat penyakit`);
+    }
+
+    function viewDetails(rm) {
+      alert(`👁️ Detail Pemeriksaan RM ${rm}\n\n[Detail lengkap akan ditampilkan]\n\n- Hasil pemeriksaan\n- Diagnosis\n- Resep obat\n- Surat keterangan\n- Catatan dokter`);
+    }
+
+    // Auto-refresh every 30 seconds
+    setInterval(() => {
+      console.log('Auto-refresh patient list...');
+      // In production, fetch new data from server
+    }, 30000);
+  </script>
+  <script src="../js/header-common.js"></script>
+</body>
+</html>

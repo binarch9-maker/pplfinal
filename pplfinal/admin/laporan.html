@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Laporan - Smart Health Center Service</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    body {
+      display: flex;
+      min-height: 100vh;
+      flex-direction: column;
+      margin: 0;
+    }
+
+    /* Sidebar Styles */
+    .sidebar {
+      width: 260px;
+      background: #ffffff;
+      color: #2c3e50;
+      position: fixed;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      overflow-y: auto;
+      overflow-x: hidden;
+      z-index: 1000;
+      transition: all 0.3s ease;
+      box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    }
+
+    .sidebar-header {
+      padding: 0.875rem;
+      background: #ffffff;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .sidebar-header h2 {
+      margin: 0;
+      font-size: 1rem;
+      color: #2c3e50;
+      white-space: nowrap;
+    }
+
+    .sidebar-header p {
+      margin: 0.2rem 0 0 0;
+      font-size: 0.7rem;
+      color: #7f8c8d;
+      white-space: nowrap;
+    }
+
+    .sidebar-menu {
+      padding: 1rem 0;
+    }
+
+    .menu-item {
+      margin: 0.25rem 0;
+    }
+
+    .menu-link {
+      display: flex;
+      align-items: center;
+      padding: 0.75rem 0.875rem;
+      color: #2c3e50;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      user-select: none;
+      font-size: 0.95rem;
+    }
+
+    .menu-link:hover {
+      background: rgba(0,0,0,0.08);
+      padding-left: 1rem;
+    }
+
+    .menu-link.active {
+      background: #3498db;
+      color: #fff;
+      border-left: 4px solid #2980b9;
+      padding-left: 0.625rem;
+    }
+
+    .menu-link i {
+      margin-right: 0.625rem;
+      font-size: 1rem;
+      width: 18px;
+      text-align: center;
+      font-style: normal;
+    }
+
+    .menu-link .arrow {
+      margin-left: auto;
+      transition: transform 0.3s ease;
+      font-size: 0.8rem;
+    }
+
+    .menu-link.expanded .arrow {
+      transform: rotate(90deg);
+    }
+
+    .submenu {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+      background: rgba(0,0,0,0.08);
+    }
+
+    .submenu.open {
+      max-height: 500px;
+    }
+
+    .submenu-link {
+      display: block;
+      padding: 0.65rem 0.875rem 0.65rem 2.75rem;
+      color: #34495e;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      font-size: 0.85rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .submenu-link:hover {
+      background: rgba(0,0,0,0.05);
+      color: #1a252f;
+      padding-left: 2.875rem;
+    }
+
+    .submenu-link.active {
+      background: rgba(52, 152, 219, 0.3);
+      color: #3498db;
+      border-left: 3px solid #3498db;
+      padding-left: 2.625rem;
+    }
+
+    .main-content {
+      margin-left: 260px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: #f5f7fa;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      background: #fff;
+    }
+
+    main {
+      padding: 2rem;
+      flex: 1;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+      }
+      .sidebar.mobile-open {
+        transform: translateX(0);
+      }
+      .main-content {
+        margin-left: 0;
+      }
+    }
+
+    .report-card {
+      background: #fff;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 1.5rem;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    .report-card:hover {
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      transform: translateY(-3px);
+    }
+    .report-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+    .chart-placeholder {
+      background: #f5f5f5;
+      border: 2px dashed #e0e0e0;
+      border-radius: 8px;
+      padding: 3rem;
+      text-align: center;
+      color: #999;
+      margin: 1rem 0;
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem; text-align: center;">
+        <img src="../img/Smarthealth-Logo.png" alt="Smart Health Logo" style="height: 50px;">
+      </div>
+    </div>
+
+    <div class="sidebar-menu">
+      <!-- Beranda -->
+      <div class="menu-item">
+        <a href="dashboard-admin.html" class="menu-link">
+          <i>🏠</i>
+          <span>Beranda</span>
+        </a>
+      </div>
+
+      <!-- Kelola Pengguna -->
+      <div class="menu-item">
+        <div class="menu-link" onclick="toggleSubmenu(this)">
+          <i>👥</i>
+          <span>Kelola Pengguna</span>
+          <span class="arrow">▸</span>
+        </div>
+        <div class="submenu">
+          <a href="kelola-pengguna.html" class="submenu-link">Daftar Pasien</a>
+          <a href="kelola-pengguna.html?tab=tenaga-medis" class="submenu-link">Tenaga Medis</a>
+          <a href="kelola-pengguna.html?tab=admin" class="submenu-link">Administrator</a>
+        </div>
+      </div>
+
+      <!-- Kelola Pengajuan -->
+      <div class="menu-item">
+        <div class="menu-link" onclick="toggleSubmenu(this)">
+          <i>🗂️</i>
+          <span>Kelola Pengajuan</span>
+          <span class="arrow">▸</span>
+        </div>
+        <div class="submenu">
+          <a href="#" class="submenu-link">Antrean Pasien</a>
+          <a href="#" class="submenu-link">Permohonan Surat</a>
+          <a href="#" class="submenu-link">Validasi Surat</a>
+        </div>
+      </div>
+
+      <!-- Kelola Jadwal -->
+      <div class="menu-item">
+        <a href="kelola-jadwal.html" class="menu-link">
+          <i>📅</i>
+          <span>Kelola Jadwal</span>
+        </a>
+      </div>
+
+      <!-- Kelola Pengumuman -->
+      <div class="menu-item">
+        <a href="kelola-pengumuman.html" class="menu-link">
+          <i>📢</i>
+          <span>Kelola Pengumuman</span>
+        </a>
+      </div>
+
+      <!-- Laporan -->
+      <div class="menu-item">
+        <div class="menu-link active expanded" onclick="toggleSubmenu(this)">
+          <i>📊</i>
+          <span>Laporan</span>
+          <span class="arrow">▸</span>
+        </div>
+        <div class="submenu open">
+          <a href="laporan.html" class="submenu-link active">Laporan Kunjungan</a>
+          <a href="laporan.html?type=surat" class="submenu-link">Laporan Surat</a>
+          <a href="laporan.html?type=keuangan" class="submenu-link">Laporan Keuangan</a>
+          <a href="laporan.html?type=kepuasan" class="submenu-link">Survei Kepuasan</a>
+        </div>
+      </div>
+
+      <!-- Pengaturan -->
+      <div class="menu-item">
+        <div class="menu-link" onclick="toggleSubmenu(this)">
+          <i>⚙️</i>
+          <span>Pengaturan</span>
+          <span class="arrow">▸</span>
+        </div>
+        <div class="submenu">
+          <a href="pengaturan.html" class="submenu-link">Pengaturan Umum</a>
+          <a href="pengaturan.html?tab=jam" class="submenu-link">Jam Operasional</a>
+          <a href="pengaturan.html?tab=backup" class="submenu-link">Backup & Restore</a>
+        </div>
+      </div>
+
+      <hr style="border: none; border-top: 1px solid rgba(255,255,255,0.1); margin: 1rem 0;">
+
+      <!-- Logout -->
+      <div class="menu-item">
+        <a href="../login-admin.html" class="menu-link" style="color: #e74c3c;">
+          <i>🚪</i>
+          <span>Logout</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+  <header>
+    <div class="header-container">
+      <div class="logo" style="flex-direction: column; align-items: flex-start; gap: 0.25rem;">
+        <img src="../img/Smarthealth-Logo.png" alt="Smart Health Logo" style="height: 45px;">
+        <p style="font-size: 0.75rem; margin: 0; color: #5f7a95;">Layanan Digital Puskesmas</p>
+      </div>
+      <nav>
+        <div class="nav-container">
+          <div class="nav-breadcrumb">
+            <a href="dashboard-admin.html">🏠 Dashboard</a>
+            <span class="separator">›</span>
+            <span class="current-page">📊 Laporan</span>
+          </div>
+          <div class="nav-actions">
+            <div class="nav-dropdown">
+              <button class="dropdown-toggle">📋 Menu ▼</button>
+              <div class="dropdown-menu">
+                <a href="kelola-pengguna.html">👥 Kelola Pengguna</a>
+                <a href="kelola-jadwal.html">📅 Kelola Jadwal</a>
+                <a href="kelola-pengumuman.html">📢 Kelola Pengumuman</a>
+                <a href="pengaturan.html">⚙️ Pengaturan</a>
+              </div>
+            </div>
+            <div class="nav-dropdown">
+              <button class="dropdown-toggle">👤 Admin ▼</button>
+              <div class="dropdown-menu">
+                <a href="../logout.html" style="color: #d32f2f; font-weight: 700;">🚪 Logout</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="page-header">
+      <h2>📊 Laporan & Analitik</h2>
+      <p>Laporan komprehensif aktivitas dan kinerja sistem</p>
+    </div>
+
+    <!-- Report Period Selection -->
+    <div class="card">
+      <h3>📅 Pilih Periode Laporan</h3>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="reportPeriod">Periode</label>
+          <select id="reportPeriod" onchange="updatePeriod()">
+            <option value="today">Hari Ini</option>
+            <option value="week">Minggu Ini</option>
+            <option value="month" selected>Bulan Ini</option>
+            <option value="year">Tahun Ini</option>
+            <option value="custom">Custom</option>
+          </select>
+        </div>
+        <div class="form-group" id="customDateStart" style="display: none;">
+          <label for="startDate">Tanggal Mulai</label>
+          <input type="date" id="startDate">
+        </div>
+        <div class="form-group" id="customDateEnd" style="display: none;">
+          <label for="endDate">Tanggal Akhir</label>
+          <input type="date" id="endDate">
+        </div>
+        <div class="form-group">
+          <label>&nbsp;</label>
+          <button class="btn btn-primary" onclick="generateReport()">🔄 Generate Laporan</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Reports -->
+    <div class="card">
+      <h3>⚡ Laporan Cepat</h3>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 1rem;">
+        <div class="report-card" onclick="viewReport('visits')">
+          <div class="report-icon">📈</div>
+          <h4>Laporan Kunjungan</h4>
+          <p style="color: #666;">Statistik kunjungan pasien harian, mingguan, dan bulanan</p>
+        </div>
+        
+        <div class="report-card" onclick="viewReport('revenue')">
+          <div class="report-icon">💰</div>
+          <h4>Laporan Keuangan</h4>
+          <p style="color: #666;">Pendapatan dari layanan dan pembayaran pasien</p>
+        </div>
+        
+        <div class="report-card" onclick="viewReport('doctor')">
+          <div class="report-icon">👨‍⚕️</div>
+          <h4>Kinerja Dokter</h4>
+          <p style="color: #666;">Jumlah pasien yang ditangani per dokter</p>
+        </div>
+        
+        <div class="report-card" onclick="viewReport('poli')">
+          <div class="report-icon">🏥</div>
+          <h4>Statistik Poli</h4>
+          <p style="color: #666;">Distribusi kunjungan per poli dan layanan</p>
+        </div>
+        
+        <div class="report-card" onclick="viewReport('queue')">
+          <div class="report-icon">📋</div>
+          <h4>Efisiensi Antrean</h4>
+          <p style="color: #666;">Waktu tunggu dan waktu pelayanan rata-rata</p>
+        </div>
+        
+        <div class="report-card" onclick="viewReport('satisfaction')">
+          <div class="report-icon">⭐</div>
+          <h4>Kepuasan Pasien</h4>
+          <p style="color: #666;">Hasil survey dan rating dari pasien</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Statistics -->
+    <div class="card">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <h3>📊 Statistik Bulan November 2025</h3>
+        <div>
+          <button class="btn btn-secondary" onclick="exportPDF()">📄 Export PDF</button>
+          <button class="btn btn-secondary" onclick="exportExcel()">📊 Export Excel</button>
+          <button class="btn btn-secondary" onclick="window.print()">🖨️ Print</button>
+        </div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <h3>1,247</h3>
+          <p>Total Kunjungan</p>
+          <p style="font-size: 0.9rem; margin-top: 0.5rem; color: #388e3c;">▲ +12% vs bulan lalu</p>
+        </div>
+        <div class="stat-card success">
+          <h3>87</h3>
+          <p>Pasien Baru</p>
+          <p style="font-size: 0.9rem; margin-top: 0.5rem; color: #388e3c;">▲ +8% vs bulan lalu</p>
+        </div>
+        <div class="stat-card info">
+          <h3>Rp 45.7 Jt</h3>
+          <p>Total Pendapatan</p>
+          <p style="font-size: 0.9rem; margin-top: 0.5rem; color: #388e3c;">▲ +15% vs bulan lalu</p>
+        </div>
+        <div class="stat-card warning">
+          <h3>8 menit</h3>
+          <p>Rata-rata Waktu Tunggu</p>
+          <p style="font-size: 0.9rem; margin-top: 0.5rem; color: #d32f2f;">▼ -2 menit vs bulan lalu</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Visit Chart -->
+    <div class="card">
+      <h3>📈 Grafik Kunjungan Pasien (30 Hari Terakhir)</h3>
+      <div class="chart-placeholder">
+        <p style="font-size: 3rem; margin: 0;">📊</p>
+        <p style="margin: 1rem 0;">Line Chart - Kunjungan Harian</p>
+        <p style="font-size: 0.9rem;">[Akan diisi dengan Chart.js atau library grafik lainnya]</p>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Minggu</th>
+            <th>Total Kunjungan</th>
+            <th>Rata-rata/Hari</th>
+            <th>Tertinggi</th>
+            <th>Terendah</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Minggu 1 (1-7 Nov)</td>
+            <td>234</td>
+            <td>33.4</td>
+            <td>45 (Jumat)</td>
+            <td>18 (Minggu)</td>
+          </tr>
+          <tr>
+            <td>Minggu 2 (8-14 Nov)</td>
+            <td>287</td>
+            <td>41.0</td>
+            <td>52 (Rabu)</td>
+            <td>21 (Minggu)</td>
+          </tr>
+          <tr>
+            <td>Minggu 3 (15-21 Nov)</td>
+            <td>312</td>
+            <td>44.6</td>
+            <td>58 (Kamis)</td>
+            <td>24 (Sabtu)</td>
+          </tr>
+          <tr>
+            <td>Minggu 4 (22-27 Nov)</td>
+            <td>414</td>
+            <td>69.0</td>
+            <td>78 (Selasa)</td>
+            <td>45 (Rabu)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Poli Distribution -->
+    <div class="card">
+      <h3>🏥 Distribusi Kunjungan per Poli</h3>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+        <div class="chart-placeholder">
+          <p style="font-size: 3rem; margin: 0;">🍩</p>
+          <p style="margin: 1rem 0;">Pie Chart - Distribusi Poli</p>
+          <p style="font-size: 0.9rem;">[Chart Placeholder]</p>
+        </div>
+        <div>
+          <table>
+            <thead>
+              <tr>
+                <th>Poli</th>
+                <th>Jumlah</th>
+                <th>Persentase</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Poli Umum</td>
+                <td>561</td>
+                <td>45%</td>
+              </tr>
+              <tr>
+                <td>Poli Gigi</td>
+                <td>312</td>
+                <td>25%</td>
+              </tr>
+              <tr>
+                <td>Poli Anak</td>
+                <td>224</td>
+                <td>18%</td>
+              </tr>
+              <tr>
+                <td>Poli Kandungan</td>
+                <td>87</td>
+                <td>7%</td>
+              </tr>
+              <tr>
+                <td>Poli Mata</td>
+                <td>63</td>
+                <td>5%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Doctor Performance -->
+    <div class="card">
+      <h3>👨‍⚕️ Kinerja Dokter (November 2025)</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Dokter</th>
+            <th>Poli</th>
+            <th>Pasien Ditangani</th>
+            <th>Jam Kerja</th>
+            <th>Rata-rata Waktu/Pasien</th>
+            <th>Rating</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>dr. Ahmad Fauzi</td>
+            <td>Poli Umum</td>
+            <td>561</td>
+            <td>160 jam</td>
+            <td>17 menit</td>
+            <td>⭐ 4.8</td>
+          </tr>
+          <tr>
+            <td>drg. Siti Nurhaliza, Sp.KG</td>
+            <td>Poli Gigi</td>
+            <td>312</td>
+            <td>96 jam</td>
+            <td>18 menit</td>
+            <td>⭐ 4.9</td>
+          </tr>
+          <tr>
+            <td>dr. Budi Santoso, Sp.A</td>
+            <td>Poli Anak</td>
+            <td>224</td>
+            <td>96 jam</td>
+            <td>26 menit</td>
+            <td>⭐ 4.7</td>
+          </tr>
+          <tr>
+            <td>dr. Ratna Dewi, Sp.OG</td>
+            <td>Poli Kandungan</td>
+            <td>87</td>
+            <td>48 jam</td>
+            <td>33 menit</td>
+            <td>⭐ 4.9</td>
+          </tr>
+          <tr>
+            <td>dr. Hasan Basri, Sp.M</td>
+            <td>Poli Mata</td>
+            <td>63</td>
+            <td>72 jam</td>
+            <td>69 menit</td>
+            <td>⭐ 4.6</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Financial Report -->
+    <div class="card">
+      <h3>💰 Laporan Keuangan (November 2025)</h3>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+        <div style="padding: 1rem; background: #e8f5e9; border-radius: 8px; text-align: center;">
+          <p style="margin: 0; color: #666;">Total Pendapatan</p>
+          <h3 style="margin: 0.5rem 0; color: #388e3c;">Rp 45,700,000</h3>
+        </div>
+        <div style="padding: 1rem; background: #e3f2fd; border-radius: 8px; text-align: center;">
+          <p style="margin: 0; color: #666;">Pendapatan BPJS</p>
+          <h3 style="margin: 0.5rem 0; color: #1976d2;">Rp 28,500,000</h3>
+        </div>
+        <div style="padding: 1rem; background: #fff3cd; border-radius: 8px; text-align: center;">
+          <p style="margin: 0; color: #666;">Pendapatan Umum</p>
+          <h3 style="margin: 0.5rem 0; color: #f57c00;">Rp 17,200,000</h3>
+        </div>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Jenis Layanan</th>
+            <th>Jumlah Transaksi</th>
+            <th>Pendapatan</th>
+            <th>Persentase</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Konsultasi Dokter Umum</td>
+            <td>561</td>
+            <td>Rp 16,830,000</td>
+            <td>36.8%</td>
+          </tr>
+          <tr>
+            <td>Perawatan Gigi</td>
+            <td>312</td>
+            <td>Rp 15,600,000</td>
+            <td>34.1%</td>
+          </tr>
+          <tr>
+            <td>Konsultasi Anak</td>
+            <td>224</td>
+            <td>Rp 6,720,000</td>
+            <td>14.7%</td>
+          </tr>
+          <tr>
+            <td>Pemeriksaan Kandungan</td>
+            <td>87</td>
+            <td>Rp 4,350,000</td>
+            <td>9.5%</td>
+          </tr>
+          <tr>
+            <td>Pemeriksaan Mata</td>
+            <td>63</td>
+            <td>Rp 2,200,000</td>
+            <td>4.9%</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Patient Satisfaction -->
+    <div class="card">
+      <h3>⭐ Tingkat Kepuasan Pasien</h3>
+      <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 2rem;">
+        <div style="text-align: center; padding: 2rem; background: linear-gradient(135deg, #00796b 0%, #004d40 100%); color: #fff; border-radius: 12px;">
+          <p style="margin: 0; font-size: 1.2rem; opacity: 0.9;">Rata-rata Rating</p>
+          <h2 style="margin: 1rem 0; font-size: 4rem;">4.8</h2>
+          <p style="margin: 0; opacity: 0.9;">dari 234 responden</p>
+          <div style="margin-top: 1rem; font-size: 2rem;">⭐⭐⭐⭐⭐</div>
+        </div>
+        <div>
+          <table>
+            <thead>
+              <tr>
+                <th>Aspek</th>
+                <th>Rating</th>
+                <th>Persentase Puas</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Kecepatan Pelayanan</td>
+                <td>⭐ 4.7</td>
+                <td>94%</td>
+              </tr>
+              <tr>
+                <td>Keramahan Petugas</td>
+                <td>⭐ 4.9</td>
+                <td>98%</td>
+              </tr>
+              <tr>
+                <td>Kebersihan Fasilitas</td>
+                <td>⭐ 4.8</td>
+                <td>96%</td>
+              </tr>
+              <tr>
+                <td>Kemudahan Pendaftaran</td>
+                <td>⭐ 4.6</td>
+                <td>92%</td>
+              </tr>
+              <tr>
+                <td>Kualitas Pengobatan</td>
+                <td>⭐ 4.9</td>
+                <td>98%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Top Diagnosis -->
+    <div class="card">
+      <h3>🔬 10 Diagnosis Terbanyak (November 2025)</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Ranking</th>
+            <th>Kode ICD-10</th>
+            <th>Diagnosis</th>
+            <th>Jumlah Kasus</th>
+            <th>Persentase</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>J06.9</td>
+            <td>Infeksi Saluran Pernapasan Atas Akut</td>
+            <td>187</td>
+            <td>15.0%</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>I10</td>
+            <td>Hipertensi Esensial</td>
+            <td>156</td>
+            <td>12.5%</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>E11.9</td>
+            <td>Diabetes Melitus Tipe 2</td>
+            <td>124</td>
+            <td>9.9%</td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td>A09</td>
+            <td>Gastroenteritis & Kolitis Infeksi</td>
+            <td>98</td>
+            <td>7.9%</td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td>K04.7</td>
+            <td>Abses Periapikal dengan Sinus</td>
+            <td>87</td>
+            <td>7.0%</td>
+          </tr>
+          <tr>
+            <td>6</td>
+            <td>R50.9</td>
+            <td>Demam</td>
+            <td>76</td>
+            <td>6.1%</td>
+          </tr>
+          <tr>
+            <td>7</td>
+            <td>M79.3</td>
+            <td>Mialgia</td>
+            <td>65</td>
+            <td>5.2%</td>
+          </tr>
+          <tr>
+            <td>8</td>
+            <td>J00</td>
+            <td>Nasofaringitis Akut (Common Cold)</td>
+            <td>54</td>
+            <td>4.3%</td>
+          </tr>
+          <tr>
+            <td>9</td>
+            <td>K29.9</td>
+            <td>Gastritis</td>
+            <td>43</td>
+            <td>3.4%</td>
+          </tr>
+          <tr>
+            <td>10</td>
+            <td>R51</td>
+            <td>Sakit Kepala</td>
+            <td>37</td>
+            <td>3.0%</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Smart Health Center Service. All Rights Reserved.</p>
+  </footer>
+  </div>
+
+  <script>
+    // Toggle submenu
+    function toggleSubmenu(element) {
+      const submenu = element.nextElementSibling;
+      const isOpen = submenu.classList.contains('open');
+      
+      // Close all other submenus
+      document.querySelectorAll('.submenu.open').forEach(sm => {
+        if (sm !== submenu) {
+          sm.classList.remove('open');
+          sm.previousElementSibling.classList.remove('expanded');
+        }
+      });
+      
+      // Toggle current submenu
+      if (isOpen) {
+        submenu.classList.remove('open');
+        element.classList.remove('expanded');
+      } else {
+        submenu.classList.add('open');
+        element.classList.add('expanded');
+      }
+    }
+  </script>
+
+  <script>
+    function updatePeriod() {
+      const period = document.getElementById('reportPeriod').value;
+      const showCustom = period === 'custom';
+      document.getElementById('customDateStart').style.display = showCustom ? 'block' : 'none';
+      document.getElementById('customDateEnd').style.display = showCustom ? 'block' : 'none';
+    }
+
+    function generateReport() {
+      const period = document.getElementById('reportPeriod').value;
+      alert('🔄 Generating laporan untuk periode: ' + period + '\n\nMemuat data...');
+      location.reload();
+    }
+
+    function viewReport(type) {
+      const reports = {
+        'visits': 'Laporan Kunjungan Pasien',
+        'revenue': 'Laporan Keuangan',
+        'doctor': 'Laporan Kinerja Dokter',
+        'poli': 'Statistik per Poli',
+        'queue': 'Efisiensi Antrean',
+        'satisfaction': 'Kepuasan Pasien'
+      };
+      alert('📊 Membuka ' + reports[type] + '...');
+    }
+
+    function exportPDF() {
+      alert('📄 Exporting laporan ke PDF...\n\nFile akan diunduh otomatis.');
+    }
+
+    function exportExcel() {
+      alert('📊 Exporting laporan ke Excel...\n\nFile akan diunduh otomatis.');
+    }
+  </script>
+  <script src="../js/header-common.js"></script>
+</body>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Smart Health Center Service</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header>
+    <div class="header-container">
+      <div class="logo" style="flex-direction: column; align-items: flex-start; gap: 0.25rem;">
+        <img src="img/Smarthealth-Logo.png" alt="Smart Health Logo" style="height: 45px;">
+        <p style="font-size: 0.75rem; margin: 0; color: #5f7a95;">Layanan Digital Puskesmas</p>
+      </div>
+      <div>
+        <a href="index.html" class="btn btn-secondary">Kembali ke Beranda</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="auth-container">
+      <div class="auth-card">
+        <div class="auth-header">
+          <h2>Selamat Datang Kembali</h2>
+          <p class="text-muted">Silakan login untuk melanjutkan</p>
+        </div>
+
+        <form id="loginForm" onsubmit="handleLogin(event)">
+          <div class="form-group">
+            <label for="username">Username atau Email</label>
+            <input type="text" id="username" name="username" placeholder="Masukkan username atau email" required>
+          </div>
+
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="Masukkan password" required>
+          </div>
+
+          <div class="form-group" style="display: flex; align-items: center; gap: 0.5rem;">
+            <input type="checkbox" id="remember" name="remember" style="width: auto;">
+            <label for="remember" style="margin: 0;">Ingat Saya</label>
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
+            Masuk
+          </button>
+        </form>
+
+        <script>
+          // Ambil portal yang dipilih dari sessionStorage
+          const selectedPortal = sessionStorage.getItem('selectedPortal');
+          
+          // Update header sesuai portal yang dipilih
+          window.addEventListener('DOMContentLoaded', function() {
+            const headerTitle = document.querySelector('.auth-header h2');
+            const portalNames = {
+              'pasien': 'Portal Pasien',
+              'tenaga_medis': 'Portal Tenaga Medis',
+              'dokter': 'Portal Dokter',
+              'admin': 'Portal Administrator'
+            };
+            
+            if (selectedPortal && portalNames[selectedPortal]) {
+              headerTitle.textContent = portalNames[selectedPortal];
+            }
+          });
+          
+          function handleLogin(event) {
+            event.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            // Ambil portal yang dipilih
+            const selectedPortal = sessionStorage.getItem('selectedPortal');
+            
+            if (!selectedPortal) {
+              alert('⚠️ Silakan pilih portal terlebih dahulu dari halaman beranda.');
+              window.location.href = 'index.html#login';
+              return;
+            }
+            
+            // Simpan session
+            sessionStorage.setItem('userRole', selectedPortal);
+            sessionStorage.setItem('username', username);
+            sessionStorage.setItem('isLoggedIn', 'true');
+            
+            // Redirect berdasarkan portal yang dipilih
+            const redirectUrls = {
+              'pasien': 'pasien/dashboard.html',
+              'tenaga_medis': 'staf/dashboard.html',
+              'dokter': 'dokter/dashboard.html',
+              'admin': 'admin/dashboard.html'
+            };
+            
+            window.location.href = redirectUrls[selectedPortal];
+          }
+        </script>
+
+        <div class="auth-footer">
+          <p><a href="#" style="color: #1a8bd3; text-decoration: none;">Lupa Password?</a></p>
+          <p class="text-muted" style="margin-top: 1rem;">
+            Belum punya akun? <a href="register.html" style="color: #1a8bd3; text-decoration: none; font-weight: 600;">Daftar di sini</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Smart Health Center Service. All Rights Reserved.</p>
+  </footer>
+</body>
+</html>

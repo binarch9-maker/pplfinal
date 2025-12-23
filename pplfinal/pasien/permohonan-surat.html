@@ -1,0 +1,904 @@
+﻿<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Permohonan Surat - Smart Health Center Service</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/header-styles.css">
+  <script src="../js/header-common.js"></script>
+  <style>
+    body {
+      display: flex;
+      min-height: 100vh;
+      flex-direction: column;
+      margin: 0;
+    }
+
+    /* Sidebar Styles */
+    .sidebar {
+      width: 260px;
+      background: #ffffff;
+      color: #2c3e50;
+      position: fixed;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      overflow-y: auto;
+      overflow-x: hidden;
+      z-index: 1000;
+      transition: all 0.3s ease;
+      box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    }
+
+    .sidebar-header {
+      padding: 0.875rem;
+      background: #ffffff;
+      border-bottom: 1px solid #e0e0e0;
+      text-align: center;
+    }
+
+    .sidebar-menu {
+      padding: 1rem 0;
+    }
+
+    .menu-item {
+      margin: 0.25rem 0;
+    }
+
+    .menu-link {
+      display: flex;
+      align-items: center;
+      padding: 0.75rem 0.875rem;
+      color: #2c3e50;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      user-select: none;
+      font-size: 0.95rem;
+    }
+
+    .menu-link:hover {
+      background: rgba(0,0,0,0.08);
+      padding-left: 1rem;
+    }
+
+    .menu-link.active {
+      background: #3498db;
+      color: #fff;
+      border-left: 4px solid #2980b9;
+      padding-left: 0.625rem;
+    }
+
+    .menu-link i {
+      margin-right: 0.625rem;
+      font-size: 1rem;
+      width: 18px;
+      text-align: center;
+      font-style: normal;
+    }
+
+    .main-content {
+      margin-left: 260px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: #f5f7fa;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      background: #fff;
+    }
+
+    main {
+      padding: 2rem;
+      flex: 1;
+    }
+
+    /* Tab Styles */
+    .tabs {
+      display: flex;
+      gap: 0.5rem;
+      border-bottom: 2px solid #e0e0e0;
+      margin-bottom: 1.5rem;
+    }
+    .tab-btn {
+      padding: 0.75rem 1.5rem;
+      background: none;
+      border: none;
+      border-bottom: 3px solid transparent;
+      color: #666;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.3s;
+      white-space: nowrap;
+    }
+    .tab-btn:hover {
+      color: #2c3e50;
+      background: rgba(52, 152, 219, 0.05);
+    }
+    .tab-btn.active {
+      color: #3498db;
+      border-bottom-color: #3498db;
+      font-weight: 600;
+    }
+    .tab-content {
+      display: none;
+    }
+    .tab-content.active {
+      display: block;
+      animation: fadeIn 0.3s ease-in;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Tab Styles */
+    .tabs {
+      display: flex;
+      gap: 0.5rem;
+      border-bottom: 2px solid #e0e0e0;
+      margin-bottom: 1.5rem;
+    }
+    .tab-btn {
+      padding: 0.75rem 1.5rem;
+      background: none;
+      border: none;
+      border-bottom: 3px solid transparent;
+      color: #666;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.3s;
+      white-space: nowrap;
+    }
+    .tab-btn:hover {
+      color: #2c3e50;
+      background: rgba(52, 152, 219, 0.05);
+    }
+    .tab-btn.active {
+      color: #3498db;
+      border-bottom-color: #3498db;
+      font-weight: 600;
+    }
+    .tab-content {
+      display: none;
+    }
+    .tab-content.active {
+      display: block;
+      animation: fadeIn 0.3s ease-in;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+      }
+      .sidebar.mobile-open {
+        transform: translateX(0);
+      }
+      .main-content {
+        margin-left: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem; text-align: center;">
+        <img src="../img/Smarthealth-Logo.png" alt="Smart Health Logo" style="height: 50px;">
+      </div>
+    </div>
+
+    <div class="sidebar-menu">
+      <!-- Beranda -->
+      <div class="menu-item">
+        <a href="dashboard.html" class="menu-link">
+          <i>🏠</i>
+          <span>Beranda</span>
+        </a>
+      </div>
+
+      <!-- Jadwal Dokter -->
+      <div class="menu-item">
+        <a href="jadwal-dokter.html" class="menu-link">
+          <i>📅</i>
+          <span>Jadwal Dokter</span>
+        </a>
+      </div>
+
+      <!-- Antrean -->
+      <div class="menu-item">
+        <a href="antrean.html" class="menu-link">
+          <i>🎫</i>
+          <span>Antrean</span>
+        </a>
+      </div>
+
+      <!-- Status Antrean -->
+      <div class="menu-item">
+        <a href="status-antrean.html" class="menu-link">
+          <i>📋</i>
+          <span>Status Antrean</span>
+        </a>
+      </div>
+
+      <!-- Permohonan Surat -->
+      <div class="menu-item">
+        <a href="permohonan-surat.html" class="menu-link active">
+          <i>📄</i>
+          <span>Permohonan Surat</span>
+        </a>
+      </div>
+
+      <!-- Riwayat Surat -->
+      <div class="menu-item">
+        <a href="riwayat-surat.html" class="menu-link">
+          <i>📜</i>
+          <span>Riwayat Surat</span>
+        </a>
+      </div>
+
+      <!-- Chatbot -->
+      <div class="menu-item">
+        <a href="chatbot.html" class="menu-link">
+          <i>💬</i>
+          <span>Chatbot</span>
+        </a>
+      </div>
+
+      <hr style="border: none; border-top: 1px solid rgba(0,0,0,0.1); margin: 1rem 0;">
+
+      <!-- Logout -->
+      <div class="menu-item">
+        <a href="../login-pasien.html" class="menu-link" style="color: #e74c3c;">
+          <i>🚪</i>
+          <span>Logout</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+  <header>
+    <div class="header-container">
+      <div>
+        <h1 style="color: #2c4964; font-size: 1.5rem; margin: 0; font-weight: 600;">Permohonan Surat</h1>
+        <p style="color: #5f7a95; font-size: 0.9rem; margin: 0.25rem 0 0 0;">Portal Pasien SmartHealth</p>
+      </div>
+      
+      <nav style="flex: 1; margin-left: 2rem;">
+      </nav>
+      
+      <div class="header-right">
+        <!-- Notification Bell -->
+        <div class="notification-bell" onclick="toggleNotification()">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/>
+          </svg>
+          <span class="notification-badge">4</span>
+          
+          <div class="notification-dropdown" id="notificationDropdown">
+            <div class="notification-header">
+              <h4>Notifikasi</h4>
+              <a href="#" class="mark-read">Tandai Sudah Dibaca</a>
+            </div>
+            <div class="notification-list-header">
+              <div class="notification-item-header unread">
+                <div class="notification-icon-header success">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                  </svg>
+                </div>
+                <div class="notification-content-header">
+                  <strong>Surat Sehat Anda telah diterbitkan</strong>
+                  <p>Silakan unduh di menu Riwayat Surat</p>
+                  <div class="notification-time-header">10 menit lalu</div>
+                </div>
+              </div>
+              
+              <div class="notification-item-header unread">
+                <div class="notification-icon-header info">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+                  </svg>
+                </div>
+                <div class="notification-content-header">
+                  <strong>Nomor antrean Anda: A-012</strong>
+                  <p>Silakan menunggu, saat ini posisi ke-3</p>
+                  <div class="notification-time-header">25 menit lalu</div>
+                </div>
+              </div>
+              
+              <div class="notification-item-header">
+                <div class="notification-icon-header warning">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/>
+                  </svg>
+                </div>
+                <div class="notification-content-header">
+                  <strong>Jadwal kontrol: 5 Desember 2025</strong>
+                  <p>Jangan lupa jadwal kontrol dengan dr. Siti Aminah</p>
+                  <div class="notification-time-header">2 hari lalu</div>
+                </div>
+              </div>
+              
+              <div class="notification-item-header">
+                <div class="notification-icon-header info">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+                  </svg>
+                </div>
+                <div class="notification-content-header">
+                  <strong>Permohonan surat sakit diproses</strong>
+                  <p>Tenaga medis sedang memvalidasi permohonan Anda</p>
+                  <div class="notification-time-header">3 hari lalu</div>
+                </div>
+              </div>
+            </div>
+            <div class="notification-footer">
+              <a href="#">Lihat Semua</a>
+            </div>
+          </div>
+        </div>
+        
+        <!-- User Profile Dropdown -->
+        <div class="user-profile" id="userProfile">
+          <button class="user-profile-toggle" onclick="toggleUserDropdown()">
+            <div class="user-avatar">DP</div>
+            <div class="user-info">
+              <span class="user-name" id="headerUserName">Demo Pasien</span>
+              <span class="user-role">Pasien</span>
+            </div>
+            <svg class="dropdown-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path d="M7 10l5 5 5-5z"/>
+            </svg>
+          </button>
+          
+          <div class="user-dropdown" id="userDropdown">
+            <a href="profil.html" class="user-dropdown-item">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+              </svg>
+              Profil Saya
+            </a>
+            <div style="border-top: 1px solid #f0f0f0; margin: 0.5rem 0;"></div>
+            <a href="../logout.html" class="user-dropdown-item logout">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/>
+              </svg>
+              Logout
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="page-header">
+      <h2>Permohonan Surat</h2>
+      <p>Ajukan permohonan surat kesehatan secara online</p>
+    </div>
+
+    <!-- Tab Navigation -->
+    <div class="card">
+      <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('formulir')">
+          📝 Formulir Permohonan
+        </button>
+        <button class="tab-btn" onclick="switchTab('diproses')">
+          ⏳ Permohonan Sedang Diproses
+        </button>
+      </div>
+
+      <!-- Tab Content: Formulir Permohonan -->
+      <div id="tab-formulir" class="tab-content active">
+      <h3 style="font-size: 1.2rem;">Pilih Jenis Surat yang Dibutuhkan</h3>
+      <div style="margin-top: 1.5rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem;">
+        <div class="card" style="cursor: pointer; border: 2px solid #E0E8F5; transition: all 0.3s;" onclick="pilihSurat('sehat')" onmouseover="this.style.borderColor='#6B9BD1'; this.style.boxShadow='0 4px 12px rgba(107,155,209,0.15)'" onmouseout="this.style.borderColor='#E0E8F5'; this.style.boxShadow='none'">
+          <div style="text-align: center;">
+            <div style="font-size: 2.5rem; margin-bottom: 1rem;">📋</div>
+            <h4 style="color: #6B9BD1; font-size: 1rem;">Surat Keterangan Sehat</h4>
+            <p style="color: #666; margin-top: 0.5rem; font-size: 0.9rem;">Untuk keperluan administrasi, lamaran kerja, dll.</p>
+          </div>
+        </div>
+        <div class="card" style="cursor: pointer; border: 2px solid #FFE8E8; transition: all 0.3s;" onclick="pilihSurat('sakit')" onmouseover="this.style.borderColor='#D97B7B'; this.style.boxShadow='0 4px 12px rgba(217,123,123,0.15)'" onmouseout="this.style.borderColor='#FFE8E8'; this.style.boxShadow='none'">
+          <div style="text-align: center;">
+            <div style="font-size: 2.5rem; margin-bottom: 1rem;">🏥</div>
+            <h4 style="color: #D97B7B; font-size: 1rem;">Surat Keterangan Sakit</h4>
+            <p style="color: #666; margin-top: 0.5rem; font-size: 0.9rem;">Untuk izin tidak masuk kerja/sekolah</p>
+          </div>
+        </div>
+        <div class="card" style="cursor: pointer; border: 2px solid #FFE8D0; transition: all 0.3s;" onclick="pilihSurat('rujukan')" onmouseover="this.style.borderColor='#D9A861'; this.style.boxShadow='0 4px 12px rgba(217,168,97,0.15)'" onmouseout="this.style.borderColor='#FFE8D0'; this.style.boxShadow='none'">
+          <div style="text-align: center;">
+            <div style="font-size: 2.5rem; margin-bottom: 1rem;">🏨</div>
+            <h4 style="color: #D9A861; font-size: 1rem;">Surat Rujukan</h4>
+            <p style="color: #666; margin-top: 0.5rem; font-size: 0.9rem;">Untuk rujukan ke rumah sakit atau spesialis</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Info Syarat & Ketentuan -->
+      <div style="margin-top: 2rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+        <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); border-top: 4px solid #27AE60; transition: all 0.3s ease; position: relative; overflow: hidden;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 20px rgba(39,174,96,0.15)'" onmouseout="this.style.transform=''; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.08)'">
+          <div style="position: absolute; top: -20px; right: -20px; width: 80px; height: 80px; background: linear-gradient(135deg, rgba(39,174,96,0.1), rgba(39,174,96,0.05)); border-radius: 50%;"></div>
+          <h3 style="color: #2e7d32; position: relative; margin-bottom: 1rem;">✅ Syarat Umum</h3>
+          <ul style="line-height: 2; color: #5f7a95; position: relative;">
+            <li>WNI dengan KTP yang masih berlaku</li>
+            <li>Terdaftar sebagai pasien puskesmas</li>
+            <li>Melakukan pemeriksaan jika diperlukan</li>
+            <li>Mengisi formulir dengan data yang benar</li>
+            <li>Mengikuti prosedur yang ditetapkan</li>
+          </ul>
+        </div>
+
+        <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); border-top: 4px solid #e91e63; transition: all 0.3s ease; position: relative; overflow: hidden;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 20px rgba(233,30,99,0.15)'" onmouseout="this.style.transform=''; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.08)'">
+          <div style="position: absolute; top: -20px; right: -20px; width: 80px; height: 80px; background: linear-gradient(135deg, rgba(233,30,99,0.1), rgba(233,30,99,0.05)); border-radius: 50%;"></div>
+          <h3 style="color: #880e4f; position: relative; margin-bottom: 1rem;">📋 Waktu Proses</h3>
+          <ul style="line-height: 2; color: #5f7a95; position: relative;">
+            <li><strong>Surat Sehat:</strong> 1-2 hari kerja</li>
+            <li><strong>Surat Sakit:</strong> Langsung (setelah pemeriksaan)</li>
+            <li><strong>Surat Rujukan:</strong> 1-3 hari kerja</li>
+            <li>Pengambilan surat di loket atau download online</li>
+            <li>Notifikasi akan dikirim melalui email/SMS</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Form Permohonan (akan muncul setelah pilih jenis) -->
+    <div id="formSehat" class="form-container" style="display: none;">
+      <h3 style="color: #00796b; margin-bottom: 1.5rem;">
+        📝 Formulir Permohonan Surat Keterangan Sehat
+      </h3>
+      
+      <form action="riwayat-surat.html" method="get">
+        <div class="form-group">
+          <label for="keperluan_sehat">Keperluan *</label>
+          <select id="keperluan_sehat" name="keperluan" required>
+            <option value="">-- Pilih Keperluan --</option>
+            <option value="lamaran_kerja">Lamaran Kerja</option>
+            <option value="pendaftaran_sekolah">Pendaftaran Sekolah/Kuliah</option>
+            <option value="pembuatan_sim">Pembuatan SIM</option>
+            <option value="kegiatan_olahraga">Keikutsertaan Kegiatan Olahraga</option>
+            <option value="administrasi">Administrasi Umum</option>
+            <option value="lainnya">Lainnya</option>
+          </select>
+        </div>
+
+        <div class="form-group" id="keperluanLainSehat" style="display: none;">
+          <label for="keperluan_lain_sehat">Sebutkan Keperluan *</label>
+          <input type="text" id="keperluan_lain_sehat" name="keperluan_lain" placeholder="Jelaskan keperluan Anda">
+        </div>
+
+        <div class="form-group">
+          <label for="ditujukan_sehat">Ditujukan Kepada</label>
+          <input type="text" id="ditujukan_sehat" name="ditujukan" placeholder="Contoh: PT. ABC, Universitas XYZ, dll.">
+        </div>
+
+        <div class="form-group">
+          <label for="catatan_sehat">Catatan Tambahan</label>
+          <textarea id="catatan_sehat" name="catatan" rows="3" placeholder="Informasi tambahan (opsional)"></textarea>
+        </div>
+
+        <div class="form-group">
+          <div style="background: #e3f2fd; padding: 1rem; border-radius: 5px; border-left: 4px solid #1976d2;">
+            <p style="color: #1565c0; font-weight: 600; margin-bottom: 0.5rem;">ℹ️ Informasi:</p>
+            <ul style="color: #666; line-height: 1.8; margin-left: 1.5rem;">
+              <li>Surat akan divalidasi oleh tenaga medis dalam <strong>1-2 hari kerja</strong></li>
+              <li>Anda perlu <strong>datang ke puskesmas untuk pemeriksaan</strong></li>
+              <li>Bawa <strong>KTP</strong> saat datang</li>
+              <li>Biaya: <strong>Gratis untuk warga setempat</strong></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="btn-group mt-2" style="justify-content: flex-end;">
+          <button type="submit" class="btn btn-primary">✅ Ajukan Permohonan</button>
+          <button type="button" class="btn btn-secondary" onclick="resetForm()">🔄 Reset</button>
+          <button type="button" class="btn btn-danger" onclick="batalForm()">❌ Batal</button>
+        </div>
+      </form>
+    </div>
+
+    <div id="formSakit" class="form-container" style="display: none;">
+      <h3 style="color: #00796b; margin-bottom: 1.5rem;">
+        📝 Formulir Permohonan Surat Keterangan Sakit
+      </h3>
+      
+      <form action="riwayat-surat.html" method="get">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="tanggal_mulai_sakit">Tanggal Mulai Sakit *</label>
+            <input type="date" id="tanggal_mulai_sakit" name="tanggal_mulai" required>
+          </div>
+
+          <div class="form-group">
+            <label for="tanggal_selesai_sakit">Tanggal Selesai (Perkiraan) *</label>
+            <input type="date" id="tanggal_selesai_sakit" name="tanggal_selesai" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="lama_istirahat">Lama Istirahat *</label>
+          <select id="lama_istirahat" name="lama_istirahat" required>
+            <option value="">-- Pilih Lama Istirahat --</option>
+            <option value="1">1 Hari</option>
+            <option value="2">2 Hari</option>
+            <option value="3">3 Hari</option>
+            <option value="4">4 Hari</option>
+            <option value="5">5 Hari</option>
+            <option value="7">7 Hari (1 Minggu)</option>
+            <option value="14">14 Hari (2 Minggu)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="keperluan_sakit">Keperluan *</label>
+          <select id="keperluan_sakit" name="keperluan" required>
+            <option value="">-- Pilih Keperluan --</option>
+            <option value="izin_kerja">Izin Tidak Masuk Kerja</option>
+            <option value="izin_sekolah">Izin Tidak Masuk Sekolah/Kuliah</option>
+            <option value="klaim_asuransi">Klaim Asuransi</option>
+            <option value="lainnya">Lainnya</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="ditujukan_sakit">Ditujukan Kepada *</label>
+          <input type="text" id="ditujukan_sakit" name="ditujukan" placeholder="Contoh: PT. ABC, SMA Negeri 1, dll." required>
+        </div>
+
+        <div class="form-group">
+          <label for="keluhan_sakit">Keluhan/Diagnosis *</label>
+          <textarea id="keluhan_sakit" name="keluhan" rows="4" placeholder="Jelaskan keluhan atau diagnosis dari dokter" required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="catatan_sakit">Catatan Tambahan</label>
+          <textarea id="catatan_sakit" name="catatan" rows="3" placeholder="Informasi tambahan (opsional)"></textarea>
+        </div>
+
+        <div class="form-group">
+          <div style="background: #fff3cd; padding: 1rem; border-radius: 5px; border-left: 4px solid #f57c00;">
+            <p style="color: #e65100; font-weight: 600; margin-bottom: 0.5rem;">⚠️ Perhatian:</p>
+            <ul style="color: #666; line-height: 1.8; margin-left: 1.5rem;">
+              <li>Surat sakit hanya diterbitkan berdasarkan <strong>hasil pemeriksaan dokter</strong></li>
+              <li>Anda <strong>wajib datang untuk diperiksa</strong> terlebih dahulu</li>
+              <li>Daftar antrean terlebih dahulu di menu <a href="antrean.html" style="color: #00796b;">Pendaftaran Antrean</a></li>
+              <li>Bawa <strong>KTP dan dokumen pendukung</strong> (surat tugas, kartu pelajar, dll.)</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="btn-group mt-2" style="justify-content: flex-end;">
+          <button type="submit" class="btn btn-primary">✅ Ajukan Permohonan</button>
+          <button type="button" class="btn btn-secondary" onclick="resetForm()">🔄 Reset</button>
+          <button type="button" class="btn btn-danger" onclick="batalForm()">❌ Batal</button>
+        </div>
+      </form>
+
+      <!-- Info Syarat & Ketentuan -->
+      <div style="margin-top: 2rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+        <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); border-top: 4px solid #27AE60; transition: all 0.3s ease; position: relative; overflow: hidden;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 20px rgba(39,174,96,0.15)'" onmouseout="this.style.transform=''; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.08)'">
+          <div style="position: absolute; top: -20px; right: -20px; width: 80px; height: 80px; background: linear-gradient(135deg, rgba(39,174,96,0.1), rgba(39,174,96,0.05)); border-radius: 50%;"></div>
+          <h3 style="color: #2e7d32; position: relative; margin-bottom: 1rem;">✅ Syarat Umum</h3>
+          <ul style="line-height: 2; color: #5f7a95; position: relative;">
+            <li>WNI dengan KTP yang masih berlaku</li>
+            <li>Terdaftar sebagai pasien puskesmas</li>
+            <li>Melakukan pemeriksaan jika diperlukan</li>
+            <li>Mengisi formulir dengan data yang benar</li>
+            <li>Mengikuti prosedur yang ditetapkan</li>
+          </ul>
+        </div>
+
+        <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); border-top: 4px solid #e91e63; transition: all 0.3s ease; position: relative; overflow: hidden;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 20px rgba(233,30,99,0.15)'" onmouseout="this.style.transform=''; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.08)'">
+          <div style="position: absolute; top: -20px; right: -20px; width: 80px; height: 80px; background: linear-gradient(135deg, rgba(233,30,99,0.1), rgba(233,30,99,0.05)); border-radius: 50%;"></div>
+          <h3 style="color: #880e4f; position: relative; margin-bottom: 1rem;">📋 Waktu Proses</h3>
+          <ul style="line-height: 2; color: #5f7a95; position: relative;">
+            <li><strong>Surat Sehat:</strong> 1-2 hari kerja</li>
+            <li><strong>Surat Sakit:</strong> Langsung (setelah pemeriksaan)</li>
+            <li><strong>Surat Rujukan:</strong> 1-3 hari kerja</li>
+            <li>Pengambilan surat di loket atau download online</li>
+            <li>Notifikasi akan dikirim melalui email/SMS</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div id="formRujukan" class="form-container" style="display: none;">
+      <h3 style="color: #6B9BD1; margin-bottom: 1.5rem; font-size: 1.2rem;">Formulir Permohonan Surat Rujukan</h3>
+      <form action="riwayat-surat.html" method="get">
+        <div class="form-group">
+          <label for="tujuan_rujukan">Tujuan Rujukan *</label>
+          <select id="tujuan_rujukan" name="tujuan_rujukan" required>
+            <option value="">-- Pilih Tujuan --</option>
+            <option value="rs_umum">Rumah Sakit Umum</option>
+            <option value="rs_khusus">Rumah Sakit Khusus</option>
+            <option value="klinik_spesialis">Klinik Spesialis</option>
+            <option value="laboratorium">Laboratorium Khusus</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="nama_rs">Nama Rumah Sakit/Klinik *</label>
+          <input type="text" id="nama_rs" name="nama_rs" placeholder="Contoh: RSUD Dr. Soetomo" required>
+        </div>
+
+        <div class="form-group">
+          <label for="spesialis">Spesialisasi yang Dituju *</label>
+          <select id="spesialis" name="spesialis" required>
+            <option value="">-- Pilih Spesialisasi --</option>
+            <option value="penyakit_dalam">Penyakit Dalam</option>
+            <option value="bedah">Bedah</option>
+            <option value="jantung">Jantung</option>
+            <option value="paru">Paru-paru</option>
+            <option value="orthopedi">Orthopedi (Tulang)</option>
+            <option value="mata">Mata</option>
+            <option value="tht">THT</option>
+            <option value="kulit">Kulit dan Kelamin</option>
+            <option value="saraf">Saraf</option>
+            <option value="jiwa">Jiwa</option>
+            <option value="kandungan">Kandungan</option>
+            <option value="anak">Anak</option>
+            <option value="lainnya">Lainnya</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="alasan_rujukan">Alasan Rujukan *</label>
+          <textarea id="alasan_rujukan" name="alasan_rujukan" rows="4" placeholder="Jelaskan alasan membutuhkan rujukan ke spesialis" required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="diagnosis_awal">Diagnosis Awal (jika ada)</label>
+          <textarea id="diagnosis_awal" name="diagnosis_awal" rows="3" placeholder="Diagnosis dari dokter puskesmas (akan dilengkapi oleh dokter)"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="jenis_pasien_rujukan">Jenis Pasien *</label>
+          <select id="jenis_pasien_rujukan" name="jenis_pasien" required>
+            <option value="">-- Pilih Jenis Pasien --</option>
+            <option value="bpjs">BPJS Kesehatan</option>
+            <option value="umum">Pasien Umum (Pribadi)</option>
+            <option value="asuransi">Asuransi Lainnya</option>
+          </select>
+        </div>
+
+        <div class="form-group" id="noBPJSRujukan" style="display: none;">
+          <label for="no_bpjs_rujukan">Nomor BPJS *</label>
+          <input type="text" id="no_bpjs_rujukan" name="no_bpjs" placeholder="13 digit nomor BPJS" maxlength="13">
+        </div>
+
+        <div class="form-group">
+          <label for="catatan_rujukan">Catatan Tambahan</label>
+          <textarea id="catatan_rujukan" name="catatan" rows="3" placeholder="Informasi tambahan (opsional)"></textarea>
+        </div>
+
+        <div class="form-group">
+          <div class="alert alert-info" style="background-color: #e3f2fd; border-left: 4px solid #1565c0; padding: 1rem; border-radius: 8px; margin-top: 1.5rem;">
+            <p style="color: #1565c0; font-weight: 600; margin-bottom: 0.5rem;">ℹ️ Informasi:</p>
+            <ul style="color: #666; line-height: 1.8; margin-left: 1.5rem;">
+              <li>Rujukan hanya diterbitkan berdasarkan <strong>rekomendasi dokter</strong></li>
+              <li>Anda perlu <strong>konsultasi dengan dokter</strong> terlebih dahulu</li>
+              <li>Daftar antrean di menu <a href="antrean.html" style="color: #00796b;">Pendaftaran Antrean</a></li>
+              <li>Untuk pasien BPJS, pastikan <strong>faskes tingkat 1 sudah terdaftar</strong></li>
+              <li>Surat rujukan berlaku <strong>maksimal 3 bulan</strong></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="btn-group mt-2" style="justify-content: flex-end;">
+          <button type="submit" class="btn btn-primary">✅ Ajukan Permohonan</button>
+          <button type="button" class="btn btn-secondary" onclick="resetForm()">🔄 Reset</button>
+          <button type="button" class="btn btn-danger" onclick="batalForm()">❌ Batal</button>
+        </div>
+      </form>
+
+      <!-- Info Syarat & Ketentuan -->
+      <div style="margin-top: 2rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+        <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); border-top: 4px solid #27AE60; transition: all 0.3s ease; position: relative; overflow: hidden;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 20px rgba(39,174,96,0.15)'" onmouseout="this.style.transform=''; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.08)'">
+          <div style="position: absolute; top: -20px; right: -20px; width: 80px; height: 80px; background: linear-gradient(135deg, rgba(39,174,96,0.1), rgba(39,174,96,0.05)); border-radius: 50%;"></div>
+          <h3 style="color: #2e7d32; position: relative; margin-bottom: 1rem;">✅ Syarat Umum</h3>
+          <ul style="line-height: 2; color: #5f7a95; position: relative;">
+            <li>WNI dengan KTP yang masih berlaku</li>
+            <li>Terdaftar sebagai pasien puskesmas</li>
+            <li>Melakukan pemeriksaan jika diperlukan</li>
+            <li>Mengisi formulir dengan data yang benar</li>
+            <li>Mengikuti prosedur yang ditetapkan</li>
+          </ul>
+        </div>
+
+        <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); border-top: 4px solid #e91e63; transition: all 0.3s ease; position: relative; overflow: hidden;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 20px rgba(233,30,99,0.15)'" onmouseout="this.style.transform=''; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.08)'">
+          <div style="position: absolute; top: -20px; right: -20px; width: 80px; height: 80px; background: linear-gradient(135deg, rgba(233,30,99,0.1), rgba(233,30,99,0.05)); border-radius: 50%;"></div>
+          <h3 style="color: #880e4f; position: relative; margin-bottom: 1rem;">📋 Waktu Proses</h3>
+          <ul style="line-height: 2; color: #5f7a95; position: relative;">
+            <li><strong>Surat Sehat:</strong> 1-2 hari kerja</li>
+            <li><strong>Surat Sakit:</strong> Langsung (setelah pemeriksaan)</li>
+            <li><strong>Surat Rujukan:</strong> 1-3 hari kerja</li>
+            <li>Pengambilan surat di loket atau download online</li>
+            <li>Notifikasi akan dikirim melalui email/SMS</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+      </div>
+
+      <!-- Tab Content: Permohonan Sedang Diproses -->
+      <div id="tab-diproses" class="tab-content">
+      <h3 style="color: #00796b; margin-bottom: 1.5rem; font-size: 1.2rem;">⏳ Permohonan Sedang Diproses</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Tanggal Pengajuan</th>
+            <th>Jenis Surat</th>
+            <th>Keperluan</th>
+            <th>Status</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>27 Nov 2025, 09:15</td>
+            <td>Surat Keterangan Sakit</td>
+            <td>Izin Kerja</td>
+            <td><span class="badge badge-warning">Menunggu Validasi</span></td>
+            <td><button class="btn btn-danger" style="padding: 0.5rem 1rem;">Batalkan</button></td>
+          </tr>
+          <tr>
+            <td>26 Nov 2025, 14:30</td>
+            <td>Surat Rujukan</td>
+            <td>Spesialis Jantung</td>
+            <td><span class="badge badge-info">Sedang Diverifikasi</span></td>
+            <td><button class="btn btn-danger" style="padding: 0.5rem 1rem;">Batalkan</button></td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="text-muted mt-1">Total: 2 permohonan sedang diproses</p>
+
+      <!-- Info Syarat & Ketentuan -->
+      <div style="margin-top: 2rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+        <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); border-top: 4px solid #27AE60; transition: all 0.3s ease; position: relative; overflow: hidden;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 20px rgba(39,174,96,0.15)'" onmouseout="this.style.transform=''; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.08)'">
+          <div style="position: absolute; top: -20px; right: -20px; width: 80px; height: 80px; background: linear-gradient(135deg, rgba(39,174,96,0.1), rgba(39,174,96,0.05)); border-radius: 50%;"></div>
+          <h3 style="color: #2e7d32; position: relative; margin-bottom: 1rem;">✅ Syarat Umum</h3>
+          <ul style="line-height: 2; color: #5f7a95; position: relative;">
+            <li>WNI dengan KTP yang masih berlaku</li>
+            <li>Terdaftar sebagai pasien puskesmas</li>
+            <li>Melakukan pemeriksaan jika diperlukan</li>
+            <li>Mengisi formulir dengan data yang benar</li>
+            <li>Mengikuti prosedur yang ditetapkan</li>
+          </ul>
+        </div>
+
+        <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); border-top: 4px solid #e91e63; transition: all 0.3s ease; position: relative; overflow: hidden;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 20px rgba(233,30,99,0.15)'" onmouseout="this.style.transform=''; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.08)'">
+          <div style="position: absolute; top: -20px; right: -20px; width: 80px; height: 80px; background: linear-gradient(135deg, rgba(233,30,99,0.1), rgba(233,30,99,0.05)); border-radius: 50%;"></div>
+          <h3 style="color: #880e4f; position: relative; margin-bottom: 1rem;">📋 Waktu Proses</h3>
+          <ul style="line-height: 2; color: #5f7a95; position: relative;">
+            <li><strong>Surat Sehat:</strong> 1-2 hari kerja</li>
+            <li><strong>Surat Sakit:</strong> Langsung (setelah pemeriksaan)</li>
+            <li><strong>Surat Rujukan:</strong> 1-3 hari kerja</li>
+            <li>Pengambilan surat di loket atau download online</li>
+            <li>Notifikasi akan dikirim melalui email/SMS</li>
+          </ul>
+        </div>
+      </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Smart Health Center Service. All Rights Reserved.</p>
+  </footer>
+
+  <script>
+    // Tab switching function
+    function switchTab(tabName) {
+      // Remove active class from all buttons and contents
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      document.querySelectorAll('.tab-content').forEach(content => {
+        content.classList.remove('active');
+      });
+      
+      // Add active class to clicked button and corresponding content
+      event.target.classList.add('active');
+      document.getElementById('tab-' + tabName).classList.add('active');
+    }
+
+    function pilihSurat(jenis) {
+      // Hide all forms
+      document.getElementById('formSehat').style.display = 'none';
+      document.getElementById('formSakit').style.display = 'none';
+      document.getElementById('formRujukan').style.display = 'none';
+      
+      // Show selected form and scroll to it
+      if (jenis === 'sehat') {
+        document.getElementById('formSehat').style.display = 'block';
+        setTimeout(() => {
+          document.getElementById('formSehat').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 100);
+      } else if (jenis === 'sakit') {
+        document.getElementById('formSakit').style.display = 'block';
+        setDateLimits();
+        setTimeout(() => {
+          document.getElementById('formSakit').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 100);
+      } else if (jenis === 'rujukan') {
+        document.getElementById('formRujukan').style.display = 'block';
+        setTimeout(() => {
+          document.getElementById('formRujukan').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 100);
+      }
+    }
+
+    function setDateLimits() {
+      const today = new Date();
+      const maxDate = new Date();
+      maxDate.setDate(maxDate.getDate() + 14); // Max 14 days ahead
+      
+      const minDate = new Date();
+      minDate.setDate(minDate.getDate() - 7); // Max 7 days back
+      
+      document.getElementById('tanggal_mulai_sakit').setAttribute('min', minDate.toISOString().split('T')[0]);
+      document.getElementById('tanggal_mulai_sakit').setAttribute('max', today.toISOString().split('T')[0]);
+      document.getElementById('tanggal_selesai_sakit').setAttribute('min', today.toISOString().split('T')[0]);
+      document.getElementById('tanggal_selesai_sakit').setAttribute('max', maxDate.toISOString().split('T')[0]);
+    }
+
+    // Show "Lainnya" field if selected
+    document.getElementById('keperluan_sehat')?.addEventListener('change', function() {
+      const lainField = document.getElementById('keperluanLainSehat');
+      if (this.value === 'lainnya') {
+        lainField.style.display = 'block';
+        document.getElementById('keperluan_lain_sehat').required = true;
+      } else {
+        lainField.style.display = 'none';
+        document.getElementById('keperluan_lain_sehat').required = false;
+      }
+    });
+
+    // Show BPJS field if BPJS selected
+    document.getElementById('jenis_pasien_rujukan')?.addEventListener('change', function() {
+      const bpjsField = document.getElementById('noBPJSRujukan');
+      if (this.value === 'bpjs') {
+        bpjsField.style.display = 'block';
+        document.getElementById('no_bpjs_rujukan').required = true;
+      } else {
+        bpjsField.style.display = 'none';
+        document.getElementById('no_bpjs_rujukan').required = false;
+      }
+    });
+
+    function resetForm() {
+      if (confirm('Reset formulir? Semua data yang sudah diisi akan hilang.')) {
+        const forms = document.querySelectorAll('.form-container form');
+        forms.forEach(form => form.reset());
+      }
+    }
+
+    function batalForm() {
+      if (confirm('Batalkan pengisian formulir?')) {
+        document.getElementById('formSehat').style.display = 'none';
+        document.getElementById('formSakit').style.display = 'none';
+        document.getElementById('formRujukan').style.display = 'none';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+  </script>
+  <script src="../js/chatbot-knowledge-base.js"></script>
+  <script src="../js/chatbot-widget.js"></script>
+</body>
+</html>

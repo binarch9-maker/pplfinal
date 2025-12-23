@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daftar Berita - Smart Health Center</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    :root {
+      --primary: #1a8bd3;
+      --secondary: #2c4964;
+      --muted: #5f7a95;
+      --surface: #ffffff;
+      --bg: #f6f8fb;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: "Segoe UI", system-ui, sans-serif; background: var(--bg); color: var(--secondary); }
+    .top-header { border-bottom: 1px solid #e5eef5; background: #ffffff; }
+    .page-hero { padding: 3rem 1.5rem 2rem; background: linear-gradient(135deg, rgba(26,139,211,0.08), rgba(44,73,100,0.08)); border-bottom: 1px solid #e5eef5; text-align: center; }
+    .page-hero h1 { margin: 0 0 0.75rem; font-size: 2rem; }
+    .page-hero p { margin: 0; color: var(--muted); font-size: 1rem; }
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem 3rem; }
+    .back-link { display: inline-flex; align-items: center; gap: 0.5rem; margin-top: 1.5rem; padding: 0.65rem 1.1rem; border-radius: 10px; background: var(--secondary); color: white; text-decoration: none; font-weight: 600; transition: transform 0.2s ease, box-shadow 0.2s ease; }
+    .back-link:hover { transform: translateY(-2px); box-shadow: 0 8px 18px rgba(44,73,100,0.2); }
+    .news-list { display: flex; flex-direction: column; gap: 1.25rem; padding: 0; margin: 2rem 0 0; list-style: none; }
+    .news-item { background: var(--surface); border-radius: 12px; padding: 1.25rem 1.5rem; border-left: 4px solid var(--primary); box-shadow: 0 2px 12px rgba(0,0,0,0.06); display: flex; flex-direction: column; gap: 0.5rem; }
+    .news-meta { display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; color: var(--muted); }
+    .news-tag { display: inline-flex; align-items: center; padding: 0.2rem 0.65rem; border-radius: 999px; background: #e3f2fd; color: #0b6fbf; font-weight: 700; font-size: 0.8rem; letter-spacing: 0.02em; }
+    .news-title { margin: 0; font-size: 1.1rem; color: var(--secondary); }
+    .news-title a { color: inherit; text-decoration: none; }
+    .news-title a:hover { color: var(--primary); }
+    .news-desc { margin: 0; color: var(--muted); line-height: 1.6; font-size: 0.95rem; }
+    @media (max-width: 600px) { .page-hero h1 { font-size: 1.65rem; } .news-meta { flex-direction: column; align-items: flex-start; gap: 0.3rem; } }
+  </style>
+</head>
+<body>
+  <header class="top-header">
+    <div class="header-container">
+      <div class="logo" style="flex-direction: column; align-items: flex-start; gap: 0.25rem;">
+        <img src="img/Smarthealth-Logo.png" alt="Smart Health Logo" style="height: 45px;">
+        <p style="font-size: 0.75rem; margin: 0; color: #5f7a95;">Layanan Digital Puskesmas</p>
+      </div>
+      <div class="btn-group" style="gap: 0.75rem;">
+        <a href="index.html#pengumuman" class="btn btn-secondary" style="padding: 8px 18px; font-size: 0.9rem;">Pengumuman</a>
+        <a href="javascript:void(0)" onclick="loginPasien()" class="btn btn-primary" style="padding: 8px 18px; font-size: 0.9rem;">Login</a>
+        <a href="register.html" class="btn btn-secondary" style="padding: 8px 18px; font-size: 0.9rem;">Registrasi</a>
+      </div>
+    </div>
+  </header>
+  <main>
+    <section class="page-hero">
+      <div class="container">
+        <h1>Daftar Berita</h1>
+        <p>Rangkuman berita terbaru dari Smart Health Center.</p>
+        <a class="back-link" href="index.html" aria-label="Kembali ke halaman utama"><- Kembali ke beranda</a>
+      </div>
+    </section>
+    <section>
+      <div class="container">
+        <ul class="news-list">
+          <li class="news-item">
+            <div class="news-meta"><span class="news-tag">Program</span><span>3 Desember 2025</span></div>
+            <h2 class="news-title"><a href="#">Layanan Kesehatan Keliling Kembali Hadir</a></h2>
+            <p class="news-desc">Tim kami akan berkeliling ke 5 kelurahan dalam dua minggu ke depan untuk skrining kesehatan dasar dan edukasi gizi.</p>
+          </li>
+          <li class="news-item">
+            <div class="news-meta"><span class="news-tag">Teknologi</span><span>29 November 2025</span></div>
+            <h2 class="news-title"><a href="#">Pembaruan Sistem Antrian Online</a></h2>
+            <p class="news-desc">Versi terbaru menghadirkan notifikasi real-time dan opsi perubahan jadwal tanpa harus datang ke loket.</p>
+          </li>
+          <li class="news-item">
+            <div class="news-meta"><span class="news-tag">Edukasi</span><span>25 November 2025</span></div>
+            <h2 class="news-title"><a href="#">Panduan Persiapan Vaksinasi Anak</a></h2>
+            <p class="news-desc">Panduan singkat untuk orang tua mengenai persiapan sebelum dan sesudah vaksinasi anak usia 5-11 tahun.</p>
+          </li>
+          <li class="news-item">
+            <div class="news-meta"><span class="news-tag">Layanan</span><span>18 November 2025</span></div>
+            <h2 class="news-title"><a href="#">Penambahan Jam Layanan Laboratorium</a></h2>
+            <p class="news-desc">Jam layanan laboratorium kini dibuka hingga pukul 17.00 WIB setiap hari kerja untuk memenuhi kebutuhan pemeriksaan.</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+  </main>
+  <script>
+    function loginPasien() {
+      window.location.href = "login.html";
+    }
+  </script>
+</body>
+</html>

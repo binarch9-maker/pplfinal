@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Pasien - Smart Health Center Service</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header>
+    <div class="header-container">
+      <div class="logo" style="flex-direction: column; align-items: flex-start; gap: 0.25rem;">
+        <img src="img/Smarthealth-Logo.png" alt="Smart Health Logo" style="height: 45px;">
+        <p style="font-size: 0.75rem; margin: 0; color: #5f7a95;">Layanan Digital Puskesmas</p>
+      </div>
+      <div>
+        <a href="index.html" class="btn btn-secondary">Kembali ke Beranda</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="auth-container">
+      <div class="auth-card">
+        <div class="auth-header">
+          <div style="font-size: 3rem; margin-bottom: 1rem; color: #00796b;">👤</div>
+          <h2>Portal Pasien</h2>
+          <p class="text-muted">Masukkan kredensial Anda untuk melanjutkan</p>
+        </div>
+
+        <form id="loginForm" onsubmit="handleLogin(event)">
+          <div class="form-group">
+            <label for="username">Username atau Email</label>
+            <input type="text" id="username" name="username" placeholder="Masukkan username atau email" required>
+          </div>
+
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="Masukkan password" required>
+          </div>
+
+          <div class="form-group" style="display: flex; align-items: center; gap: 0.5rem;">
+            <input type="checkbox" id="remember" name="remember" style="width: auto;">
+            <label for="remember" style="margin: 0;">Ingat Saya</label>
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
+            Masuk
+          </button>
+        </form>
+
+        <script>
+          function handleLogin(event) {
+            event.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            // Simpan session
+            sessionStorage.setItem('userRole', 'pasien');
+            sessionStorage.setItem('username', username);
+            sessionStorage.setItem('isLoggedIn', 'true');
+            
+            // Redirect ke dashboard pasien
+            window.location.href = 'pasien/dashboard.html';
+            return false;
+          }
+        </script>
+
+        <div class="auth-footer">
+          <p><a href="#" style="color: #00796b; text-decoration: none;">Lupa Password?</a></p>
+          <p class="text-muted" style="margin-top: 1rem;">
+            Belum punya akun? <a href="register.html" style="color: #00796b; text-decoration: none; font-weight: 600;">Daftar di sini</a>
+          </p>
+        </div>
+      </div>
+
+      <!-- Info Box -->
+      <div class="card mt-2">
+        <h3>ℹ️ Portal Pasien</h3>
+        <ul style="line-height: 2; color: #666;">
+          <li>Daftar antrean online</li>
+          <li>Ajukan permohonan surat kesehatan</li>
+          <li>Lihat jadwal dokter</li>
+          <li>Cek status antrean real-time</li>
+        </ul>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Smart Health Center Service. All Rights Reserved.</p>
+  </footer>
+</body>
+</html>

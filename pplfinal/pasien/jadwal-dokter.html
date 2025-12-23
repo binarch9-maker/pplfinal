@@ -1,0 +1,712 @@
+﻿<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jadwal Dokter - Smart Health Center Service</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/header-styles.css">
+  <script src="../js/header-common.js"></script>
+  <style>
+    body {
+      display: flex;
+      min-height: 100vh;
+      flex-direction: column;
+      margin: 0;
+    }
+
+    /* Sidebar Styles */
+    .sidebar {
+      width: 260px;
+      background: #ffffff;
+      color: #2c3e50;
+      position: fixed;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      overflow-y: auto;
+      overflow-x: hidden;
+      z-index: 1000;
+      transition: all 0.3s ease;
+      box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    }
+
+    .sidebar-header {
+      padding: 0.875rem;
+      background: #ffffff;
+      border-bottom: 1px solid #e0e0e0;
+      text-align: center;
+    }
+
+    .sidebar-menu {
+      padding: 1rem 0;
+    }
+
+    .menu-item {
+      margin: 0.25rem 0;
+    }
+
+    .menu-link {
+      display: flex;
+      align-items: center;
+      padding: 0.75rem 0.875rem;
+      color: #2c3e50;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      user-select: none;
+      font-size: 0.95rem;
+    }
+
+    .menu-link:hover {
+      background: rgba(0,0,0,0.08);
+      padding-left: 1rem;
+    }
+
+    .menu-link.active {
+      background: #3498db;
+      color: #fff;
+      border-left: 4px solid #2980b9;
+      padding-left: 0.625rem;
+    }
+
+    .menu-link i {
+      margin-right: 0.625rem;
+      font-size: 1rem;
+      width: 18px;
+      text-align: center;
+      font-style: normal;
+    }
+
+    .main-content {
+      margin-left: 260px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: #f5f7fa;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      background: #fff;
+    }
+
+    main {
+      padding: 2rem;
+      flex: 1;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+      }
+      .sidebar.mobile-open {
+        transform: translateX(0);
+      }
+      .main-content {
+        margin-left: 0;
+      }
+    }
+
+    /* Tab Styles */
+    .tabs {
+      display: flex;
+      gap: 0.5rem;
+      border-bottom: 2px solid #e0e0e0;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      padding: 1rem 1.5rem;
+      background: none;
+      border: none;
+      border-bottom: 3px solid transparent;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 500;
+      color: #666;
+      transition: all 0.3s ease;
+      white-space: nowrap;
+    }
+
+    .tab-btn:hover {
+      color: #3498db;
+      background: #f8f9fa;
+    }
+
+    .tab-btn.active {
+      color: #3498db;
+      border-bottom-color: #3498db;
+      background: #e8f4fd;
+    }
+
+    .tab-content {
+      display: none;
+      animation: fadeIn 0.3s ease-in;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .jadwal-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+    .dokter-card {
+      border: 2px solid #e0e0e0;
+      border-radius: 10px;
+      padding: 1.5rem;
+      background: #fff;
+      transition: all 0.3s ease;
+    }
+    .dokter-card:hover {
+      border-color: #00796b;
+      transform: translateY(-5px);
+      box-shadow: 0 5px 20px rgba(0, 121, 107, 0.2);
+    }
+    .dokter-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    .dokter-avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #00796b, #004d40);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      color: #fff;
+    }
+    .jadwal-hari {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.5rem;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .jadwal-hari:last-child {
+      border-bottom: none;
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem; text-align: center;">
+        <img src="../img/Smarthealth-Logo.png" alt="Smart Health Logo" style="height: 50px;">
+      </div>
+    </div>
+
+    <div class="sidebar-menu">
+      <!-- Beranda -->
+      <div class="menu-item">
+        <a href="dashboard.html" class="menu-link">
+          <i>🏠</i>
+          <span>Beranda</span>
+        </a>
+      </div>
+
+      <!-- Jadwal Dokter -->
+      <div class="menu-item">
+        <a href="jadwal-dokter.html" class="menu-link active">
+          <i>📅</i>
+          <span>Jadwal Dokter</span>
+        </a>
+      </div>
+
+      <!-- Antrean -->
+      <div class="menu-item">
+        <a href="antrean.html" class="menu-link">
+          <i>🎫</i>
+          <span>Antrean</span>
+        </a>
+      </div>
+
+      <!-- Status Antrean -->
+      <div class="menu-item">
+        <a href="status-antrean.html" class="menu-link">
+          <i>📋</i>
+          <span>Status Antrean</span>
+        </a>
+      </div>
+
+      <!-- Permohonan Surat -->
+      <div class="menu-item">
+        <a href="permohonan-surat.html" class="menu-link">
+          <i>📄</i>
+          <span>Permohonan Surat</span>
+        </a>
+      </div>
+
+      <!-- Riwayat Surat -->
+      <div class="menu-item">
+        <a href="riwayat-surat.html" class="menu-link">
+          <i>📜</i>
+          <span>Riwayat Surat</span>
+        </a>
+      </div>
+
+      <!-- Chatbot -->
+      <div class="menu-item">
+        <a href="chatbot.html" class="menu-link">
+          <i>💬</i>
+          <span>Chatbot</span>
+        </a>
+      </div>
+
+      <hr style="border: none; border-top: 1px solid rgba(0,0,0,0.1); margin: 1rem 0;">
+
+      <!-- Logout -->
+      <div class="menu-item">
+        <a href="../login-pasien.html" class="menu-link" style="color: #e74c3c;">
+          <i>🚪</i>
+          <span>Logout</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+  <header>
+    <div class="header-container">
+      <div class="logo" style="flex-direction: column; align-items: flex-start; gap: 0.25rem;">
+        <h2 style="margin: 0; font-size: 1.5rem; color: #2c3e50;">Jadwal Dokter</h2>
+        <p style="font-size: 0.85rem; margin: 0; color: #7f8c8d;">Portal Pasien SmartHealth</p>
+      </div>
+
+      <nav style="flex: 1; margin-left: 2rem;">
+      </nav>
+      
+      <div class="header-right">
+        <!-- Notification Bell -->
+        <div class="notification-bell" onclick="toggleNotification()">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/>
+          </svg>
+          <span class="notification-badge">4</span>
+          
+          <div class="notification-dropdown" id="notificationDropdown">
+            <div class="notification-header">
+              <h4>Notifikasi</h4>
+              <a href="#" class="mark-read">Tandai Sudah Dibaca</a>
+            </div>
+            <div class="notification-list-header">
+              <div class="notification-item-header unread">
+                <div class="notification-icon-header success">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                  </svg>
+                </div>
+                <div class="notification-content-header">
+                  <strong>Surat Sehat Anda telah diterbitkan</strong>
+                  <p>Silakan unduh di menu Riwayat Surat</p>
+                  <div class="notification-time-header">10 menit lalu</div>
+                </div>
+              </div>
+              
+              <div class="notification-item-header unread">
+                <div class="notification-icon-header info">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+                  </svg>
+                </div>
+                <div class="notification-content-header">
+                  <strong>Nomor antrean Anda: A-012</strong>
+                  <p>Silakan menunggu, saat ini posisi ke-3</p>
+                  <div class="notification-time-header">25 menit lalu</div>
+                </div>
+              </div>
+              
+              <div class="notification-item-header">
+                <div class="notification-icon-header warning">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/>
+                  </svg>
+                </div>
+                <div class="notification-content-header">
+                  <strong>Jadwal kontrol: 5 Desember 2025</strong>
+                  <p>Jangan lupa jadwal kontrol dengan dr. Siti Aminah</p>
+                  <div class="notification-time-header">2 hari lalu</div>
+                </div>
+              </div>
+              
+              <div class="notification-item-header">
+                <div class="notification-icon-header info">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+                  </svg>
+                </div>
+                <div class="notification-content-header">
+                  <strong>Permohonan surat sakit diproses</strong>
+                  <p>Tenaga medis sedang memvalidasi permohonan Anda</p>
+                  <div class="notification-time-header">3 hari lalu</div>
+                </div>
+              </div>
+            </div>
+            <div class="notification-footer">
+              <a href="#">Lihat Semua</a>
+            </div>
+          </div>
+        </div>
+        
+        <!-- User Profile Dropdown -->
+        <div class="user-profile" id="userProfile">
+          <button class="user-profile-toggle" onclick="toggleUserDropdown()">
+            <div class="user-avatar">DP</div>
+            <div class="user-info">
+              <span class="user-name" id="headerUserName">Demo Pasien</span>
+              <span class="user-role">Pasien</span>
+            </div>
+            <svg class="dropdown-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path d="M7 10l5 5 5-5z"/>
+            </svg>
+          </button>
+          
+          <div class="user-dropdown" id="userDropdown">
+            <a href="profil.html" class="user-dropdown-item">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+              </svg>
+              Profil Saya
+            </a>
+            <div style="border-top: 1px solid #f0f0f0; margin: 0.5rem 0;"></div>
+            <a href="../logout.html" class="user-dropdown-item logout">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/>
+              </svg>
+              Logout
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="page-header">
+      <h2>Jadwal Praktik Dokter</h2>
+      <p>Lihat jadwal praktik dokter yang tersedia di puskesmas</p>
+    </div>
+
+    <!-- Tab Navigation -->
+    <div class="card">
+      <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('hari-ini')">
+          📅 Jadwal Hari Ini (Rabu, 27 November 2025)
+        </button>
+        <button class="tab-btn" onclick="switchTab('semua-dokter')">
+          📋 Jadwal Lengkap Semua Dokter
+        </button>
+      </div>
+
+      <!-- Tab Content: Jadwal Hari Ini -->
+      <div id="tab-hari-ini" class="tab-content active">
+      <div class="jadwal-grid" style="margin-top: 1rem;">
+        <div class="dokter-card">
+            <div class="dokter-header">
+            <div class="dokter-avatar">👨‍⚕️</div>
+            <div>
+              <h4 style="margin: 0; color: #00796b;">dr. Ahmad Fauzi</h4>
+              <p style="margin: 0; color: #666; font-size: 0.9rem;">Dokter Umum</p>
+            </div>
+          </div>
+          <div style="margin: 1rem 0;">
+            <p><strong>Poli Umum</strong></p>
+            <p style="color: #666; font-size: 0.9rem;">
+              ⏰ 08:00 - 13:00 WIB<br>
+              <span class="badge badge-success">Tersedia Hari Ini</span>
+            </p>
+          </div>
+          <a href="antrean.html" class="btn btn-primary" style="width: 100%;">Daftar Antrean</a>
+        </div>
+
+        <div class="dokter-card">
+          <div class="dokter-header">
+            <div class="dokter-avatar">👩‍⚕️</div>
+            <div>
+              <h4 style="margin: 0; color: #00796b;">drg. Siti Nurhaliza</h4>
+              <p style="margin: 0; color: #666; font-size: 0.9rem;">Dokter Gigi</p>
+            </div>
+          </div>
+          <div style="margin: 1rem 0;">
+            <p><strong>Poli Gigi</strong></p>
+            <p style="color: #666; font-size: 0.9rem;">
+              ⏰ 08:00 - 14:00 WIB<br>
+              <span class="badge badge-success">Tersedia Hari Ini</span>
+            </p>
+          </div>
+          <a href="antrean.html" class="btn btn-primary" style="width: 100%;">Daftar Antrean</a>
+        </div>
+
+        <div class="dokter-card">
+          <div class="dokter-header">
+            <div class="dokter-avatar">👩‍⚕️</div>
+            <div>
+              <h4 style="margin: 0; color: #00796b;">dr. Dewi Lestari, Sp.OG</h4>
+              <p style="margin: 0; color: #666; font-size: 0.9rem;">Spesialis Kandungan</p>
+            </div>
+          </div>
+          <div style="margin: 1rem 0;">
+            <p><strong>Poli KIA</strong></p>
+            <p style="color: #666; font-size: 0.9rem;">
+              ⏰ 09:00 - 12:00 WIB<br>
+              <span class="badge badge-success">Tersedia Hari Ini</span>
+            </p>
+          </div>
+          <a href="antrean.html" class="btn btn-primary" style="width: 100%;">Daftar Antrean</a>
+        </div>
+      </div>
+      </div>
+
+      <!-- Tab Content: Jadwal Lengkap Semua Dokter -->
+      <div id="tab-semua-dokter" class="tab-content">
+        <h3 style="margin-bottom: 1.5rem; font-size: 1.2rem; color: #00796b;">👨‍⚕️ Jadwal Lengkap Praktik Dokter</h3>
+        
+        <!-- Filter -->
+        <div style="margin-bottom: 1.5rem; padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+          <h4 style="font-size: 1rem; margin-bottom: 0.75rem;">Filter Jadwal</h4>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="filterHari">Hari</label>
+              <select id="filterHari" onchange="filterJadwal()">
+                <option value="">Semua Hari</option>
+                <option value="senin">Senin</option>
+                <option value="selasa">Selasa</option>
+                <option value="rabu">Rabu</option>
+                <option value="kamis">Kamis</option>
+                <option value="jumat">Jumat</option>
+                <option value="sabtu">Sabtu</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="filterPoli">Poli/Spesialisasi</label>
+              <select id="filterPoli" onchange="filterJadwal()">
+                <option value="">Semua Poli</option>
+                <option value="Poli Umum">Poli Umum</option>
+                <option value="Poli Gigi">Poli Gigi</option>
+                <option value="Poli KIA">Poli KIA</option>
+                <option value="Poli Lansia">Poli Lansia</option>
+                <option value="Poli Gizi">Poli Gizi</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="searchDokter">Cari Dokter</label>
+              <input type="text" id="searchDokter" placeholder="Nama dokter..." onkeyup="filterJadwal()">
+            </div>
+          </div>
+        </div>
+
+        <!-- Tabel Jadwal -->
+        <div style="overflow-x: auto;">
+        <table style="min-width: 900px;">
+          <thead>
+            <tr>
+              <th style="min-width: 180px;">Nama Dokter</th>
+              <th style="min-width: 120px;">Poli</th>
+              <th style="min-width: 90px;">Senin</th>
+              <th style="min-width: 90px;">Selasa</th>
+              <th style="min-width: 90px;">Rabu</th>
+              <th style="min-width: 90px;">Kamis</th>
+              <th style="min-width: 90px;">Jumat</th>
+              <th style="min-width: 90px;">Sabtu</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- POLI UMUM -->
+            <tr data-nama="dr. Ahmad Fauzi" data-poli="Poli Umum" data-senin="08:00-13:00" data-selasa="08:00-13:00" data-rabu="08:00-13:00" data-kamis="08:00-13:00" data-jumat="08:00-11:00" data-sabtu="">
+              <td><strong>dr. Ahmad Fauzi</strong><br><small style="color: #666;">Dokter Umum</small></td>
+              <td>Poli Umum</td>
+              <td style="background: #e8f5e9; text-align: center; font-size: 0.9rem;">08:00<br>13:00</td>
+              <td style="background: #e8f5e9; text-align: center; font-size: 0.9rem;">08:00<br>13:00</td>
+              <td style="background: #e8f5e9; text-align: center; font-size: 0.9rem;">08:00<br>13:00</td>
+              <td style="background: #e8f5e9; text-align: center; font-size: 0.9rem;">08:00<br>13:00</td>
+              <td style="background: #e8f5e9; text-align: center; font-size: 0.9rem;">08:00<br>11:00</td>
+              <td style="background: #f5f5f5; text-align: center;">-</td>
+            </tr>
+            <tr data-nama="dr. Budi Santoso" data-poli="Poli Umum" data-senin="13:00-16:00" data-selasa="13:00-16:00" data-rabu="" data-kamis="13:00-16:00" data-jumat="" data-sabtu="08:00-12:00">
+              <td><strong>dr. Budi Santoso</strong><br><small style="color: #666;">Dokter Umum</small></td>
+              <td>Poli Umum</td>
+              <td style="background: #e8f5e9; text-align: center; font-size: 0.9rem;">13:00<br>16:00</td>
+              <td style="background: #e8f5e9; text-align: center; font-size: 0.9rem;">13:00<br>16:00</td>
+              <td style="background: #f5f5f5; text-align: center;">-</td>
+              <td style="background: #e8f5e9; text-align: center; font-size: 0.9rem;">13:00<br>16:00</td>
+              <td style="background: #f5f5f5; text-align: center;">-</td>
+              <td style="background: #e8f5e9; text-align: center; font-size: 0.9rem;">08:00<br>12:00</td>
+            </tr>
+            
+            <!-- POLI GIGI -->
+            <tr data-nama="drg. Siti Nurhaliza" data-poli="Poli Gigi" data-senin="08:00-14:00" data-selasa="" data-rabu="08:00-14:00" data-kamis="" data-jumat="08:00-14:00" data-sabtu="">
+              <td><strong>drg. Siti Nurhaliza</strong><br><small style="color: #666;">Dokter Gigi</small></td>
+              <td>Poli Gigi</td>
+              <td style="background: #e3f2fd; text-align: center; font-size: 0.9rem;">08:00<br>14:00</td>
+              <td style="background: #f5f5f5; text-align: center;">-</td>
+              <td style="background: #e3f2fd; text-align: center; font-size: 0.9rem;">08:00<br>14:00</td>
+              <td style="background: #f5f5f5; text-align: center;">-</td>
+              <td style="background: #e3f2fd; text-align: center; font-size: 0.9rem;">08:00<br>14:00</td>
+              <td style="background: #f5f5f5; text-align: center;">-</td>
+            </tr>
+            <tr data-nama="drg. Anton Wijaya, Sp.Perio" data-poli="Poli Gigi" data-senin="" data-selasa="08:00-13:00" data-rabu="" data-kamis="08:00-13:00" data-jumat="" data-sabtu="08:00-12:00">
+              <td><strong>drg. Anton Wijaya, Sp.Perio</strong><br><small style="color: #666;">Spesialis Periodonsia</small></td>
+              <td>Poli Gigi</td>
+              <td style="background: #f5f5f5; text-align: center;">-</td>
+              <td style="background: #e3f2fd; text-align: center; font-size: 0.9rem;">08:00<br>13:00</td>
+              <td style="background: #f5f5f5; text-align: center;">-</td>
+              <td style="background: #e3f2fd; text-align: center; font-size: 0.9rem;">08:00<br>13:00</td>
+              <td style="background: #f5f5f5; text-align: center;">-</td>
+              <td style="background: #e3f2fd; text-align: center; font-size: 0.9rem;">08:00<br>12:00</td>
+            </tr>
+            
+            <!-- POLI KIA -->
+            <tr data-nama="dr. Dewi Lestari, Sp.OG" data-poli="Poli KIA" data-senin="09:00-12:00" data-selasa="" data-rabu="09:00-12:00" data-kamis="" data-jumat="09:00-11:00" data-sabtu="">
+              <td><strong>dr. Dewi Lestari, Sp.OG</strong><br><small style="color: #666;">Spesialis Kandungan</small></td>
+              <td>Poli KIA</td>
+              <td style="background: #fce4ec; text-align: center; font-size: 0.9rem;">09:00<br>12:00</td>
+              <td style="background: #f5f5f5; text-align: center;">-</td>
+              <td style="background: #fce4ec; text-align: center; font-size: 0.9rem;">09:00<br>12:00</td>
+              <td style="background: #f5f5f5; text-align: center;">-</td>
+              <td style="background: #fce4ec; text-align: center; font-size: 0.9rem;">09:00<br>11:00</td>
+              <td style="background: #f5f5f5; text-align: center;">-</td>
+            </tr>
+            <tr data-nama="Bidan Nur Azizah" data-poli="Poli KIA" data-senin="08:00-16:00" data-selasa="08:00-16:00" data-rabu="08:00-16:00" data-kamis="08:00-16:00" data-jumat="08:00-11:00" data-sabtu="08:00-13:00">
+              <td><strong>Bidan Nur Azizah</strong><br><small style="color: #666;">Bidan</small></td>
+              <td>Poli KIA</td>
+              <td style="background: #fce4ec; text-align: center; font-size: 0.9rem;">08:00<br>16:00</td>
+              <td style="background: #fce4ec; text-align: center; font-size: 0.9rem;">08:00<br>16:00</td>
+              <td style="background: #fce4ec; text-align: center; font-size: 0.9rem;">08:00<br>16:00</td>
+              <td style="background: #fce4ec; text-align: center; font-size: 0.9rem;">08:00<br>16:00</td>
+              <td style="background: #fce4ec; text-align: center; font-size: 0.9rem;">08:00<br>11:00</td>
+              <td style="background: #fce4ec; text-align: center; font-size: 0.9rem;">08:00<br>13:00</td>
+            </tr>
+            
+            <!-- POLI LANSIA -->
+            <tr data-nama="dr. Hasan Basri, Sp.PD" data-poli="Poli Lansia" data-senin="" data-selasa="08:00-12:00" data-rabu="" data-kamis="08:00-12:00" data-jumat="" data-sabtu="08:00-12:00">
+              <td><strong>dr. Hasan Basri, Sp.PD</strong><br><small style="color: #666;">Spesialis Penyakit Dalam</small></td>
+              <td>Poli Lansia</td>
+              <td style="background: #f5f5f5; text-align: center;">-</td>
+              <td style="background: #fff3e0; text-align: center; font-size: 0.9rem;">08:00<br>12:00</td>
+              <td style="background: #f5f5f5; text-align: center;">-</td>
+              <td style="background: #fff3e0; text-align: center; font-size: 0.9rem;">08:00<br>12:00</td>
+              <td style="background: #f5f5f5; text-align: center;">-</td>
+              <td style="background: #fff3e0; text-align: center; font-size: 0.9rem;">08:00<br>12:00</td>
+            </tr>
+            
+            <!-- POLI GIZI -->
+            <tr data-nama="dr. Ratna Sari" data-poli="Poli Gizi" data-senin="13:00-16:00" data-selasa="" data-rabu="13:00-16:00" data-kamis="" data-jumat="13:00-15:00" data-sabtu="">
+              <td><strong>dr. Ratna Sari</strong><br><small style="color: #666;">Ahli Gizi</small></td>
+              <td>Poli Gizi</td>
+              <td style="background: #f1f8e9; text-align: center; font-size: 0.9rem;">13:00<br>16:00</td>
+              <td style="background: #f5f5f5; text-align: center;">-</td>
+              <td style="background: #f1f8e9; text-align: center; font-size: 0.9rem;">13:00<br>16:00</td>
+              <td style="background: #f5f5f5; text-align: center;">-</td>
+              <td style="background: #f1f8e9; text-align: center; font-size: 0.9rem;">13:00<br>15:00</td>
+              <td style="background: #f5f5f5; text-align: center;">-</td>
+            </tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Info Tambahan -->
+    <div class="card-grid">
+      <div class="card" style="background: #e3f2fd; border-left: 4px solid #1976d2;">
+        <h3 style="color: #1565c0;">ℹ️ Informasi Penting</h3>
+        <ul style="line-height: 2; color: #666;">
+          <li>Jadwal dapat berubah sewaktu-waktu tanpa pemberitahuan</li>
+          <li>Untuk memastikan ketersediaan dokter, <strong>daftar antrean terlebih dahulu</strong></li>
+          <li>Datang <strong>15 menit sebelum</strong> waktu praktik</li>
+          <li>Bawa <strong>KTP dan Kartu BPJS</strong> (jika ada)</li>
+          <li>Untuk konsultasi khusus, hubungi <strong>(021) 1234-5678</strong></li>
+        </ul>
+      </div>
+
+      <div class="card" style="background: #e8f5e9; border-left: 4px solid #388e3c;">
+        <h3 style="color: #2e7d32;">📞 Hubungi Kami</h3>
+        <ul style="line-height: 2; color: #666;">
+          <li><strong>Telepon:</strong> (021) 1234-5678</li>
+          <li><strong>WhatsApp:</strong> 0812-3456-7890</li>
+          <li><strong>Email:</strong> info@smarthealthcenter.id</li>
+          <li><strong>Jam Operasional:</strong> Senin-Sabtu, 08:00-16:00</li>
+          <li>Gunakan <a href="chatbot.html" style="color: #00796b;">Chatbot</a> untuk pertanyaan cepat</li>
+        </ul>
+      </div>
+    </div>
+  </main>  </div>
+
+
+
+  <footer>
+    <p>&copy; 2025 Smart Health Center Service. All Rights Reserved.</p>
+  </footer>
+
+  <script>
+    // Tab switching function
+    function switchTab(tabName) {
+      // Remove active class from all buttons and contents
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      document.querySelectorAll('.tab-content').forEach(content => {
+        content.classList.remove('active');
+      });
+      
+      // Add active class to clicked button and corresponding content
+      event.target.classList.add('active');
+      document.getElementById('tab-' + tabName).classList.add('active');
+    }
+
+    function filterJadwal() {
+      const hari = document.getElementById('filterHari').value.toLowerCase();
+      const poli = document.getElementById('filterPoli').value;
+      const search = document.getElementById('searchDokter').value.toLowerCase();
+      
+      const rows = document.querySelectorAll('#tab-semua-dokter tbody tr');
+      
+      rows.forEach(row => {
+        const nama = row.getAttribute('data-nama').toLowerCase();
+        const rowPoli = row.getAttribute('data-poli');
+        let showRow = true;
+        
+        // Filter by search
+        if (search && !nama.includes(search)) {
+          showRow = false;
+        }
+        
+        // Filter by poli
+        if (poli && rowPoli !== poli) {
+          showRow = false;
+        }
+        
+        // Filter by hari
+        if (hari) {
+          const hariData = row.getAttribute('data-' + hari);
+          if (!hariData) {
+            showRow = false;
+          }
+        }
+        
+        row.style.display = showRow ? '' : 'none';
+      });
+    }
+  </script>
+  <script src="../js/chatbot-knowledge-base.js"></script>
+  <script src="../js/chatbot-widget.js"></script>
+</body>
+</html>

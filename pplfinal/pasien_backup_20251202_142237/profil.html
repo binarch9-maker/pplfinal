@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profil Pasien - Smart Health Center Service</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/header-styles.css">
+  <script src="../js/header-common.js"></script>
+</head>
+<body>
+  <header>
+    <div class="header-container">
+      <div class="logo" style="flex-direction: column; align-items: flex-start; gap: 0.25rem;">
+        <img src="../img/Smarthealth-Logo.png" alt="Smart Health Logo" style="height: 45px;">
+        <p style="font-size: 0.75rem; margin: 0; color: #5f7a95;">Layanan Digital Puskesmas</p>
+      </div>
+
+      <nav style="flex: 1; margin-left: 2rem;">
+        <a href="dashboard.html" style="color: #1a8bd3; text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 0.5rem; border-bottom: 2px solid #1a8bd3; padding: 0.5rem 0;">
+          🏠 Dashboard
+        </a>
+      </nav>
+      
+      <div class="header-right">
+        <!-- Notification Bell -->
+        <div class="notification-bell" onclick="toggleNotification()">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/>
+          </svg>
+          <span class="notification-badge">4</span>
+          
+          <div class="notification-dropdown" id="notificationDropdown">
+            <div class="notification-header">
+              <h4>Notifikasi</h4>
+              <a href="#" class="mark-read">Tandai Sudah Dibaca</a>
+            </div>
+            <div class="notification-list-header">
+              <div class="notification-item-header unread">
+                <div class="notification-icon-header success">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                  </svg>
+                </div>
+                <div class="notification-content-header">
+                  <strong>Surat Sehat Anda telah diterbitkan</strong>
+                  <p>Silakan unduh di menu Riwayat Surat</p>
+                  <div class="notification-time-header">10 menit lalu</div>
+                </div>
+              </div>
+              
+              <div class="notification-item-header unread">
+                <div class="notification-icon-header info">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+                  </svg>
+                </div>
+                <div class="notification-content-header">
+                  <strong>Nomor antrean Anda: A-012</strong>
+                  <p>Silakan menunggu, saat ini posisi ke-3</p>
+                  <div class="notification-time-header">25 menit lalu</div>
+                </div>
+              </div>
+              
+              <div class="notification-item-header">
+                <div class="notification-icon-header warning">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/>
+                  </svg>
+                </div>
+                <div class="notification-content-header">
+                  <strong>Jadwal kontrol: 5 Desember 2025</strong>
+                  <p>Jangan lupa jadwal kontrol dengan dr. Siti Aminah</p>
+                  <div class="notification-time-header">2 hari lalu</div>
+                </div>
+              </div>
+              
+              <div class="notification-item-header">
+                <div class="notification-icon-header info">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+                  </svg>
+                </div>
+                <div class="notification-content-header">
+                  <strong>Permohonan surat sakit diproses</strong>
+                  <p>Tenaga medis sedang memvalidasi permohonan Anda</p>
+                  <div class="notification-time-header">3 hari lalu</div>
+                </div>
+              </div>
+            </div>
+            <div class="notification-footer">
+              <a href="#">Lihat Semua</a>
+            </div>
+          </div>
+        </div>
+        
+        <!-- User Profile Dropdown -->
+        <div class="user-profile" id="userProfile">
+          <button class="user-profile-toggle" onclick="toggleUserDropdown()">
+            <div class="user-avatar">DP</div>
+            <div class="user-info">
+              <span class="user-name" id="headerUserName">Demo Pasien</span>
+              <span class="user-role">Pasien</span>
+            </div>
+            <svg class="dropdown-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path d="M7 10l5 5 5-5z"/>
+            </svg>
+          </button>
+          
+          <div class="user-dropdown" id="userDropdown">
+            <a href="profil.html" class="user-dropdown-item">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+              </svg>
+              Profil Saya
+            </a>
+            <div style="border-top: 1px solid #f0f0f0; margin: 0.5rem 0;"></div>
+            <a href="antrean.html" class="user-dropdown-item">
+              <span>📋</span> Daftar Antrean
+            </a>
+            <a href="status-antrean.html" class="user-dropdown-item">
+              <span>⏱️</span> Status Antrean
+            </a>
+            <a href="permohonan-surat.html" class="user-dropdown-item">
+              <span>📄</span> Permohonan Surat
+            </a>
+            <a href="riwayat-surat.html" class="user-dropdown-item">
+              <span>📚</span> Riwayat Surat
+            </a>
+            <a href="jadwal-dokter.html" class="user-dropdown-item">
+              <span>👨‍⚕️</span> Jadwal Dokter
+            </a>
+            <a href="chatbot.html" class="user-dropdown-item">
+              <span>💬</span> Chatbot
+            </a>
+            <div style="border-top: 1px solid #f0f0f0; margin: 0.5rem 0;"></div>
+            <a href="#" class="user-dropdown-item">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94L14.4 2.81c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
+              </svg>
+              Pengaturan
+            </a>
+            <a href="../logout.html" class="user-dropdown-item logout">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/>
+              </svg>
+              Logout
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="page-header">
+      <h2>Profil Saya</h2>
+      <p>Kelola informasi pribadi dan pengaturan akun Anda</p>
+    </div>
+
+    <!-- Profile Header Card -->
+    <div class="card" style="background: linear-gradient(135deg, #6B9BD1 0%, #5A8BC1 100%); color: #fff;">
+      <div style="display: flex; align-items: center; gap: 2rem;">
+        <div style="width: 90px; height: 90px; border-radius: 50%; background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; font-size: 2.5rem;">
+          👤
+        </div>
+        <div style="flex: 1;">
+          <h2 style="color: #fff; margin-bottom: 0.5rem; font-size: 1.5rem;">Ahmad Ridwan</h2>
+          <p style="font-size: 0.95rem; opacity: 0.95;">NIK: 3201012345678901</p>
+          <p style="font-size: 0.85rem; opacity: 0.9;">No. Rekam Medis: RM-2025-00123</p>
+          <p style="margin-top: 1rem;">
+            <span class="badge badge-success">Akun Terverifikasi ✓</span>
+            <span class="badge" style="background: #fff; color: #6B9BD1; margin-left: 0.5rem;">Pasien BPJS</span>
+          </p>
+        </div>
+        <div>
+          <button class="btn btn-success" onclick="editProfil()">Edit Profil</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab Navigation -->
+    <div class="card">
+      <div style="display: flex; gap: 0.5rem; border-bottom: 2px solid #e0e0e0; padding-bottom: 0;">
+        <button class="tab-btn active" onclick="showTab('data-pribadi')" id="tab-data-pribadi" style="font-size: 0.95rem;">
+          Data Pribadi
+        </button>
+        <button class="tab-btn" onclick="showTab('data-medis')" id="tab-data-medis" style="font-size: 0.95rem;">
+          Data Medis
+        </button>
+        <button class="tab-btn" onclick="showTab('keamanan')" id="tab-keamanan" style="font-size: 0.95rem;">
+          Keamanan
+        </button>
+        <button class="tab-btn" onclick="showTab('notifikasi')" id="tab-notifikasi" style="font-size: 0.95rem;">
+          Notifikasi
+        </button>
+      </div>
+    </div>
+
+    <!-- Tab Content: Data Pribadi -->
+    <div id="content-data-pribadi" class="tab-content">
+      <div class="form-container">
+        <h3 style="color: #6B9BD1; margin-bottom: 1.5rem; font-size: 1.1rem;">Data Pribadi</h3>
+        
+        <form id="formDataPribadi">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="nik">NIK *</label>
+              <input type="text" id="nik" value="3201012345678901" readonly style="background: #f5f5f5;">
+            </div>
+            <div class="form-group">
+              <label for="no_rm">No. Rekam Medis</label>
+              <input type="text" id="no_rm" value="RM-2025-00123" readonly style="background: #f5f5f5;">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="nama_lengkap">Nama Lengkap *</label>
+            <input type="text" id="nama_lengkap" value="Ahmad Ridwan" required>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="tempat_lahir">Tempat Lahir *</label>
+              <input type="text" id="tempat_lahir" value="Jakarta" required>
+            </div>
+            <div class="form-group">
+              <label for="tanggal_lahir">Tanggal Lahir *</label>
+              <input type="date" id="tanggal_lahir" value="1990-05-15" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="jenis_kelamin">Jenis Kelamin *</label>
+              <select id="jenis_kelamin" required>
+                <option value="L" selected>Laki-laki</option>
+                <option value="P">Perempuan</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="golongan_darah">Golongan Darah</label>
+              <select id="golongan_darah">
+                <option value="A" selected>A</option>
+                <option value="B">B</option>
+                <option value="AB">AB</option>
+                <option value="O">O</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="status_pernikahan">Status Pernikahan</label>
+              <select id="status_pernikahan">
+                <option value="belum_menikah">Belum Menikah</option>
+                <option value="menikah" selected>Menikah</option>
+                <option value="cerai">Cerai</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="alamat">Alamat Lengkap *</label>
+            <textarea id="alamat" required>Jl. Merdeka No. 45, RT 002/RW 005, Kelurahan Sejahtera, Kecamatan Bahagia</textarea>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="kota">Kota/Kabupaten *</label>
+              <input type="text" id="kota" value="Jakarta Selatan" required>
+            </div>
+            <div class="form-group">
+              <label for="provinsi">Provinsi *</label>
+              <input type="text" id="provinsi" value="DKI Jakarta" required>
+            </div>
+            <div class="form-group">
+              <label for="kode_pos">Kode Pos</label>
+              <input type="text" id="kode_pos" value="12345" maxlength="5">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="no_telp">Nomor Telepon *</label>
+              <input type="tel" id="no_telp" value="081234567890" required>
+            </div>
+            <div class="form-group">
+              <label for="email">Email *</label>
+              <input type="email" id="email" value="ahmad.ridwan@email.com" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="pekerjaan">Pekerjaan</label>
+              <input type="text" id="pekerjaan" value="Karyawan Swasta">
+            </div>
+            <div class="form-group">
+              <label for="pendidikan">Pendidikan Terakhir</label>
+              <select id="pendidikan">
+                <option value="">-- Pilih --</option>
+                <option value="sd">SD</option>
+                <option value="smp">SMP</option>
+                <option value="sma">SMA/SMK</option>
+                <option value="d3">D3</option>
+                <option value="s1" selected>S1</option>
+                <option value="s2">S2</option>
+                <option value="s3">S3</option>
+              </select>
+            </div>
+          </div>
+
+          <h4 style="color: #00796b; margin: 2rem 0 1rem 0;">Informasi BPJS</h4>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="no_bpjs">Nomor BPJS</label>
+              <input type="text" id="no_bpjs" value="0001234567890" maxlength="13">
+            </div>
+            <div class="form-group">
+              <label for="faskes_1">Faskes Tingkat 1</label>
+              <input type="text" id="faskes_1" value="Puskesmas Sejahtera">
+            </div>
+          </div>
+
+          <div class="btn-group mt-2" style="justify-content: flex-end;">
+            <button type="submit" class="btn btn-primary">💾 Simpan Perubahan</button>
+            <button type="reset" class="btn btn-secondary">🔄 Reset Form</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Tab Content: Data Medis -->
+    <div id="content-data-medis" class="tab-content" style="display: none;">
+      <div class="card">
+        <h3 style="color: #00796b;">🏥 Data Medis</h3>
+        
+        <div class="form-group" style="margin-top: 1.5rem;">
+          <label for="alergi">Riwayat Alergi</label>
+          <textarea id="alergi" rows="4">Alergi obat: Penisilin
+Alergi makanan: Seafood (udang, kepiting)</textarea>
+          <button class="btn btn-primary" style="margin-top: 0.5rem;" onclick="updateAlergi()">💾 Update Alergi</button>
+        </div>
+
+        <div class="form-group">
+          <label for="penyakit_bawaan">Riwayat Penyakit</label>
+          <textarea id="penyakit_bawaan" rows="4">Hipertensi (sejak 2020)
+Diabetes Tipe 2 (terkontrol dengan obat)</textarea>
+          <button class="btn btn-primary" style="margin-top: 0.5rem;" onclick="updatePenyakit()">💾 Update Penyakit</button>
+        </div>
+
+        <h4 style="color: #00796b; margin: 2rem 0 1rem 0;">Obat yang Sedang Dikonsumsi</h4>
+        <table>
+          <thead>
+            <tr>
+              <th>Nama Obat</th>
+              <th>Dosis</th>
+              <th>Frekuensi</th>
+              <th>Sejak</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Amlodipine</td>
+              <td>5 mg</td>
+              <td>1x sehari</td>
+              <td>Jan 2020</td>
+            </tr>
+            <tr>
+              <td>Metformin</td>
+              <td>500 mg</td>
+              <td>2x sehari</td>
+              <td>Mar 2021</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h4 style="color: #00796b; margin: 2rem 0 1rem 0;">Riwayat Vaksinasi</h4>
+        <table>
+          <thead>
+            <tr>
+              <th>Jenis Vaksin</th>
+              <th>Tanggal</th>
+              <th>Lokasi</th>
+              <th>Dosis</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>COVID-19 (Moderna)</td>
+              <td>15 Agu 2021</td>
+              <td>Puskesmas Sejahtera</td>
+              <td>Dosis 1</td>
+            </tr>
+            <tr>
+              <td>COVID-19 (Moderna)</td>
+              <td>10 Sep 2021</td>
+              <td>Puskesmas Sejahtera</td>
+              <td>Dosis 2</td>
+            </tr>
+            <tr>
+              <td>COVID-19 Booster (Pfizer)</td>
+              <td>20 Jan 2022</td>
+              <td>Puskesmas Sejahtera</td>
+              <td>Booster</td>
+            </tr>
+            <tr>
+              <td>Influenza</td>
+              <td>5 Nov 2024</td>
+              <td>Puskesmas Sejahtera</td>
+              <td>Annual</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Tab Content: Keamanan -->
+    <div id="content-keamanan" class="tab-content" style="display: none;">
+      <div class="form-container">
+        <h3 style="color: #00796b; margin-bottom: 1.5rem;">🔐 Keamanan Akun</h3>
+        
+        <form id="formGantiPassword">
+          <h4 style="color: #00796b; margin-bottom: 1rem;">Ganti Password</h4>
+          
+          <div class="form-group">
+            <label for="password_lama">Password Lama *</label>
+            <input type="password" id="password_lama" required>
+          </div>
+
+          <div class="form-group">
+            <label for="password_baru">Password Baru *</label>
+            <input type="password" id="password_baru" minlength="8" required>
+            <small style="color: #666;">Minimal 8 karakter, kombinasi huruf dan angka</small>
+          </div>
+
+          <div class="form-group">
+            <label for="konfirmasi_password">Konfirmasi Password Baru *</label>
+            <input type="password" id="konfirmasi_password" required>
+          </div>
+
+          <button type="submit" class="btn btn-primary">🔐 Ganti Password</button>
+        </form>
+
+        <hr style="margin: 2rem 0; border: none; border-top: 1px solid #e0e0e0;">
+
+        <h4 style="color: #00796b; margin-bottom: 1rem;">Riwayat Login</h4>
+        <table>
+          <thead>
+            <tr>
+              <th>Tanggal & Waktu</th>
+              <th>Device</th>
+              <th>IP Address</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>27 Nov 2025, 09:15</td>
+              <td>Chrome - Windows 10</td>
+              <td>192.168.1.100</td>
+              <td><span class="badge badge-success">Login Saat Ini</span></td>
+            </tr>
+            <tr>
+              <td>26 Nov 2025, 14:30</td>
+              <td>Chrome - Android</td>
+              <td>192.168.1.105</td>
+              <td><span class="badge badge-secondary">Berhasil</span></td>
+            </tr>
+            <tr>
+              <td>25 Nov 2025, 08:45</td>
+              <td>Firefox - Windows 10</td>
+              <td>192.168.1.100</td>
+              <td><span class="badge badge-secondary">Berhasil</span></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <hr style="margin: 2rem 0; border: none; border-top: 1px solid #e0e0e0;">
+
+        <h4 style="color: #d32f2f; margin-bottom: 1rem;">⚠️ Zona Bahaya</h4>
+        <div style="background: #ffebee; padding: 1.5rem; border-radius: 5px; border-left: 4px solid #d32f2f;">
+          <p style="color: #666; margin-bottom: 1rem;">
+            Tindakan di bawah ini bersifat permanen dan tidak dapat dibatalkan.
+          </p>
+          <button class="btn btn-danger" onclick="hapusAkun()">🗑️ Hapus Akun</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab Content: Notifikasi -->
+    <div id="content-notifikasi" class="tab-content" style="display: none;">
+      <div class="form-container">
+        <h3 style="color: #00796b; margin-bottom: 1.5rem;">🔔 Pengaturan Notifikasi</h3>
+        
+        <form id="formNotifikasi">
+          <h4 style="color: #00796b; margin-bottom: 1rem;">Email Notifikasi</h4>
+          
+          <div class="form-group">
+            <div style="display: flex; align-items: center; gap: 0.5rem; padding: 0.75rem; background: #f9f9f9; border-radius: 5px; margin-bottom: 0.5rem;">
+              <input type="checkbox" id="notif_antrean" checked style="width: auto;">
+              <label for="notif_antrean" style="margin: 0; flex: 1;">
+                <strong>Status Antrean</strong><br>
+                <small style="color: #666;">Notifikasi saat nomor antrean Anda dipanggil</small>
+              </label>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 0.5rem; padding: 0.75rem; background: #f9f9f9; border-radius: 5px; margin-bottom: 0.5rem;">
+              <input type="checkbox" id="notif_surat" checked style="width: auto;">
+              <label for="notif_surat" style="margin: 0; flex: 1;">
+                <strong>Permohonan Surat</strong><br>
+                <small style="color: #666;">Update status validasi dan penerbitan surat</small>
+              </label>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 0.5rem; padding: 0.75rem; background: #f9f9f9; border-radius: 5px; margin-bottom: 0.5rem;">
+              <input type="checkbox" id="notif_jadwal" checked style="width: auto;">
+              <label for="notif_jadwal" style="margin: 0; flex: 1;">
+                <strong>Jadwal Kontrol</strong><br>
+                <small style="color: #666;">Pengingat jadwal kontrol kesehatan</small>
+              </label>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 0.5rem; padding: 0.75rem; background: #f9f9f9; border-radius: 5px; margin-bottom: 0.5rem;">
+              <input type="checkbox" id="notif_pengumuman" style="width: auto;">
+              <label for="notif_pengumuman" style="margin: 0; flex: 1;">
+                <strong>Pengumuman</strong><br>
+                <small style="color: #666;">Info penting dari puskesmas</small>
+              </label>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 0.5rem; padding: 0.75rem; background: #f9f9f9; border-radius: 5px; margin-bottom: 0.5rem;">
+              <input type="checkbox" id="notif_promo" style="width: auto;">
+              <label for="notif_promo" style="margin: 0; flex: 1;">
+                <strong>Program & Promosi</strong><br>
+                <small style="color: #666;">Informasi program kesehatan dan layanan baru</small>
+              </label>
+            </div>
+          </div>
+
+          <h4 style="color: #00796b; margin: 2rem 0 1rem 0;">WhatsApp Notifikasi</h4>
+          
+          <div class="form-group">
+            <div style="display: flex; align-items: center; gap: 0.5rem; padding: 0.75rem; background: #f9f9f9; border-radius: 5px; margin-bottom: 0.5rem;">
+              <input type="checkbox" id="wa_antrean" checked style="width: auto;">
+              <label for="wa_antrean" style="margin: 0; flex: 1;">
+                <strong>Status Antrean via WhatsApp</strong><br>
+                <small style="color: #666;">Ke nomor: 0812-3456-7890</small>
+              </label>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 0.5rem; padding: 0.75rem; background: #f9f9f9; border-radius: 5px;">
+              <input type="checkbox" id="wa_surat" checked style="width: auto;">
+              <label for="wa_surat" style="margin: 0; flex: 1;">
+                <strong>Status Surat via WhatsApp</strong><br>
+                <small style="color: #666;">Ke nomor: 0812-3456-7890</small>
+              </label>
+            </div>
+          </div>
+
+          <div class="btn-group mt-2" style="justify-content: flex-end;">
+            <button type="submit" class="btn btn-primary">💾 Simpan Pengaturan</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Smart Health Center Service. All Rights Reserved.</p>
+  </footer>
+
+  <style>
+    .tab-btn {
+      padding: 1rem 1.5rem;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 500;
+      color: #666;
+      border-bottom: 3px solid transparent;
+      transition: all 0.3s ease;
+    }
+    .tab-btn:hover {
+      color: #00796b;
+    }
+    .tab-btn.active {
+      color: #00796b;
+      border-bottom-color: #00796b;
+    }
+  </style>
+
+  <script>
+    function showTab(tabName) {
+      // Hide all tab contents
+      document.querySelectorAll('.tab-content').forEach(content => {
+        content.style.display = 'none';
+      });
+      
+      // Remove active class from all tabs
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      
+      // Show selected tab content
+      document.getElementById('content-' + tabName).style.display = 'block';
+      
+      // Add active class to selected tab
+      document.getElementById('tab-' + tabName).classList.add('active');
+    }
+
+    function editProfil() {
+      showTab('data-pribadi');
+      document.getElementById('nama_lengkap').focus();
+    }
+
+    function updateAlergi() {
+      alert('✅ Data alergi berhasil diperbarui!');
+    }
+
+    function updatePenyakit() {
+      alert('✅ Data riwayat penyakit berhasil diperbarui!');
+    }
+
+    function hapusAkun() {
+      if (confirm('⚠️ PERINGATAN!\n\nApakah Anda yakin ingin menghapus akun?\n\nSemua data Anda akan dihapus permanen dan tidak dapat dipulihkan, termasuk:\n• Riwayat kunjungan\n• Riwayat surat\n• Data medis\n\nKetik "HAPUS AKUN" untuk melanjutkan.')) {
+        const konfirmasi = prompt('Ketik "HAPUS AKUN" (tanpa tanda petik):');
+        if (konfirmasi === 'HAPUS AKUN') {
+          alert('Akun Anda akan dihapus. Terima kasih telah menggunakan layanan kami.');
+          window.location.href = '../index.html';
+        } else {
+          alert('Penghapusan akun dibatalkan.');
+        }
+      }
+    }
+
+    // Form submissions
+    document.getElementById('formDataPribadi').addEventListener('submit', function(e) {
+      e.preventDefault();
+      alert('✅ Data pribadi berhasil diperbarui!');
+    });
+
+    document.getElementById('formGantiPassword').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const passwordBaru = document.getElementById('password_baru').value;
+      const konfirmasiPassword = document.getElementById('konfirmasi_password').value;
+      
+      if (passwordBaru !== konfirmasiPassword) {
+        alert('❌ Password baru dan konfirmasi password tidak cocok!');
+        return;
+      }
+      
+      alert('✅ Password berhasil diubah!\n\nAnda akan diminta login kembali dengan password baru.');
+      window.location.href = '../login.html';
+    });
+
+    document.getElementById('formNotifikasi').addEventListener('submit', function(e) {
+      e.preventDefault();
+      alert('✅ Pengaturan notifikasi berhasil disimpan!');
+    });
+  </script>
+  <script src="../js/chatbot-knowledge-base.js"></script>
+  <script src="../js/chatbot-widget.js"></script>
+</body>
+</html>

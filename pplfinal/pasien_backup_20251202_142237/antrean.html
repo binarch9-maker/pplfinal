@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pendaftaran Antrean Online - Smart Health Center Service</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/header-styles.css">
+  <script src="../js/header-common.js"></script>
+</head>
+<body>
+  <header>
+    <div class="header-container">
+      <div class="logo" style="flex-direction: column; align-items: flex-start; gap: 0.25rem;">
+        <img src="../img/Smarthealth-Logo.png" alt="Smart Health Logo" style="height: 45px;">
+        <p style="font-size: 0.75rem; margin: 0; color: #5f7a95;">Layanan Digital Puskesmas</p>
+      </div>
+
+      <nav style="flex: 1; margin-left: 2rem;">
+        <a href="dashboard.html" style="color: #6B9BD1; text-decoration: none; font-weight: 500; display: inline-flex; align-items: center; gap: 0.5rem;">
+          🏠 Dashboard
+        </a>
+      </nav>
+      
+      <div class="header-right">
+        <!-- Notification Bell -->
+        <div class="notification-bell" onclick="toggleNotification()">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/>
+          </svg>
+          <span class="notification-badge">4</span>
+          
+          <div class="notification-dropdown" id="notificationDropdown">
+            <div class="notification-header">
+              <h4>Notifikasi</h4>
+              <a href="#" class="mark-read">Tandai Sudah Dibaca</a>
+            </div>
+            <div class="notification-list-header">
+              <div class="notification-item-header unread">
+                <div class="notification-icon-header success">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                  </svg>
+                </div>
+                <div class="notification-content-header">
+                  <strong>Surat Sehat Anda telah diterbitkan</strong>
+                  <p>Silakan unduh di menu Riwayat Surat</p>
+                  <div class="notification-time-header">10 menit lalu</div>
+                </div>
+              </div>
+              
+              <div class="notification-item-header unread">
+                <div class="notification-icon-header info">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+                  </svg>
+                </div>
+                <div class="notification-content-header">
+                  <strong>Nomor antrean Anda: A-012</strong>
+                  <p>Silakan menunggu, saat ini posisi ke-3</p>
+                  <div class="notification-time-header">25 menit lalu</div>
+                </div>
+              </div>
+              
+              <div class="notification-item-header">
+                <div class="notification-icon-header warning">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/>
+                  </svg>
+                </div>
+                <div class="notification-content-header">
+                  <strong>Jadwal kontrol: 5 Desember 2025</strong>
+                  <p>Jangan lupa jadwal kontrol dengan dr. Siti Aminah</p>
+                  <div class="notification-time-header">2 hari lalu</div>
+                </div>
+              </div>
+              
+              <div class="notification-item-header">
+                <div class="notification-icon-header info">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+                  </svg>
+                </div>
+                <div class="notification-content-header">
+                  <strong>Permohonan surat sakit diproses</strong>
+                  <p>Tenaga medis sedang memvalidasi permohonan Anda</p>
+                  <div class="notification-time-header">3 hari lalu</div>
+                </div>
+              </div>
+            </div>
+            <div class="notification-footer">
+              <a href="#">Lihat Semua</a>
+            </div>
+          </div>
+        </div>
+        
+        <!-- User Profile Dropdown -->
+        <div class="user-profile" id="userProfile">
+          <button class="user-profile-toggle" onclick="toggleUserDropdown()">
+            <div class="user-avatar">DP</div>
+            <div class="user-info">
+              <span class="user-name" id="headerUserName">Demo Pasien</span>
+              <span class="user-role">Pasien</span>
+            </div>
+            <svg class="dropdown-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path d="M7 10l5 5 5-5z"/>
+            </svg>
+          </button>
+          
+          <div class="user-dropdown" id="userDropdown">
+            <a href="profil.html" class="user-dropdown-item">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+              </svg>
+              Profil Saya
+            </a>
+            <div style="border-top: 1px solid #f0f0f0; margin: 0.5rem 0;"></div>
+            <a href="antrean.html" class="user-dropdown-item">
+              <span>📋</span> Daftar Antrean
+            </a>
+            <a href="status-antrean.html" class="user-dropdown-item">
+              <span>⏱️</span> Status Antrean
+            </a>
+            <a href="permohonan-surat.html" class="user-dropdown-item">
+              <span>📄</span> Permohonan Surat
+            </a>
+            <a href="riwayat-surat.html" class="user-dropdown-item">
+              <span>📚</span> Riwayat Surat
+            </a>
+            <a href="jadwal-dokter.html" class="user-dropdown-item">
+              <span>👨‍⚕️</span> Jadwal Dokter
+            </a>
+            <a href="chatbot.html" class="user-dropdown-item">
+              <span>💬</span> Chatbot
+            </a>
+            <div style="border-top: 1px solid #f0f0f0; margin: 0.5rem 0;"></div>
+            <a href="#" class="user-dropdown-item">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94L14.4 2.81c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
+              </svg>
+              Pengaturan
+            </a>
+            <a href="../logout.html" class="user-dropdown-item logout">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/>
+              </svg>
+              Logout
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+
+
+  <main>
+    <div class="page-header">
+      <h2>Pendaftaran Antrean Online</h2>
+      <p>Daftar antrean puskesmas dari rumah, hemat waktu Anda</p>
+    </div>
+
+    <!-- Info Antrean Hari Ini -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon">👥</div>
+        <h3>45</h3>
+        <p>Total Antrean Hari Ini</p>
+      </div>
+      <div class="stat-card info">
+        <div class="stat-icon">⏳</div>
+        <h3>12</h3>
+        <p>Sedang Dilayani</p>
+      </div>
+      <div class="stat-card warning">
+        <div class="stat-icon">⏱️</div>
+        <h3>~20 menit</h3>
+        <p>Rata-rata Waktu Tunggu</p>
+      </div>
+      <div class="stat-card success">
+        <div class="stat-icon">✓</div>
+        <h3>Buka</h3>
+        <p>Status Pendaftaran</p>
+      </div>
+    </div>
+
+    <!-- Form Pendaftaran -->
+    <div class="form-container">
+      <h3 style="color: #6B9BD1; margin-bottom: 1.5rem; font-size: 1.2rem;">Formulir Pendaftaran Antrean</h3>
+      
+      <form id="formAntrean" action="status-antrean.html" method="get">
+        <div class="form-group">
+          <label for="tanggal_kunjungan">Tanggal Kunjungan *</label>
+          <input type="date" id="tanggal_kunjungan" name="tanggal_kunjungan" required>
+          <small style="color: #666;">Anda dapat mendaftar untuk hari ini atau H+1</small>
+        </div>
+
+        <div class="form-group">
+          <label for="poli">Pilih Poli/Layanan *</label>
+          <select id="poli" name="poli" required onchange="updateDokter()">
+            <option value="">-- Pilih Poli --</option>
+            <option value="poli_umum">Poli Umum</option>
+            <option value="poli_gigi">Poli Gigi</option>
+            <option value="poli_kia">Poli KIA (Kesehatan Ibu dan Anak)</option>
+            <option value="poli_lansia">Poli Lansia</option>
+            <option value="poli_tb">Poli TB</option>
+            <option value="poli_gizi">Poli Gizi</option>
+            <option value="poli_imunisasi">Imunisasi</option>
+            <option value="laboratorium">Laboratorium</option>
+            <option value="apotik">Apotek (Pengambilan Obat)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="dokter">Pilih Dokter (Opsional)</label>
+          <select id="dokter" name="dokter">
+            <option value="">-- Dokter Tersedia akan muncul setelah memilih Poli --</option>
+          </select>
+          <small style="color: #666;">Kosongkan jika ingin sistem yang menentukan</small>
+        </div>
+
+        <div class="form-group">
+          <label for="waktu_preferensi">Waktu Preferensi *</label>
+          <select id="waktu_preferensi" name="waktu_preferensi" required>
+            <option value="">-- Pilih Waktu --</option>
+            <option value="pagi">Pagi (08:00 - 10:00)</option>
+            <option value="siang">Siang (10:00 - 12:00)</option>
+            <option value="sore">Sore (13:00 - 16:00)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="jenis_pasien">Jenis Pasien *</label>
+          <select id="jenis_pasien" name="jenis_pasien" required>
+            <option value="">-- Pilih Jenis Pasien --</option>
+            <option value="umum">Pasien Umum</option>
+            <option value="bpjs">Pasien BPJS</option>
+            <option value="kontrol">Kontrol Rutin</option>
+            <option value="rujukan">Rujukan</option>
+          </select>
+        </div>
+
+        <div class="form-group" id="nomorBPJS" style="display: none;">
+          <label for="no_bpjs">Nomor Kartu BPJS</label>
+          <input type="text" id="no_bpjs" name="no_bpjs" placeholder="13 digit nomor BPJS" maxlength="13">
+        </div>
+
+        <div class="form-group">
+          <label for="keluhan">Keluhan Utama *</label>
+          <textarea id="keluhan" name="keluhan" rows="4" placeholder="Deskripsikan keluhan Anda secara singkat" required></textarea>
+          <small style="color: #666;">Contoh: Demam 3 hari, batuk dan pilek, sakit kepala, dll.</small>
+        </div>
+
+        <div class="form-group">
+          <label for="catatan">Catatan Tambahan</label>
+          <textarea id="catatan" name="catatan" rows="3" placeholder="Informasi tambahan (opsional)"></textarea>
+        </div>
+
+        <div class="form-group">
+          <div style="display: flex; align-items: flex-start; gap: 0.5rem;">
+            <input type="checkbox" id="konfirmasi" name="konfirmasi" style="width: auto; margin-top: 0.25rem;" required>
+            <label for="konfirmasi" style="margin: 0;">
+              Saya konfirmasi bahwa data yang saya berikan adalah benar dan saya bersedia datang sesuai waktu yang ditentukan.
+            </label>
+          </div>
+        </div>
+
+        <div class="btn-group mt-2" style="justify-content: flex-end;">
+          <button type="submit" class="btn btn-primary">
+            ✅ Daftar Antrean
+          </button>
+          <button type="reset" class="btn btn-secondary">
+            🔄 Reset Form
+          </button>
+          <a href="dashboard.html" class="btn btn-danger">
+            ❌ Batal
+          </a>
+        </div>
+      </form>
+    </div>
+
+    <!-- Informasi Antrean per Poli -->
+    <div class="card mt-2">
+      <h3 style="font-size: 1.1rem;">Informasi Antrean Saat Ini per Poli</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Poli/Layanan</th>
+            <th>Antrean Saat Ini</th>
+            <th>Estimasi Waktu Tunggu</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Poli Umum</td>
+            <td>Nomor: A-012 (3 orang menunggu)</td>
+            <td>~15 menit</td>
+            <td><span class="badge badge-success">Buka</span></td>
+          </tr>
+          <tr>
+            <td>Poli Gigi</td>
+            <td>Nomor: B-008 (2 orang menunggu)</td>
+            <td>~25 menit</td>
+            <td><span class="badge badge-success">Buka</span></td>
+          </tr>
+          <tr>
+            <td>Poli KIA</td>
+            <td>Nomor: C-005 (1 orang menunggu)</td>
+            <td>~10 menit</td>
+            <td><span class="badge badge-success">Buka</span></td>
+          </tr>
+          <tr>
+            <td>Poli Lansia</td>
+            <td>Nomor: D-015 (5 orang menunggu)</td>
+            <td>~30 menit</td>
+            <td><span class="badge badge-warning">Penuh</span></td>
+          </tr>
+          <tr>
+            <td>Laboratorium</td>
+            <td>Nomor: L-020 (4 orang menunggu)</td>
+            <td>~20 menit</td>
+            <td><span class="badge badge-success">Buka</span></td>
+          </tr>
+          <tr>
+            <td>Apotek</td>
+            <td>Nomor: R-018 (6 orang menunggu)</td>
+            <td>~15 menit</td>
+            <td><span class="badge badge-success">Buka</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Panduan -->
+    <div class="card-grid mt-2">
+      <div class="card" style="background: #E8F0FF; border-left: 4px solid #6B9BD1;">
+        <h3 style="color: #5A7BA8; font-size: 1.1rem;">Cara Pendaftaran</h3>
+        <ol style="line-height: 2; color: #666; margin-top: 1rem;">
+          <li>Pilih tanggal kunjungan (hari ini atau besok)</li>
+          <li>Pilih poli/layanan yang ingin dituju</li>
+          <li>Pilih dokter (opsional) atau biarkan sistem menentukan</li>
+          <li>Pilih waktu preferensi kunjungan</li>
+          <li>Isi keluhan utama dengan jelas</li>
+          <li>Centang konfirmasi dan klik "Daftar Antrean"</li>
+          <li>Nomor antrean akan diberikan setelah pendaftaran berhasil</li>
+        </ol>
+      </div>
+
+      <div class="card" style="background: #FFF5E6; border-left: 4px solid #C9A961;">
+        <h3 style="color: #A68951; font-size: 1.1rem;">Perhatian!</h3>
+        <ul style="line-height: 2; color: #666; margin-top: 1rem;">
+          <li>Pendaftaran <strong>maksimal H+1</strong> (hari ini atau besok)</li>
+          <li>Datang <strong>15 menit sebelum</strong> waktu preferensi</li>
+          <li>Bawa <strong>KTP dan Kartu BPJS</strong> (untuk pasien BPJS)</li>
+          <li>Jika <strong>terlambat >30 menit</strong>, antrean dapat dibatalkan</li>
+          <li>Untuk <strong>gawat darurat</strong>, langsung datang ke IGD</li>
+          <li>Antrean dapat <strong>dibatalkan</strong> di menu Status Antrean</li>
+        </ul>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Smart Health Center Service. All Rights Reserved.</p>
+  </footer>
+
+  <script>
+    // Set minimum date to today
+    const today = new Date().toISOString().split('T')[0];
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const maxDate = tomorrow.toISOString().split('T')[0];
+    
+    document.getElementById('tanggal_kunjungan').setAttribute('min', today);
+    document.getElementById('tanggal_kunjungan').setAttribute('max', maxDate);
+    document.getElementById('tanggal_kunjungan').value = today;
+
+    // Show/hide BPJS field
+    document.getElementById('jenis_pasien').addEventListener('change', function() {
+      const bpjsField = document.getElementById('nomorBPJS');
+      if (this.value === 'bpjs') {
+        bpjsField.style.display = 'block';
+        document.getElementById('no_bpjs').required = true;
+      } else {
+        bpjsField.style.display = 'none';
+        document.getElementById('no_bpjs').required = false;
+      }
+    });
+
+    // Update available doctors based on poli selection
+    function updateDokter() {
+      const poli = document.getElementById('poli').value;
+      const dokterSelect = document.getElementById('dokter');
+      
+      // Clear existing options
+      dokterSelect.innerHTML = '<option value="">-- Pilih Dokter --</option>';
+      
+      // Sample doctor data (in production, fetch from API)
+      const dokterData = {
+        'poli_umum': [
+          {value: 'dr_ahmad', text: 'dr. Ahmad Fauzi'},
+          {value: 'dr_budi', text: 'dr. Budi Santoso'},
+          {value: 'dr_siti', text: 'dr. Siti Aminah, Sp.PD'}
+        ],
+        'poli_gigi': [
+          {value: 'drg_siti', text: 'drg. Siti Nurhaliza'},
+          {value: 'drg_anton', text: 'drg. Anton Wijaya, Sp.Perio'}
+        ],
+        'poli_kia': [
+          {value: 'dr_dewi', text: 'dr. Dewi Lestari, Sp.OG'},
+          {value: 'bidan_nur', text: 'Bidan Nur Azizah'}
+        ],
+        'poli_lansia': [
+          {value: 'dr_hasan', text: 'dr. Hasan Basri, Sp.PD'},
+          {value: 'dr_ratna', text: 'dr. Ratna Sari'}
+        ]
+      };
+      
+      if (poli && dokterData[poli]) {
+        dokterData[poli].forEach(function(dokter) {
+          const option = document.createElement('option');
+          option.value = dokter.value;
+          option.textContent = dokter.text;
+          dokterSelect.appendChild(option);
+        });
+      }
+    }
+
+    // Form validation
+    document.getElementById('formAntrean').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      // In production, submit to backend
+      const formData = new FormData(this);
+      const data = Object.fromEntries(formData.entries());
+      
+      console.log('Form Data:', data);
+      
+      // Simulate success
+      alert('✅ Pendaftaran antrean berhasil!\n\nNomor Antrean Anda: A-013\nPoli: ' + 
+            document.getElementById('poli').options[document.getElementById('poli').selectedIndex].text +
+            '\n\nSilakan cek Status Antrean untuk memantau posisi Anda.');
+      
+      window.location.href = 'status-antrean.html';
+    });
+  </script>
+  <script src="../js/chatbot-knowledge-base.js"></script>
+  <script src="../js/chatbot-widget.js"></script>
+</body>
+</html>

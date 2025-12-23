@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hasil Pemeriksaan - Smart Health Center Service</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/header-styles.css">
+  <style>
+    body {
+      display: flex;
+      min-height: 100vh;
+      flex-direction: column;
+      margin: 0;
+    }
+
+    /* Sidebar Styles */
+    .sidebar {
+      width: 260px;
+      background: #ffffff;
+      color: #2c3e50;
+      position: fixed;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      overflow-y: auto;
+      overflow-x: hidden;
+      z-index: 1000;
+      transition: all 0.3s ease;
+      box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    }
+
+    .sidebar-header {
+      padding: 0.875rem;
+      background: #ffffff;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .sidebar-menu {
+      padding: 1rem 0;
+    }
+
+    .menu-item {
+      margin: 0.25rem 0;
+    }
+
+    .menu-link {
+      display: flex;
+      align-items: center;
+      padding: 0.75rem 0.875rem;
+      color: #2c3e50;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      user-select: none;
+      font-size: 0.95rem;
+    }
+
+    .menu-link:hover {
+      background: rgba(0,0,0,0.08);
+      padding-left: 1rem;
+    }
+
+    .menu-link.active {
+      background: #3498db;
+      color: #fff;
+      border-left: 4px solid #2980b9;
+      padding-left: 0.625rem;
+    }
+
+    .menu-link i {
+      margin-right: 0.625rem;
+      font-size: 1rem;
+      width: 18px;
+      text-align: center;
+      font-style: normal;
+    }
+
+    .main-content {
+      margin-left: 260px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: #f5f7fa;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      background: #fff;
+    }
+
+    main {
+      padding: 2rem;
+      flex: 1;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+      }
+      .sidebar.mobile-open {
+        transform: translateX(0);
+      }
+      .main-content {
+        margin-left: 0;
+      }
+    }
+
+    .form-section {
+      background: #f5f5f5;
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+      border-left: 4px solid #00796b;
+    }
+    .vital-signs {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .vital-card {
+      background: #fff;
+      padding: 1rem;
+      border-radius: 8px;
+      text-align: center;
+      border: 2px solid #e0e0e0;
+    }
+    .vital-card input {
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin: 0.5rem 0;
+    }
+    .medication-item {
+      background: #fff;
+      padding: 1rem;
+      border-radius: 8px;
+      border: 1px solid #e0e0e0;
+      margin-bottom: 1rem;
+    }
+    .icd-search {
+      position: relative;
+    }
+    .icd-suggestions {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: #fff;
+      border: 1px solid #e0e0e0;
+      border-radius: 4px;
+      max-height: 200px;
+      overflow-y: auto;
+      display: none;
+      z-index: 100;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    .icd-suggestion-item {
+      padding: 0.75rem;
+      cursor: pointer;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .icd-suggestion-item:hover {
+      background: #e3f2fd;
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem; text-align: center;">
+        <img src="../img/Smarthealth-Logo.png" alt="Smart Health Logo" style="height: 50px;">
+      </div>
+    </div>
+
+    <div class="sidebar-menu">
+      <!-- Beranda -->
+      <div class="menu-item">
+        <a href="dashboard-staf.html" class="menu-link">
+          <i>🏠</i>
+          <span>Beranda</span>
+        </a>
+      </div>
+
+      <!-- Daftar Antrean -->
+      <div class="menu-item">
+        <a href="daftar-antrean.html" class="menu-link">
+          <i>📋</i>
+          <span>Daftar Antrean</span>
+        </a>
+      </div>
+
+      <!-- Kelola Antrean -->
+      <div class="menu-item">
+        <a href="kelola-antrean.html" class="menu-link">
+          <i>⚙️</i>
+          <span>Kelola Antrean</span>
+        </a>
+      </div>
+
+      <!-- Hasil Pemeriksaan -->
+      <div class="menu-item">
+        <a href="hasil-pemeriksaan.html" class="menu-link active">
+          <i>🔬</i>
+          <span>Hasil Pemeriksaan</span>
+        </a>
+      </div>
+
+      <!-- Validasi Surat -->
+      <div class="menu-item">
+        <a href="validasi-surat.html" class="menu-link">
+          <i>✅</i>
+          <span>Validasi Surat</span>
+        </a>
+      </div>
+
+      <hr style="border: none; border-top: 1px solid rgba(255,255,255,0.1); margin: 1rem 0;">
+
+      <!-- Logout -->
+      <div class="menu-item">
+        <a href="../login-staf.html" class="menu-link" style="color: #e74c3c;">
+          <i>🚪</i>
+          <span>Logout</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <header>
+      <div class="header-container">
+        <div class="logo" style="flex-direction: column; align-items: flex-start; gap: 0.25rem;">
+          <h2 style="margin: 0; font-size: 1.5rem; color: #2c3e50;">Hasil Pemeriksaan Pasien</h2>
+          <p style="font-size: 0.85rem; margin: 0; color: #7f8c8d;">Catat hasil pemeriksaan dan diagnosis</p>
+        </div>
+        
+        <nav style="flex: 1; margin-left: 2rem;">
+        </nav>
+        
+        <div class="header-right">
+          <!-- Notification Bell -->
+          <div class="notification-bell" onclick="toggleNotification()">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/>
+            </svg>
+            <span class="notification-badge">3</span>
+            
+            <div class="notification-dropdown" id="notificationDropdown">
+              <div class="notification-header">
+                <h4>Notifikasi</h4>
+                <a href="#" class="mark-read">Tandai Sudah Dibaca</a>
+              </div>
+              <div class="notification-list-header">
+                <div class="notification-item-header unread">
+                  <div class="notification-icon-header warning">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/>
+                    </svg>
+                  </div>
+                  <div class="notification-content-header">
+                    <strong>Pasien baru mendaftar</strong>
+                    <p>A-010 - Siti Aminah telah mendaftar di Poli Umum</p>
+                    <div class="notification-time-header">5 menit lalu</div>
+                  </div>
+                </div>
+                
+                <div class="notification-item-header unread">
+                  <div class="notification-icon-header info">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+                    </svg>
+                  </div>
+                  <div class="notification-content-header">
+                    <strong>Surat perlu divalidasi</strong>
+                    <p>2 surat keterangan menunggu validasi</p>
+                    <div class="notification-time-header">15 menit lalu</div>
+                  </div>
+                </div>
+                
+                <div class="notification-item-header">
+                  <div class="notification-icon-header success">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                    </svg>
+                  </div>
+                  <div class="notification-content-header">
+                    <strong>Pasien selesai dilayani</strong>
+                    <p>A-009 - Budi Santoso telah selesai</p>
+                    <div class="notification-time-header">1 jam lalu</div>
+                  </div>
+                </div>
+              </div>
+              <div class="notification-footer">
+                <a href="#">Lihat Semua</a>
+              </div>
+            </div>
+          </div>
+          
+          <!-- User Profile Dropdown -->
+          <div class="user-profile" id="userProfile">
+            <button class="user-profile-toggle" onclick="toggleUserDropdown()">
+              <div class="user-avatar">DT</div>
+              <div class="user-info">
+                <span class="user-name">Demo Tenaga Medis</span>
+                <span class="user-role">Tenaga Medis</span>
+              </div>
+              <svg class="dropdown-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M7 10l5 5 5-5z"/>
+              </svg>
+            </button>
+            
+            <div class="user-dropdown" id="userDropdown">
+              <a href="dashboard-staf.html" class="user-dropdown-item">
+                <span>🏠</span> Dashboard
+              </a>
+              <a href="daftar-antrean.html" class="user-dropdown-item">
+                <span>📋</span> Daftar Antrean
+              </a>
+              <a href="kelola-antrean.html" class="user-dropdown-item">
+                <span>⚙️</span> Kelola Antrean
+              </a>
+              <a href="hasil-pemeriksaan.html" class="user-dropdown-item">
+                <span>🔬</span> Hasil Pemeriksaan
+              </a>
+              <a href="validasi-surat.html" class="user-dropdown-item">
+                <span>✅</span> Validasi Surat
+              </a>
+              <div style="border-top: 1px solid #f0f0f0; margin: 0.5rem 0;"></div>
+              <a href="../login-staf.html" class="user-dropdown-item logout">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/>
+                </svg>
+                Logout
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+    <div class="page-header">
+      <h2>📝 Formulir Hasil Pemeriksaan</h2>
+      <p>Catat hasil pemeriksaan, diagnosis, dan tindakan medis</p>
+    </div>
+
+    <!-- Patient Info -->
+    <div class="card" style="background: linear-gradient(135deg, #00796b 0%, #004d40 100%); color: #fff;">
+      <div style="display: flex; justify-content: space-between; align-items: start; gap: 2rem;">
+        <div style="flex: 1;">
+          <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+            <span style="font-size: 2.5rem; font-weight: bold;">A-009</span>
+            <span class="badge badge-success" style="font-size: 1rem;">Sedang Dilayani</span>
+          </div>
+          <h3 style="margin: 0.5rem 0; color: #fff;">Budi Santoso</h3>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.5rem; margin-top: 1rem; opacity: 0.95;">
+            <p>👤 NIK: 3201012345678902</p>
+            <p>🎂 Umur: 45 tahun (L)</p>
+            <p>📞 Telp: 081234567890</p>
+            <p>💳 BPJS (Kelas 1)</p>
+            <p>📄 No. RM: RM-2024-001234</p>
+            <p>⏰ Waktu Masuk: 09:58 WIB</p>
+          </div>
+          <div style="margin-top: 1rem; padding: 1rem; background: rgba(255,255,255,0.2); border-radius: 8px;">
+            <p style="margin: 0; opacity: 0.9;"><strong>Keluhan Utama:</strong></p>
+            <p style="margin: 0.5rem 0 0 0;">Batuk dan pilek 3 hari, demam ringan, sakit tenggorokan</p>
+          </div>
+        </div>
+        <div style="min-width: 150px; text-align: center;">
+          <div style="background: rgba(255,255,255,0.2); padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+            <p style="margin: 0; font-size: 0.9rem; opacity: 0.9;">Dokter Pemeriksa</p>
+            <p style="margin: 0.5rem 0 0 0; font-size: 1.1rem; font-weight: 600;">dr. Ahmad Fauzi</p>
+          </div>
+          <div style="background: rgba(255,255,255,0.2); padding: 1rem; border-radius: 8px;">
+            <p style="margin: 0; font-size: 0.9rem; opacity: 0.9;">Poli</p>
+            <p style="margin: 0.5rem 0 0 0; font-size: 1.1rem; font-weight: 600;">Poli Umum</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <form id="examinationForm">
+      <!-- Vital Signs -->
+      <div class="form-section">
+        <h3 style="margin: 0 0 1rem 0; color: #00796b;">🩺 Tanda-tanda Vital</h3>
+        <div class="vital-signs">
+          <div class="vital-card">
+            <p style="margin: 0; color: #666; font-size: 0.9rem;">Tekanan Darah</p>
+            <div style="display: flex; gap: 0.5rem; justify-content: center; align-items: center;">
+              <input type="number" id="systolic" placeholder="120" style="width: 70px;" required> /
+              <input type="number" id="diastolic" placeholder="80" style="width: 70px;" required>
+            </div>
+            <p style="margin: 0.5rem 0 0 0; color: #666; font-size: 0.8rem;">mmHg</p>
+          </div>
+          <div class="vital-card">
+            <p style="margin: 0; color: #666; font-size: 0.9rem;">Nadi</p>
+            <input type="number" id="pulse" placeholder="80" required>
+            <p style="margin: 0.5rem 0 0 0; color: #666; font-size: 0.8rem;">x/menit</p>
+          </div>
+          <div class="vital-card">
+            <p style="margin: 0; color: #666; font-size: 0.9rem;">Suhu</p>
+            <input type="number" step="0.1" id="temperature" placeholder="36.5" required>
+            <p style="margin: 0.5rem 0 0 0; color: #666; font-size: 0.8rem;">°C</p>
+          </div>
+          <div class="vital-card">
+            <p style="margin: 0; color: #666; font-size: 0.9rem;">Pernapasan</p>
+            <input type="number" id="respiration" placeholder="20" required>
+            <p style="margin: 0.5rem 0 0 0; color: #666; font-size: 0.8rem;">x/menit</p>
+          </div>
+          <div class="vital-card">
+            <p style="margin: 0; color: #666; font-size: 0.9rem;">Tinggi Badan</p>
+            <input type="number" id="height" placeholder="170">
+            <p style="margin: 0.5rem 0 0 0; color: #666; font-size: 0.8rem;">cm</p>
+          </div>
+          <div class="vital-card">
+            <p style="margin: 0; color: #666; font-size: 0.9rem;">Berat Badan</p>
+            <input type="number" id="weight" placeholder="70">
+            <p style="margin: 0.5rem 0 0 0; color: #666; font-size: 0.8rem;">kg</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Anamnesis & Physical Exam -->
+      <div class="form-section">
+        <h3 style="margin: 0 0 1rem 0; color: #00796b;">📋 Anamnesis & Pemeriksaan Fisik</h3>
+        <div class="form-group">
+          <label for="anamnesis">Anamnesis (Riwayat Penyakit Sekarang)</label>
+          <textarea id="anamnesis" rows="4" placeholder="Keluhan pasien secara detail, onset, durasi, faktor pemberat/peringan..." required></textarea>
+        </div>
+        <div class="form-group">
+          <label for="physicalExam">Pemeriksaan Fisik</label>
+          <textarea id="physicalExam" rows="4" placeholder="Keadaan umum, kesadaran, pemeriksaan sistematis (kepala, leher, thorax, abdomen, ekstremitas)..." required></textarea>
+        </div>
+        <div class="form-group">
+          <label for="supportingExam">Pemeriksaan Penunjang (jika ada)</label>
+          <textarea id="supportingExam" rows="3" placeholder="Hasil lab, rontgen, EKG, dll..."></textarea>
+        </div>
+      </div>
+
+      <!-- Diagnosis -->
+      <div class="form-section">
+        <h3 style="margin: 0 0 1rem 0; color: #00796b;">🔬 Diagnosis</h3>
+        <div class="form-group icd-search">
+          <label for="primaryDiagnosis">Diagnosis Utama (ICD-10)</label>
+          <input type="text" id="primaryDiagnosis" placeholder="Ketik untuk mencari kode ICD-10..." required autocomplete="off" onfocus="showICDSuggestions()" oninput="searchICD(this.value)">
+          <div class="icd-suggestions" id="icdSuggestions">
+            <div class="icd-suggestion-item" onclick="selectICD('J06.9', 'Infeksi Saluran Pernapasan Atas Akut')">
+              <strong>J06.9</strong> - Infeksi Saluran Pernapasan Atas Akut
+            </div>
+            <div class="icd-suggestion-item" onclick="selectICD('J00', 'Nasofaringitis Akut (Common Cold)')">
+              <strong>J00</strong> - Nasofaringitis Akut (Common Cold)
+            </div>
+            <div class="icd-suggestion-item" onclick="selectICD('A09', 'Gastroenteritis & Kolitis Infeksi')">
+              <strong>A09</strong> - Gastroenteritis & Kolitis Infeksi
+            </div>
+            <div class="icd-suggestion-item" onclick="selectICD('I10', 'Hipertensi Esensial')">
+              <strong>I10</strong> - Hipertensi Esensial
+            </div>
+            <div class="icd-suggestion-item" onclick="selectICD('E11.9', 'Diabetes Melitus Tipe 2')">
+              <strong>E11.9</strong> - Diabetes Melitus Tipe 2
+            </div>
+            <div class="icd-suggestion-item" onclick="selectICD('R50.9', 'Demam')">
+              <strong>R50.9</strong> - Demam
+            </div>
+            <div class="icd-suggestion-item" onclick="selectICD('M79.3', 'Mialgia')">
+              <strong>M79.3</strong> - Mialgia
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="secondaryDiagnosis">Diagnosis Sekunder (opsional)</label>
+          <input type="text" id="secondaryDiagnosis" placeholder="Diagnosis tambahan jika ada...">
+        </div>
+        <div class="form-group">
+          <label for="clinicalNote">Catatan Klinis</label>
+          <textarea id="clinicalNote" rows="3" placeholder="Catatan tambahan mengenai kondisi pasien..."></textarea>
+        </div>
+      </div>
+
+      <!-- Treatment Plan -->
+      <div class="form-section">
+        <h3 style="margin: 0 0 1rem 0; color: #00796b;">💊 Rencana Tindakan & Terapi</h3>
+        <div class="form-group">
+          <label for="treatment">Tindakan Medis</label>
+          <textarea id="treatment" rows="3" placeholder="Tindakan yang dilakukan (injeksi, nebulisasi, wound care, dll...)" required></textarea>
+        </div>
+        
+        <div style="margin-top: 1.5rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <h4 style="margin: 0; color: #00796b;">💊 Resep Obat</h4>
+            <button type="button" class="btn btn-secondary" onclick="addMedication()">➕ Tambah Obat</button>
+          </div>
+          
+          <div id="medicationList">
+            <!-- Medication 1 -->
+            <div class="medication-item">
+              <div style="display: flex; justify-content: between; align-items: start; gap: 1rem;">
+                <div style="flex: 1;">
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label>Nama Obat</label>
+                      <input type="text" placeholder="Cth: Amoxicillin" class="med-name">
+                    </div>
+                    <div class="form-group">
+                      <label>Dosis</label>
+                      <input type="text" placeholder="500 mg" class="med-dose">
+                    </div>
+                    <div class="form-group">
+                      <label>Frekuensi</label>
+                      <select class="med-frequency">
+                        <option value="">Pilih...</option>
+                        <option value="3x1">3x1</option>
+                        <option value="2x1">2x1</option>
+                        <option value="1x1">1x1</option>
+                        <option value="4x1">4x1</option>
+                        <option value="prn">Bila Perlu</option>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label>Jumlah</label>
+                      <input type="number" placeholder="10" class="med-quantity" style="width: 80px;">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label>Aturan Pakai</label>
+                    <input type="text" placeholder="Sesudah makan" class="med-instruction">
+                  </div>
+                </div>
+                <button type="button" class="btn btn-danger" onclick="removeMedication(this)" style="margin-top: 1.8rem;">🗑️</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Follow-up & Recommendations -->
+      <div class="form-section">
+        <h3 style="margin: 0 0 1rem 0; color: #00796b;">📅 Tindak Lanjut & Rekomendasi</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="followUp">Kontrol Kembali</label>
+            <select id="followUp" required>
+              <option value="">Pilih...</option>
+              <option value="tidak-perlu">Tidak Perlu</option>
+              <option value="3-hari">3 Hari</option>
+              <option value="1-minggu">1 Minggu</option>
+              <option value="2-minggu">2 Minggu</option>
+              <option value="1-bulan">1 Bulan</option>
+              <option value="sesuai-keluhan">Sesuai Keluhan</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="referral">Rujukan</label>
+            <select id="referral">
+              <option value="">Tidak Ada Rujukan</option>
+              <option value="spesialis">Rujuk ke Spesialis</option>
+              <option value="rs">Rujuk ke Rumah Sakit</option>
+              <option value="lab">Rujuk Pemeriksaan Lab</option>
+              <option value="radiologi">Rujuk Radiologi</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="recommendations">Edukasi & Rekomendasi</label>
+          <textarea id="recommendations" rows="3" placeholder="Saran untuk pasien, perubahan gaya hidup, hal yang perlu dihindari, dll..." required></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="bedRest">Istirahat</label>
+            <select id="bedRest">
+              <option value="tidak">Tidak Perlu</option>
+              <option value="1-hari">1 Hari</option>
+              <option value="2-hari">2 Hari</option>
+              <option value="3-hari">3 Hari</option>
+              <option value="1-minggu">1 Minggu</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="sickLetter">Perlu Surat Sakit?</label>
+            <select id="sickLetter">
+              <option value="tidak">Tidak</option>
+              <option value="ya">Ya</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Additional Notes -->
+      <div class="form-section">
+        <h3 style="margin: 0 0 1rem 0; color: #00796b;">📌 Catatan Tambahan</h3>
+        <div class="form-group">
+          <label for="additionalNotes">Catatan Petugas</label>
+          <textarea id="additionalNotes" rows="3" placeholder="Catatan internal untuk staf medis lainnya..."></textarea>
+        </div>
+      </div>
+
+      <!-- Submit Buttons -->
+      <div class="card">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+          <button type="button" class="btn btn-success" onclick="submitExamination()">✅ Simpan & Selesai</button>
+          <button type="button" class="btn btn-primary" onclick="saveDraft()">💾 Simpan Draft</button>
+          <button type="button" class="btn btn-secondary" onclick="printPrescription()">🖨️ Cetak Resep</button>
+          <button type="button" class="btn btn-secondary" onclick="window.location.href='kelola-antrean.html'">❌ Batal</button>
+        </div>
+      </div>
+    </form>
+
+    <!-- Recent Records -->
+    <div class="card">
+      <h3>📜 Riwayat Pemeriksaan Pasien Ini (3 Terakhir)</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Tanggal</th>
+            <th>Diagnosis</th>
+            <th>Tindakan</th>
+            <th>Dokter</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>15 Nov 2025</td>
+            <td>Hipertensi (Kontrol)</td>
+            <td>Pemeriksaan rutin, resep obat</td>
+            <td>dr. Ahmad Fauzi</td>
+            <td><button class="btn btn-secondary" style="padding: 0.5rem 1rem;">Detail</button></td>
+          </tr>
+          <tr>
+            <td>01 Nov 2025</td>
+            <td>Gastritis</td>
+            <td>Pemeriksaan fisik, resep antasida</td>
+            <td>dr. Siti Nurhaliza</td>
+            <td><button class="btn btn-secondary" style="padding: 0.5rem 1rem;">Detail</button></td>
+          </tr>
+          <tr>
+            <td>10 Okt 2025</td>
+            <td>Hipertensi (Kontrol)</td>
+            <td>Pemeriksaan rutin, resep obat</td>
+            <td>dr. Ahmad Fauzi</td>
+            <td><button class="btn btn-secondary" style="padding: 0.5rem 1rem;">Detail</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    </main>
+
+    <footer>
+      <p>&copy; 2025 Smart Health Center Service. All Rights Reserved.</p>
+    </footer>
+  </div>
+
+  <script>
+    // Notification toggle
+    function toggleNotification() {
+      const dropdown = document.getElementById('notificationDropdown');
+      const userDropdown = document.getElementById('userDropdown');
+      if (userDropdown && userDropdown.classList.contains('active')) {
+        userDropdown.classList.remove('active');
+      }
+      dropdown.classList.toggle('active');
+    }
+
+    // User dropdown toggle
+    function toggleUserDropdown() {
+      const dropdown = document.getElementById('userDropdown');
+      const notifDropdown = document.getElementById('notificationDropdown');
+      if (notifDropdown && notifDropdown.classList.contains('active')) {
+        notifDropdown.classList.remove('active');
+      }
+      dropdown.classList.toggle('active');
+    }
+
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', function(event) {
+      const notificationBell = document.querySelector('.notification-bell');
+      const userProfile = document.querySelector('.user-profile');
+      const notifDropdown = document.getElementById('notificationDropdown');
+      const userDropdown = document.getElementById('userDropdown');
+      
+      if (!notificationBell?.contains(event.target) && notifDropdown) {
+        notifDropdown.classList.remove('active');
+      }
+      if (!userProfile?.contains(event.target) && userDropdown) {
+        userDropdown.classList.remove('active');
+      }
+      
+      // Hide ICD suggestions when clicking outside
+      if (!event.target.closest('.icd-search')) {
+        document.getElementById('icdSuggestions').style.display = 'none';
+      }
+    });
+
+    let medicationCount = 1;
+
+    function showICDSuggestions() {
+      document.getElementById('icdSuggestions').style.display = 'block';
+    }
+
+    function searchICD(query) {
+      // In real app, this would filter ICD codes based on query
+      if (query.length > 0) {
+        document.getElementById('icdSuggestions').style.display = 'block';
+      } else {
+        document.getElementById('icdSuggestions').style.display = 'none';
+      }
+    }
+
+    function selectICD(code, description) {
+      document.getElementById('primaryDiagnosis').value = code + ' - ' + description;
+      document.getElementById('icdSuggestions').style.display = 'none';
+    }
+
+    function addMedication() {
+      medicationCount++;
+      const html = `
+        <div class="medication-item">
+          <div style="display: flex; justify-content: space-between; align-items: start; gap: 1rem;">
+            <div style="flex: 1;">
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Nama Obat</label>
+                  <input type="text" placeholder="Cth: Paracetamol" class="med-name">
+                </div>
+                <div class="form-group">
+                  <label>Dosis</label>
+                  <input type="text" placeholder="500 mg" class="med-dose">
+                </div>
+                <div class="form-group">
+                  <label>Frekuensi</label>
+                  <select class="med-frequency">
+                    <option value="">Pilih...</option>
+                    <option value="3x1">3x1</option>
+                    <option value="2x1">2x1</option>
+                    <option value="1x1">1x1</option>
+                    <option value="4x1">4x1</option>
+                    <option value="prn">Bila Perlu</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Jumlah</label>
+                  <input type="number" placeholder="10" class="med-quantity" style="width: 80px;">
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Aturan Pakai</label>
+                <input type="text" placeholder="Sesudah makan" class="med-instruction">
+              </div>
+            </div>
+            <button type="button" class="btn btn-danger" onclick="removeMedication(this)" style="margin-top: 1.8rem;">🗑️</button>
+          </div>
+        </div>
+      `;
+      document.getElementById('medicationList').insertAdjacentHTML('beforeend', html);
+    }
+
+    function removeMedication(button) {
+      if (confirm('Hapus obat ini dari resep?')) {
+        button.closest('.medication-item').remove();
+      }
+    }
+
+    function submitExamination() {
+      const form = document.getElementById('examinationForm');
+      
+      // Basic validation
+      const systolic = document.getElementById('systolic').value;
+      const diastolic = document.getElementById('diastolic').value;
+      const pulse = document.getElementById('pulse').value;
+      const temperature = document.getElementById('temperature').value;
+      const anamnesis = document.getElementById('anamnesis').value;
+      const primaryDiagnosis = document.getElementById('primaryDiagnosis').value;
+      
+      if (!systolic || !diastolic || !pulse || !temperature || !anamnesis || !primaryDiagnosis) {
+        alert('❌ Mohon lengkapi semua field yang wajib diisi!');
+        return;
+      }
+      
+      if (confirm('✅ Simpan hasil pemeriksaan dan selesaikan pelayanan pasien A-009?\n\nData akan disimpan ke rekam medis.')) {
+        alert('✅ Hasil pemeriksaan berhasil disimpan!\n\n📄 Membuat resep...\n📋 Memperbarui rekam medis...\n✅ Pelayanan selesai!');
+        window.location.href = 'kelola-antrean.html';
+      }
+    }
+
+    function saveDraft() {
+      alert('💾 Draft hasil pemeriksaan disimpan.\n\nAnda dapat melanjutkan pengisian nanti.');
+    }
+
+    function printPrescription() {
+      alert('🖨️ Membuka halaman cetak resep...\n\n[Akan membuka window baru dengan format resep]');
+      // In real app: window.open('cetak-resep.html?pasien=A-009', '_blank');
+    }
+
+    // Pre-fill sample data for demo
+    window.addEventListener('load', function() {
+      document.getElementById('systolic').value = '120';
+      document.getElementById('diastolic').value = '80';
+      document.getElementById('pulse').value = '82';
+      document.getElementById('temperature').value = '37.2';
+      document.getElementById('respiration').value = '20';
+      document.getElementById('height').value = '170';
+      document.getElementById('weight').value = '70';
+      document.getElementById('anamnesis').value = 'Pasien mengeluh batuk dan pilek sejak 3 hari yang lalu. Batuk berdahak, warna dahak putih. Pilek dengan ingus bening. Demam ringan terutama malam hari. Sakit tenggorokan saat menelan.';
+      document.getElementById('physicalExam').value = 'Keadaan umum: Baik, Kesadaran: Compos mentis\nTekanan darah: 120/80 mmHg\nThorak: Ronkhi (-), Wheezing (-)\nFaring: Hiperemis (+)\nTonsil: T1-T1, hiperemis (-)\nEkstremitas: Akral hangat, edema (-)';
+    });
+  </script>
+  <script src="../js/header-common.js"></script>
+</body>
+</html>

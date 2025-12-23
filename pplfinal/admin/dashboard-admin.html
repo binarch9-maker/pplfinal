@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Admin - Smart Health Center Service</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <script>
+    // Proteksi akses - hanya untuk role admin
+    window.addEventListener('DOMContentLoaded', function() {
+      const userRole = sessionStorage.getItem('userRole');
+      const isLoggedIn = sessionStorage.getItem('isLoggedIn');
+      
+      // Jika belum login, set default sebagai admin (untuk kemudahan demo)
+      if (!isLoggedIn) {
+        sessionStorage.setItem('userRole', 'admin');
+        sessionStorage.setItem('isLoggedIn', 'true');
+        sessionStorage.setItem('username', 'Demo Admin');
+      }
+      // Jika login sebagai role lain, redirect
+      else if (userRole !== 'admin') {
+        alert('⚠️ Anda login sebagai ' + userRole + '\n\nAkan diarahkan ke portal yang sesuai.');
+        if (userRole === 'pasien') window.location.href = '../pasien/dashboard.html';
+        else if (userRole === 'tenaga_medis') window.location.href = '../staf/dashboard.html';
+        else if (userRole === 'dokter') window.location.href = '../dokter/dashboard.html';
+      }
+    });
+  </script>
+  <style>
+    body {
+      display: flex;
+      min-height: 100vh;
+      flex-direction: column;
+      margin: 0;
+    }
+
+    /* Sidebar Styles */
+    .sidebar {
+      width: 260px;
+      background: #ffffff;
+      color: #2c3e50;
+      position: fixed;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      overflow-y: auto;
+      overflow-x: hidden;
+      z-index: 1000;
+      transition: all 0.3s ease;
+      box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    }
+
+    .sidebar-header {
+      padding: 0.875rem;
+      background: #ffffff;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .sidebar-header h2 {
+      margin: 0;
+      font-size: 1rem;
+      color: #2c3e50;
+      white-space: nowrap;
+    }
+
+    .sidebar-header p {
+      margin: 0.2rem 0 0 0;
+      font-size: 0.7rem;
+      color: #7f8c8d;
+      white-space: nowrap;
+    }
+
+    .sidebar-menu {
+      padding: 1rem 0;
+    }
+
+    .menu-item {
+      margin: 0.25rem 0;
+    }
+
+    .menu-link {
+      display: flex;
+      align-items: center;
+      padding: 0.75rem 0.875rem;
+      color: #2c3e50;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      user-select: none;
+      font-size: 0.95rem;
+    }
+
+    .menu-link:hover {
+      background: rgba(0,0,0,0.08);
+      padding-left: 1rem;
+    }
+
+    .menu-link.active {
+      background: #3498db;
+      color: #fff;
+      border-left: 4px solid #2980b9;
+      padding-left: 0.625rem;
+    }
+
+    .menu-link i {
+      margin-right: 0.625rem;
+      font-size: 1rem;
+      width: 18px;
+      text-align: center;
+      font-style: normal;
+    }
+
+    .menu-link .arrow {
+      margin-left: auto;
+      transition: transform 0.3s ease;
+      font-size: 0.8rem;
+    }
+
+    .menu-link.expanded .arrow {
+      transform: rotate(90deg);
+    }
+
+    .submenu {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+      background: rgba(0,0,0,0.08);
+    }
+
+    .submenu.open {
+      max-height: 500px;
+    }
+
+    .submenu-link {
+      display: block;
+      padding: 0.65rem 0.875rem 0.65rem 2.75rem;
+      color: #34495e;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      font-size: 0.85rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .submenu-link:hover {
+      background: rgba(0,0,0,0.05);
+      color: #1a252f;
+      padding-left: 2.875rem;
+    }
+
+    .submenu-link.active {
+      background: rgba(52, 152, 219, 0.3);
+      color: #3498db;
+      border-left: 3px solid #3498db;
+      padding-left: 2.625rem;
+    }
+
+    .main-content {
+      margin-left: 260px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: #f5f7fa;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      background: #fff;
+    }
+
+    main {
+      padding: 2rem;
+      flex: 1;
+    }
+
+    .dashboard-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .stat-box {
+      background: linear-gradient(135deg, #00796b 0%, #004d40 100%);
+      color: #fff;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+    }
+    .stat-box:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    }
+    .stat-box h3 {
+      margin: 0;
+      font-size: 2.5rem;
+      font-weight: bold;
+    }
+    .stat-box p {
+      margin: 0.5rem 0 0 0;
+      opacity: 0.9;
+    }
+    .stat-box.orange {
+      background: linear-gradient(135deg, #f57c00 0%, #e65100 100%);
+    }
+    .stat-box.blue {
+      background: linear-gradient(135deg, #1976d2 0%, #0d47a1 100%);
+    }
+    .stat-box.green {
+      background: linear-gradient(135deg, #388e3c 0%, #1b5e20 100%);
+    }
+    .stat-box.purple {
+      background: linear-gradient(135deg, #7b1fa2 0%, #4a148c 100%);
+    }
+    .stat-box.red {
+      background: linear-gradient(135deg, #d32f2f 0%, #b71c1c 100%);
+    }
+    .chart-container {
+      background: #fff;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      height: 300px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #666;
+    }
+    .activity-item {
+      display: flex;
+      gap: 1rem;
+      padding: 1rem;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .activity-item:last-child {
+      border-bottom: none;
+    }
+    .activity-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+    .activity-icon.success {
+      background: #e8f5e9;
+      color: #388e3c;
+    }
+    .activity-icon.info {
+      background: #e3f2fd;
+      color: #1976d2;
+    }
+    .activity-icon.warning {
+      background: #fff3cd;
+      color: #f57c00;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+      }
+      .sidebar.mobile-open {
+        transform: translateX(0);
+      }
+      .main-content {
+        margin-left: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem; text-align: center;">
+        <img src="../img/Smarthealth-Logo.png" alt="Smart Health Logo" style="height: 50px;">
+      </div>
+    </div>
+
+    <div class="sidebar-menu">
+      <!-- Beranda -->
+      <div class="menu-item">
+        <a href="dashboard-admin.html" class="menu-link active">
+          <i>🏠</i>
+          <span>Beranda</span>
+        </a>
+      </div>
+
+      <!-- Kelola Pengguna -->
+      <div class="menu-item">
+        <div class="menu-link" onclick="toggleSubmenu(this)">
+          <i>👥</i>
+          <span>Kelola Pengguna</span>
+          <span class="arrow">▸</span>
+        </div>
+        <div class="submenu">
+          <a href="kelola-pengguna.html" class="submenu-link">Daftar Pasien</a>
+          <a href="kelola-pengguna.html?tab=tenaga-medis" class="submenu-link">Tenaga Medis</a>
+          <a href="kelola-pengguna.html?tab=admin" class="submenu-link">Administrator</a>
+        </div>
+      </div>
+
+      <!-- Kelola Pengajuan -->
+      <div class="menu-item">
+        <div class="menu-link" onclick="toggleSubmenu(this)">
+          <i>🗂️</i>
+          <span>Kelola Pengajuan</span>
+          <span class="arrow">▸</span>
+        </div>
+        <div class="submenu">
+          <a href="#" class="submenu-link">Antrean Pasien</a>
+          <a href="#" class="submenu-link">Permohonan Surat</a>
+          <a href="#" class="submenu-link">Validasi Surat</a>
+        </div>
+      </div>
+
+      <!-- Kelola Jadwal -->
+      <div class="menu-item">
+        <a href="kelola-jadwal.html" class="menu-link">
+          <i>📅</i>
+          <span>Kelola Jadwal</span>
+        </a>
+      </div>
+
+      <!-- Kelola Pengumuman -->
+      <div class="menu-item">
+        <a href="kelola-pengumuman.html" class="menu-link">
+          <i>📢</i>
+          <span>Kelola Pengumuman</span>
+        </a>
+      </div>
+
+      <!-- Laporan -->
+      <div class="menu-item">
+        <div class="menu-link" onclick="toggleSubmenu(this)">
+          <i>📊</i>
+          <span>Laporan</span>
+          <span class="arrow">▸</span>
+        </div>
+        <div class="submenu">
+          <a href="laporan.html" class="submenu-link">Laporan Kunjungan</a>
+          <a href="laporan.html?type=surat" class="submenu-link">Laporan Surat</a>
+          <a href="laporan.html?type=keuangan" class="submenu-link">Laporan Keuangan</a>
+          <a href="laporan.html?type=kepuasan" class="submenu-link">Survei Kepuasan</a>
+        </div>
+      </div>
+
+      <!-- Pengaturan -->
+      <div class="menu-item">
+        <div class="menu-link" onclick="toggleSubmenu(this)">
+          <i>⚙️</i>
+          <span>Pengaturan</span>
+          <span class="arrow">▸</span>
+        </div>
+        <div class="submenu">
+          <a href="pengaturan.html" class="submenu-link">Pengaturan Umum</a>
+          <a href="pengaturan.html?tab=jam" class="submenu-link">Jam Operasional</a>
+          <a href="pengaturan.html?tab=backup" class="submenu-link">Backup & Restore</a>
+        </div>
+      </div>
+
+      <hr style="border: none; border-top: 1px solid rgba(255,255,255,0.1); margin: 1rem 0;">
+
+      <!-- Logout -->
+      <div class="menu-item">
+        <a href="../login-admin.html" class="menu-link" style="color: #e74c3c;">
+          <i>🚪</i>
+          <span>Logout</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <header>
+      <div class="header-container">
+        <div class="logo" style="flex-direction: column; align-items: flex-start; gap: 0.25rem;">
+          <h2 style="margin: 0; font-size: 1.5rem; color: #2c3e50;">Dashboard Administrator</h2>
+          <p style="font-size: 0.85rem; margin: 0; color: #7f8c8d;">Kelola seluruh sistem Smart Health Center</p>
+        </div>
+        <nav style="margin-left: auto;">
+          <div class="nav-container">
+            <div class="nav-actions">
+              <div class="nav-dropdown">
+                <button class="dropdown-toggle">👤 Demo Admin ▼</button>
+                <div class="dropdown-menu">
+                  <a href="../login-admin.html" style="color: #d32f2f; font-weight: 700;">🚪 Logout</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <div class="page-header">
+        <h2>🏠 Dashboard Administrator</h2>
+        <p>Senin, 2 Desember 2025 - <span id="currentTime"></span></p>
+      </div>
+      
+      <!-- Info Role -->
+      <div style="background: #fff3e0; padding: 0.75rem 1rem; border-left: 4px solid #f57c00; border-radius: 4px; margin-bottom: 1.5rem;">
+        <strong>👨‍💼 Mode: ADMINISTRATOR</strong> - Anda memiliki akses penuh untuk mengelola SELURUH sistem: pengguna, jadwal, pengumuman, laporan, dan pengaturan
+      </div>
+
+      <!-- Main Statistics -->
+      <div class="dashboard-stats">
+        <div class="stat-box">
+          <h3>1,247</h3>
+          <p>👤 Total Pasien Terdaftar</p>
+          <p style="font-size: 0.9rem; margin-top: 0.5rem;">+24 bulan ini</p>
+        </div>
+        <div class="stat-box orange">
+          <h3>45</h3>
+          <p>📋 Antrean Hari Ini</p>
+          <p style="font-size: 0.9rem; margin-top: 0.5rem;">32 selesai, 12 menunggu</p>
+        </div>
+        <div class="stat-box blue">
+          <h3>18</h3>
+          <p>👨‍⚕️ Tenaga Medis Aktif</p>
+          <p style="font-size: 0.9rem; margin-top: 0.5rem;">12 dokter, 6 perawat</p>
+        </div>
+        <div class="stat-box green">
+          <h3>156</h3>
+          <p>✅ Pelayanan Minggu Ini</p>
+          <p style="font-size: 0.9rem; margin-top: 0.5rem;">Avg 31/hari</p>
+        </div>
+        <div class="stat-box purple">
+          <h3>89</h3>
+          <p>📄 Surat Diproses</p>
+          <p style="font-size: 0.9rem; margin-top: 0.5rem;">12 pending validasi</p>
+        </div>
+        <div class="stat-box red">
+          <h3>98.5%</h3>
+          <p>📈 Tingkat Kepuasan</p>
+          <p style="font-size: 0.9rem; margin-top: 0.5rem;">Dari 234 responden</p>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="card">
+        <h3>⚡ Aksi Cepat</h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
+          <button class="btn btn-primary" onclick="window.location.href='kelola-pengguna.html'">➕ Tambah Pengguna Baru</button>
+          <button class="btn btn-primary" onclick="window.location.href='kelola-jadwal.html'">📅 Atur Jadwal Dokter</button>
+          <button class="btn btn-primary" onclick="window.location.href='kelola-pengumuman.html'">📢 Buat Pengumuman</button>
+          <button class="btn btn-secondary" onclick="window.location.href='laporan.html'">📊 Lihat Laporan</button>
+          <button class="btn btn-secondary" onclick="window.location.href='pengaturan.html'">⚙️ Pengaturan</button>
+          <button class="btn btn-secondary" onclick="backupData()">💾 Backup Data</button>
+        </div>
+      </div>
+
+      <!-- Charts & Analytics -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
+        <div class="card">
+          <h3>📊 Grafik Kunjungan Pasien (7 Hari Terakhir)</h3>
+          <div class="chart-container">
+            <div style="text-align: center;">
+              <p style="font-size: 3rem; margin: 0;">📈</p>
+              <p style="margin: 0.5rem 0 0 0;">[Chart Area]</p>
+              <p style="font-size: 0.9rem; color: #999;">Grafik akan ditampilkan dengan library Chart.js</p>
+            </div>
+          </div>
+          <div style="display: flex; justify-content: space-around; margin-top: 1rem; padding: 1rem; background: #f5f5f5; border-radius: 8px;">
+            <div style="text-align: center;">
+              <p style="margin: 0; color: #666; font-size: 0.9rem;">Rata-rata/hari</p>
+              <p style="margin: 0.25rem 0 0 0; font-size: 1.5rem; font-weight: bold; color: #00796b;">31</p>
+            </div>
+            <div style="text-align: center;">
+              <p style="margin: 0; color: #666; font-size: 0.9rem;">Tertinggi</p>
+              <p style="margin: 0.25rem 0 0 0; font-size: 1.5rem; font-weight: bold; color: #00796b;">45</p>
+            </div>
+            <div style="text-align: center;">
+              <p style="margin: 0; color: #666; font-size: 0.9rem;">Terendah</p>
+              <p style="margin: 0.25rem 0 0 0; font-size: 1.5rem; font-weight: bold; color: #00796b;">18</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>🏥 Distribusi Layanan per Poli</h3>
+          <div class="chart-container">
+            <div style="text-align: center;">
+              <p style="font-size: 3rem; margin: 0;">🍩</p>
+              <p style="margin: 0.5rem 0 0 0;">[Pie Chart Area]</p>
+              <p style="font-size: 0.9rem; color: #999;">Grafik distribusi poli</p>
+            </div>
+          </div>
+          <div style="margin-top: 1rem;">
+            <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid #f0f0f0;">
+              <span>Poli Umum</span>
+              <strong>45%</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid #f0f0f0;">
+              <span>Poli Gigi</span>
+              <strong>25%</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid #f0f0f0;">
+              <span>Poli Anak</span>
+              <strong>18%</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 0.5rem 0;">
+              <span>Lainnya</span>
+              <strong>12%</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- System Activity & Alerts -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 2rem;">
+        <div class="card">
+          <h3>🔔 Notifikasi & Peringatan Sistem</h3>
+          <div style="margin-top: 1rem;">
+            <div class="activity-item">
+              <div class="activity-icon warning">⚠️</div>
+              <div style="flex: 1;">
+                <p style="margin: 0; font-weight: 600;">Stok obat Amoxicillin menipis</p>
+                <p style="margin: 0.25rem 0 0 0; font-size: 0.9rem; color: #666;">Sisa 50 tablet - 15 menit lalu</p>
+              </div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-icon info">ℹ️</div>
+              <div style="flex: 1;">
+                <p style="margin: 0; font-weight: 600;">Backup database berhasil</p>
+                <p style="margin: 0.25rem 0 0 0; font-size: 0.9rem; color: #666;">Backup otomatis pukul 00:00 WIB</p>
+              </div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-icon warning">⚠️</div>
+              <div style="flex: 1;">
+                <p style="margin: 0; font-weight: 600;">12 surat menunggu validasi</p>
+                <p style="margin: 0.25rem 0 0 0; font-size: 0.9rem; color: #666;">Perlu tindak lanjut petugas medis</p>
+              </div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-icon success">✅</div>
+              <div style="flex: 1;">
+                <p style="margin: 0; font-weight: 600;">Sistem berjalan normal</p>
+                <p style="margin: 0.25rem 0 0 0; font-size: 0.9rem; color: #666;">Uptime: 99.98% (30 hari)</p>
+              </div>
+            </div>
+          </div>
+          <button class="btn btn-secondary" style="width: 100%; margin-top: 1rem;">Lihat Semua Notifikasi</button>
+        </div>
+
+        <div class="card">
+          <h3>📋 Aktivitas Terbaru</h3>
+          <div style="margin-top: 1rem;">
+            <div class="activity-item">
+              <div class="activity-icon success">👤</div>
+              <div style="flex: 1;">
+                <p style="margin: 0; font-weight: 600;">Pengguna baru terdaftar</p>
+                <p style="margin: 0.25rem 0 0 0; font-size: 0.9rem; color: #666;">Dewi Lestari - Pasien - 10 menit lalu</p>
+              </div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-icon info">📅</div>
+              <div style="flex: 1;">
+                <p style="margin: 0; font-weight: 600;">Jadwal dokter diperbarui</p>
+                <p style="margin: 0.25rem 0 0 0; font-size: 0.9rem; color: #666;">dr. Ahmad Fauzi - 25 menit lalu</p>
+              </div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-icon success">📢</div>
+              <div style="flex: 1;">
+                <p style="margin: 0; font-weight: 600;">Pengumuman baru dipublikasi</p>
+                <p style="margin: 0.25rem 0 0 0; font-size: 0.9rem; color: #666;">"Libur Tahun Baru 2026" - 1 jam lalu</p>
+              </div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-icon info">⚙️</div>
+              <div style="flex: 1;">
+                <p style="margin: 0; font-weight: 600;">Pengaturan sistem diubah</p>
+                <p style="margin: 0.25rem 0 0 0; font-size: 0.9rem; color: #666;">Batas antrean per poli - 2 jam lalu</p>
+              </div>
+            </div>
+          </div>
+          <button class="btn btn-secondary" style="width: 100%; margin-top: 1rem;">Lihat Log Aktivitas</button>
+        </div>
+      </div>
+
+      <!-- Today's Schedule -->
+      <div class="card" style="margin-top: 2rem;">
+        <h3>👨‍⚕️ Jadwal Dokter Hari Ini</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Poli</th>
+              <th>Dokter</th>
+              <th>Shift</th>
+              <th>Pasien Terlayani</th>
+              <th>Status</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Poli Umum</td>
+              <td>dr. Ahmad Fauzi</td>
+              <td>08:00 - 16:00</td>
+              <td>32 / 45</td>
+              <td><span class="badge badge-success">Aktif</span></td>
+              <td><button class="btn btn-secondary" style="padding: 0.5rem 1rem;">Detail</button></td>
+            </tr>
+            <tr>
+              <td>Poli Gigi</td>
+              <td>drg. Siti Nurhaliza</td>
+              <td>08:00 - 14:00</td>
+              <td>12 / 20</td>
+              <td><span class="badge badge-success">Aktif</span></td>
+              <td><button class="btn btn-secondary" style="padding: 0.5rem 1rem;">Detail</button></td>
+            </tr>
+            <tr>
+              <td>Poli Anak</td>
+              <td>dr. Budi Santoso, Sp.A</td>
+              <td>13:00 - 20:00</td>
+              <td>0 / 25</td>
+              <td><span class="badge badge-warning">Belum Mulai</span></td>
+              <td><button class="btn btn-secondary" style="padding: 0.5rem 1rem;">Detail</button></td>
+            </tr>
+            <tr>
+              <td>Poli Kandungan</td>
+              <td>dr. Ratna Dewi, Sp.OG</td>
+              <td>08:00 - 12:00</td>
+              <td>8 / 15</td>
+              <td><span class="badge badge-success">Aktif</span></td>
+              <td><button class="btn btn-secondary" style="padding: 0.5rem 1rem;">Detail</button></td>
+            </tr>
+            <tr>
+              <td>Poli Mata</td>
+              <td>dr. Hasan Basri, Sp.M</td>
+              <td>14:00 - 20:00</td>
+              <td>0 / 20</td>
+              <td><span class="badge badge-warning">Belum Mulai</span></td>
+              <td><button class="btn btn-secondary" style="padding: 0.5rem 1rem;">Detail</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- System Info -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 2rem;">
+        <div class="card">
+          <h3>💻 Informasi Sistem</h3>
+          <div style="margin-top: 1rem;">
+            <div style="display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid #f0f0f0;">
+              <span>Versi Aplikasi</span>
+              <strong>v2.5.1</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid #f0f0f0;">
+              <span>Database</span>
+              <strong>MySQL 8.0.35</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid #f0f0f0;">
+              <span>Server Status</span>
+              <span class="badge badge-success">Online</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid #f0f0f0;">
+              <span>Uptime</span>
+              <strong>30 hari 14 jam</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 0.75rem 0;">
+              <span>Last Backup</span>
+              <strong>2 Des 2025, 00:00</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>📈 Statistik Bulan Ini</h3>
+          <div style="margin-top: 1rem;">
+            <div style="display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid #f0f0f0;">
+              <span>Total Kunjungan</span>
+              <strong>1,247</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid #f0f0f0;">
+              <span>Pasien Baru</span>
+              <strong>87</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid #f0f0f0;">
+              <span>Surat Diproses</span>
+              <strong>234</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid #f0f0f0;">
+              <span>Revenue</span>
+              <strong>Rp 45.7 juta</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 0.75rem 0;">
+              <span>Kepuasan Pasien</span>
+              <strong>98.5%</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <p>&copy; 2025 Smart Health Center Service. All Rights Reserved.</p>
+    </footer>
+  </div>
+
+  <script src="../js/header-common.js"></script>
+  <script>
+    function updateTime() {
+      const now = new Date();
+      const timeString = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+      document.getElementById('currentTime').textContent = timeString + ' WIB';
+    }
+    updateTime();
+    setInterval(updateTime, 60000);
+
+    function backupData() {
+      if (confirm('🔄 Mulai backup database?\n\nProses backup akan berjalan di background.')) {
+        alert('✅ Backup database dimulai!\n\nAnda akan menerima notifikasi saat backup selesai.');
+      }
+    }
+
+    // Toggle submenu
+    function toggleSubmenu(element) {
+      const submenu = element.nextElementSibling;
+      const isOpen = submenu.classList.contains('open');
+      
+      // Close all other submenus
+      document.querySelectorAll('.submenu.open').forEach(sm => {
+        if (sm !== submenu) {
+          sm.classList.remove('open');
+          sm.previousElementSibling.classList.remove('expanded');
+        }
+      });
+      
+      // Toggle current submenu
+      if (isOpen) {
+        submenu.classList.remove('open');
+        element.classList.remove('expanded');
+      } else {
+        submenu.classList.add('open');
+        element.classList.add('expanded');
+      }
+    }
+
+    // Auto refresh dashboard
+    setInterval(() => {
+      console.log('Refreshing dashboard data...');
+    }, 60000);
+  </script>
+</body>
+</html>

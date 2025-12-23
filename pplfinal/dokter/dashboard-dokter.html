@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Dokter - Smart Health Center Service</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <script>
+    // Proteksi akses - hanya untuk role dokter
+    window.addEventListener('DOMContentLoaded', function() {
+      const userRole = sessionStorage.getItem('userRole');
+      const isLoggedIn = sessionStorage.getItem('isLoggedIn');
+      
+      // Jika belum login, set default sebagai dokter (untuk kemudahan demo)
+      if (!isLoggedIn) {
+        sessionStorage.setItem('userRole', 'dokter');
+        sessionStorage.setItem('isLoggedIn', 'true');
+        sessionStorage.setItem('username', 'Demo Dokter');
+      }
+      // Jika login sebagai role lain, redirect
+      else if (userRole !== 'dokter') {
+        alert('⚠️ Anda login sebagai ' + userRole + '\n\nAkan diarahkan ke portal yang sesuai.');
+        if (userRole === 'pasien') window.location.href = '../pasien/dashboard.html';
+        else if (userRole === 'tenaga_medis') window.location.href = '../staf/dashboard-staf.html';
+        else if (userRole === 'admin') window.location.href = '../admin/dashboard-admin.html';
+      }
+    });
+  </script>
+  <style>
+    body {
+      display: flex;
+      min-height: 100vh;
+      flex-direction: column;
+      margin: 0;
+    }
+
+    /* Sidebar Styles */
+    .sidebar {
+      width: 260px;
+      background: #ffffff;
+      color: #2c3e50;
+      position: fixed;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      overflow-y: auto;
+      overflow-x: hidden;
+      z-index: 1000;
+      transition: all 0.3s ease;
+      box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    }
+
+    .sidebar-header {
+      padding: 1.5rem 0.875rem;
+      background: #ffffff;
+      border-bottom: 1px solid #e0e0e0;
+      text-align: center;
+    }
+
+    .sidebar-menu {
+      padding: 1rem 0;
+    }
+
+    .menu-item {
+      margin: 0.25rem 0;
+    }
+
+    .menu-link {
+      display: flex;
+      align-items: center;
+      padding: 0.75rem 0.875rem;
+      color: #2c3e50;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      user-select: none;
+      font-size: 0.95rem;
+    }
+
+    .menu-link:hover {
+      background: rgba(0,0,0,0.08);
+      padding-left: 1rem;
+    }
+
+    .menu-link.active {
+      background: #3498db;
+      color: #fff;
+      border-left: 4px solid #2980b9;
+      padding-left: 0.625rem;
+    }
+
+    .menu-link i {
+      margin-right: 0.625rem;
+      font-size: 1rem;
+      width: 18px;
+      text-align: center;
+      font-style: normal;
+    }
+
+    .main-content {
+      margin-left: 260px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: #f5f7fa;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      background: #fff;
+    }
+
+    main {
+      padding: 2rem;
+      flex: 1;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+      }
+      .sidebar.mobile-open {
+        transform: translateX(0);
+      }
+      .main-content {
+        margin-left: 0;
+      }
+    }
+
+    .notification-bell {
+      position: relative;
+      cursor: pointer;
+      padding: 0.5rem;
+      border-radius: 8px;
+      transition: background 0.3s;
+    }
+    .notification-bell:hover {
+      background: rgba(26, 139, 211, 0.1);
+    }
+    .notification-bell svg {
+      width: 24px;
+      height: 24px;
+      fill: #2c4964;
+    }
+    .notification-badge {
+      position: absolute;
+      top: 0;
+      right: 0;
+      background: #d32f2f;
+      color: white;
+      font-size: 0.65rem;
+      font-weight: bold;
+      padding: 0.15rem 0.4rem;
+      border-radius: 10px;
+      min-width: 18px;
+      text-align: center;
+    }
+    .notification-dropdown {
+      position: absolute;
+      top: calc(100% + 0.5rem);
+      right: 0;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+      width: 380px;
+      max-height: 500px;
+      overflow-y: auto;
+      display: none;
+      z-index: 1000;
+    }
+    .notification-dropdown.show {
+      display: block;
+    }
+    .notification-header {
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid #e0e0e0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .notification-header h4 {
+      margin: 0;
+      font-size: 1rem;
+      color: #2c4964;
+    }
+    .mark-read {
+      color: #1a8bd3;
+      font-size: 0.85rem;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .mark-read:hover {
+      text-decoration: underline;
+    }
+    .notification-item {
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid #f0f0f0;
+      transition: background 0.2s;
+      cursor: pointer;
+    }
+    .notification-item:hover {
+      background: #f8f9fa;
+    }
+    .notification-item.unread {
+      background: #e3f2fd;
+    }
+    .notification-time {
+      font-size: 0.8rem;
+      color: #999;
+      margin-bottom: 0.3rem;
+    }
+    .notification-message {
+      font-size: 0.9rem;
+      color: #2c4964;
+      line-height: 1.4;
+    }
+    .no-notifications {
+      padding: 3rem 1.25rem;
+      text-align: center;
+      color: #999;
+    }
+
+    .doctor-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(135deg, #00796b, #004d40);
+      color: #fff;
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin-bottom: 2rem;
+    }
+    .doctor-info {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .doctor-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: #fff;
+      color: #00796b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      font-weight: bold;
+      border: 3px solid rgba(255,255,255,0.3);
+    }
+    .schedule-badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      margin-right: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .patient-card {
+      background: #fff;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      transition: all 0.3s ease;
+    }
+    .patient-card:hover {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transform: translateY(-2px);
+    }
+    .patient-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.75rem;
+    }
+    .queue-number {
+      background: #00796b;
+      color: #fff;
+      font-size: 1.25rem;
+      font-weight: bold;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
+        <img src="../img/Smarthealth-Logo.png" alt="Smart Health Logo" style="height: 50px;">
+      </div>
+    </div>
+
+    <div class="sidebar-menu">
+      <!-- Beranda -->
+      <div class="menu-item">
+        <a href="dashboard-dokter.html" class="menu-link active">
+          <i>🏠</i>
+          <span>Beranda</span>
+        </a>
+      </div>
+
+      <!-- Daftar Pasien -->
+      <div class="menu-item">
+        <a href="daftar-pasien.html" class="menu-link">
+          <i>👥</i>
+          <span>Daftar Pasien</span>
+        </a>
+      </div>
+
+      <!-- Rekam Medis -->
+      <div class="menu-item">
+        <a href="rekam-medis.html" class="menu-link">
+          <i>📋</i>
+          <span>Rekam Medis</span>
+        </a>
+      </div>
+
+      <!-- Jadwal Praktik -->
+      <div class="menu-item">
+        <a href="jadwal-praktik.html" class="menu-link">
+          <i>📅</i>
+          <span>Jadwal Praktik</span>
+        </a>
+      </div>
+
+      <hr style="border: none; border-top: 1px solid rgba(0,0,0,0.1); margin: 1rem 0;">
+
+      <!-- Logout -->
+      <div class="menu-item">
+        <a href="../login-dokter.html" class="menu-link" style="color: #e74c3c;">
+          <i>🚪</i>
+          <span>Logout</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <header>
+      <div class="header-container">
+        <div class="logo" style="flex-direction: column; align-items: flex-start; gap: 0.25rem;">
+          <h2 style="margin: 0; font-size: 1.5rem; color: #2c3e50;">Dashboard Dokter</h2>
+          <p style="font-size: 0.85rem; margin: 0; color: #7f8c8d;">Portal pelayanan medis</p>
+        </div>
+        <nav style="margin-left: auto;">
+          <div class="nav-container">
+            <div class="nav-actions" style="display: flex; align-items: center; gap: 1.5rem;">
+              <div class="notification-bell" onclick="toggleNotification()">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                  <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2zm-2 1H8v-6c0-2.48 1.51-4.5 4-4.5s4 2.02 4 4.5v6z"/>
+                </svg>
+                <span class="notification-badge">3</span>
+                <div class="notification-dropdown" id="notificationDropdown">
+                  <div class="notification-header">
+                    <h4>🔔 Notifikasi</h4>
+                    <a href="#" class="mark-read" onclick="markAllRead(event)">Tandai semua dibaca</a>
+                  </div>
+                  <div class="notification-item unread" onclick="handleNotificationClick(this, 'lab-result')">
+                    <div class="notification-time">10:15 WIB</div>
+                    <div class="notification-message">📝 Hasil lab untuk pasien RM-2025-0189 sudah tersedia</div>
+                  </div>
+                  <div class="notification-item unread" onclick="handleNotificationClick(this, 'allergy-warning')">
+                    <div class="notification-time">09:45 WIB</div>
+                    <div class="notification-message">⚠️ Pasien A-04 memiliki riwayat alergi obat (Amoxicillin)</div>
+                  </div>
+                  <div class="notification-item unread" onclick="handleNotificationClick(this, 'schedule')">
+                    <div class="notification-time">08:30 WIB</div>
+                    <div class="notification-message">✅ Jadwal praktik hari ini: 23 pasien terdaftar</div>
+                  </div>
+                </div>
+              </div>
+              <div class="nav-dropdown">
+                <button class="dropdown-toggle">👨‍⚕️ dr. Ahmad Wijaya ▼</button>
+                <div class="dropdown-menu">
+                  <a href="../login-dokter.html" style="color: #d32f2f; font-weight: 700;">🚪 Logout</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+    <!-- Info Role -->
+    <div style="background: #e8f5e9; padding: 0.75rem 1rem; border-left: 4px solid #388e3c; border-radius: 4px; margin-bottom: 1.5rem;">
+      <strong>🩺 Mode: DOKTER</strong> - Anda dapat memeriksa pasien, input rekam medis, membuat resep dan surat keterangan
+    </div>
+    
+    <!-- Doctor Header Card -->
+    <div class="doctor-header">
+      <div class="doctor-info">
+        <div class="doctor-avatar">AW</div>
+        <div>
+          <h2 style="margin: 0 0 0.5rem 0;">dr. Ahmad Wijaya, Sp.A</h2>
+          <p style="margin: 0; opacity: 0.9;">👶 Spesialis Anak | 🏥 Poli Anak | SIP: 123/456/789/2024</p>
+          <div style="margin-top: 0.5rem;">
+            <span class="schedule-badge" style="background: rgba(255,255,255,0.2);">📅 Senin - Jumat</span>
+            <span class="schedule-badge" style="background: rgba(255,255,255,0.2);">🕐 08:00 - 14:00</span>
+          </div>
+        </div>
+      </div>
+      <div style="text-align: right;">
+        <div style="font-size: 2.5rem; font-weight: bold; margin-bottom: 0.5rem;">23</div>
+        <div style="opacity: 0.9;">Pasien Hari Ini</div>
+      </div>
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="stats-grid">
+      <div class="stat-box" style="background: linear-gradient(135deg, #1e88e5, #1565c0);">
+        <div class="stat-number">23</div>
+        <div class="stat-label">Total Pasien Hari Ini</div>
+      </div>
+      <div class="stat-box" style="background: linear-gradient(135deg, #43a047, #2e7d32);">
+        <div class="stat-number">12</div>
+        <div class="stat-label">Sudah Diperiksa</div>
+      </div>
+      <div class="stat-box" style="background: linear-gradient(135deg, #fb8c00, #ef6c00);">
+        <div class="stat-number">5</div>
+        <div class="stat-label">Sedang Antrean</div>
+      </div>
+      <div class="stat-box" style="background: linear-gradient(135deg, #e53935, #c62828);">
+        <div class="stat-number">6</div>
+        <div class="stat-label">Belum Dipanggil</div>
+      </div>
+    </div>
+
+    <div class="card-grid">
+      <!-- Left Column - Active Queue -->
+      <div class="card" style="grid-column: span 2;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+          <h3>📋 Pasien yang Sedang Dilayani</h3>
+        </div>
+
+        <!-- Current Patient -->
+        <div style="background: linear-gradient(135deg, #e8f5e9, #c8e6c9); border: 2px solid #43a047; border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <div style="color: #2e7d32; font-size: 0.9rem; margin-bottom: 0.5rem;">🔔 SEDANG DILAYANI</div>
+              <h3 style="margin: 0 0 0.5rem 0;">Pasien A-05: Siti Nurhaliza</h3>
+              <p style="margin: 0; color: #666;">👶 Perempuan, 4 tahun | RM-2025-0234</p>
+              <p style="margin: 0.5rem 0 0 0; color: #666;">⏰ Waktu Tunggu: 5 menit | 📝 Keluhan: Demam dan batuk sejak 2 hari</p>
+            </div>
+            <button class="btn btn-success" onclick="startExamination('A-05')">🩺 Mulai Pemeriksaan</button>
+          </div>
+        </div>
+
+        <!-- Next in Queue -->
+        <h4 style="margin-bottom: 1rem; color: #666;">Pasien Menunggu:</h4>
+        
+        <div class="patient-card">
+          <div class="patient-card-header">
+            <div>
+              <h4 style="margin: 0 0 0.5rem 0;">Pasien A-06: Budi Santoso</h4>
+              <p style="margin: 0; color: #666;">👦 Laki-laki, 7 tahun | RM-2025-0189</p>
+            </div>
+            <div class="queue-number">A-06</div>
+          </div>
+          <p style="margin: 0; color: #666;">📝 Keluhan: Sakit perut dan diare</p>
+          <p style="margin: 0.5rem 0 0 0; color: #999; font-size: 0.9rem;">⏰ Terdaftar: 09:30 WIB</p>
+        </div>
+
+        <div class="patient-card">
+          <div class="patient-card-header">
+            <div>
+              <h4 style="margin: 0 0 0.5rem 0;">Pasien A-07: Rina Wati</h4>
+              <p style="margin: 0; color: #666;">👧 Perempuan, 5 tahun | RM-2025-0312</p>
+            </div>
+            <div class="queue-number">A-07</div>
+          </div>
+          <p style="margin: 0; color: #666;">📝 Keluhan: Ruam kulit dan gatal</p>
+          <p style="margin: 0.5rem 0 0 0; color: #999; font-size: 0.9rem;">⏰ Terdaftar: 09:45 WIB</p>
+        </div>
+
+        <div class="patient-card">
+          <div class="patient-card-header">
+            <div>
+              <h4 style="margin: 0 0 0.5rem 0;">Pasien A-08: Farhan Ahmad</h4>
+              <p style="margin: 0; color: #666;">👦 Laki-laki, 3 tahun | RM-2025-0445</p>
+            </div>
+            <div class="queue-number">A-08</div>
+          </div>
+          <p style="margin: 0; color: #666;">📝 Keluhan: Batuk pilek, susah makan</p>
+          <p style="margin: 0.5rem 0 0 0; color: #999; font-size: 0.9rem;">⏰ Terdaftar: 10:00 WIB</p>
+        </div>
+
+        <div style="background: #fff3cd; border-left: 4px solid #f57c00; padding: 1rem; border-radius: 4px; margin-top: 1rem;">
+          <p style="margin: 0; color: #856404;">ℹ️ <strong>Info:</strong> Untuk memanggil dan mengubah status antrean pasien, silakan hubungi tenaga medis/staf.</p>
+        </div>
+      </div>
+
+      <!-- Right Column - Additional Info -->
+      <div>
+        <!-- Today's Statistics -->
+        <div class="card">
+          <h3>📊 Statistik Hari Ini</h3>
+          <div style="padding: 1rem 0;">
+            <div style="display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid #f0f0f0;">
+              <span>⏰ Waktu Pelayanan Rata-rata</span>
+              <strong>12 menit</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid #f0f0f0;">
+              <span>✅ Pasien Selesai</span>
+              <strong>12 / 23</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid #f0f0f0;">
+              <span>📝 Resep Diterbitkan</span>
+              <strong>10</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid #f0f0f0;">
+              <span>🔬 Rujukan Lab</span>
+              <strong>3</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 0.75rem 0;">
+              <span>🏥 Rujukan RS</span>
+              <strong>1</strong>
+            </div>
+          </div>
+        </div>
+        <!-- Recent Notifications -->
+      </div>
+    </div>
+
+    <!-- Recent Patients -->
+    <div class="card">
+      <h3>👥 Pasien Terakhir Diperiksa</h3>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>No. Antrean</th>
+              <th>Nama Pasien</th>
+              <th>Umur/JK</th>
+              <th>Diagnosis</th>
+              <th>Waktu Selesai</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="badge badge-success">A-04</span></td>
+              <td>Muhammad Rizki</td>
+              <td>6 tahun / L</td>
+              <td>ISPA (J06.9)</td>
+              <td>10:10 WIB</td>
+              <td><button class="btn btn-secondary btn-sm" onclick="viewRecord('RM-2025-0178')">📄 Lihat Rekam Medis</button></td>
+            </tr>
+            <tr>
+              <td><span class="badge badge-success">A-03</span></td>
+              <td>Ayu Lestari</td>
+              <td>5 tahun / P</td>
+              <td>Gastroenteritis (A09)</td>
+              <td>09:55 WIB</td>
+              <td><button class="btn btn-secondary btn-sm" onclick="viewRecord('RM-2025-0201')">📄 Lihat Rekam Medis</button></td>
+            </tr>
+            <tr>
+              <td><span class="badge badge-success">A-02</span></td>
+              <td>Dewi Kartika</td>
+              <td>8 tahun / P</td>
+              <td>Dermatitis Atopik (L20.9)</td>
+              <td>09:40 WIB</td>
+              <td><button class="btn btn-secondary btn-sm" onclick="viewRecord('RM-2025-0267')">📄 Lihat Rekam Medis</button></td>
+            </tr>
+            <tr>
+              <td><span class="badge badge-success">A-01</span></td>
+              <td>Andi Firmansyah</td>
+              <td>4 tahun / L</td>
+              <td>Faringitis Akut (J02.9)</td>
+              <td>09:20 WIB</td>
+              <td><button class="btn btn-secondary btn-sm" onclick="viewRecord('RM-2025-0123')">📄 Lihat Rekam Medis</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    </main>
+
+    <footer>
+      <p>&copy; 2025 Smart Health Center Service. All Rights Reserved.</p>
+    </footer>
+  </div>
+
+  <script src="../js/header-common.js"></script>
+  <script>
+    function toggleNotification() {
+      const dropdown = document.getElementById('notificationDropdown');
+      dropdown.classList.toggle('show');
+    }
+
+    function markAllRead(event) {
+      event.preventDefault();
+      event.stopPropagation();
+      const unreadItems = document.querySelectorAll('.notification-item.unread');
+      unreadItems.forEach(item => item.classList.remove('unread'));
+      const badge = document.querySelector('.notification-badge');
+      if (badge) badge.style.display = 'none';
+    }
+
+    function handleNotificationClick(element, type) {
+      element.classList.remove('unread');
+      const unreadCount = document.querySelectorAll('.notification-item.unread').length;
+      const badge = document.querySelector('.notification-badge');
+      if (badge) {
+        if (unreadCount === 0) {
+          badge.style.display = 'none';
+        } else {
+          badge.textContent = unreadCount;
+        }
+      }
+      
+      // Handle different notification types
+      if (type === 'lab-result') {
+        // Navigate to lab results or show details
+        console.log('Opening lab result...');
+      } else if (type === 'allergy-warning') {
+        console.log('Opening patient allergy info...');
+      } else if (type === 'schedule') {
+        console.log('Opening schedule...');
+      }
+    }
+
+    // Close notification dropdown when clicking outside
+    document.addEventListener('click', function(event) {
+      const notifBell = document.querySelector('.notification-bell');
+      const dropdown = document.getElementById('notificationDropdown');
+      if (!notifBell.contains(event.target)) {
+        dropdown.classList.remove('show');
+      }
+    });
+
+    function startExamination(queueNumber) {
+      if (confirm('🩺 Mulai pemeriksaan untuk pasien ' + queueNumber + '?')) {
+        location.href = 'rekam-medis.html?patient=' + queueNumber;
+      }
+    }
+
+    function viewAllQueue() {
+      location.href = 'daftar-pasien.html';
+    }
+
+    function viewRecord(rmNumber) {
+      location.href = 'rekam-medis.html?rm=' + rmNumber;
+    }
+
+    function viewSchedule() {
+      location.href = 'jadwal-praktik.html';
+    }
+
+    function viewStatistics() {
+      alert('📊 Statistik Bulan November 2025\n\nTotal Pasien: 487 pasien\nRata-rata per hari: 23 pasien\nWaktu tunggu rata-rata: 15 menit\nTingkat kepuasan: 4.8/5.0');
+    }
+
+    // Auto-refresh every 30 seconds
+    setInterval(function() {
+      console.log('Checking for queue updates...');
+    }, 30000);
+  </script>
+</body>
+</html>

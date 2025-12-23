@@ -1,0 +1,1248 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Riwayat Surat - Smart Health Center Service</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/header-styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="../js/header-common.js"></script>
+  <style>
+    .pdf-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
+      z-index: 9999;
+      overflow: auto;
+    }
+    .pdf-modal-content {
+      background: #fff;
+      margin: 2% auto;
+      width: 90%;
+      max-width: 800px;
+      border-radius: 8px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
+    .pdf-modal-header {
+      background: linear-gradient(135deg, #00796b, #004d40);
+      color: #fff;
+      padding: 1.5rem;
+      border-radius: 8px 8px 0 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .pdf-modal-body {
+      padding: 2rem;
+      max-height: 70vh;
+      overflow-y: auto;
+    }
+    .pdf-preview {
+      border: 1px solid #e0e0e0;
+      padding: 2rem;
+      background: #fff;
+      font-family: 'Times New Roman', serif;
+      line-height: 1.8;
+    }
+    .close-modal {
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 2rem;
+      cursor: pointer;
+      padding: 0;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      transition: all 0.3s;
+    }
+    .close-modal:hover {
+      background: rgba(255,255,255,0.2);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-container">
+      <div class="logo" style="flex-direction: column; align-items: flex-start; gap: 0.25rem;">
+        <img src="../img/Smarthealth-Logo.png" alt="Smart Health Logo" style="height: 45px;">
+        <p style="font-size: 0.75rem; margin: 0; color: #5f7a95;">Layanan Digital Puskesmas</p>
+      </div>
+      
+      <div class="header-right">
+        <!-- Notification Bell -->
+        <div class="notification-bell" onclick="toggleNotification()">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/>
+          </svg>
+          <span class="notification-badge">4</span>
+          
+          <div class="notification-dropdown" id="notificationDropdown">
+            <div class="notification-header">
+              <h4>Notifikasi</h4>
+              <a href="#" class="mark-read">Tandai Sudah Dibaca</a>
+            </div>
+            <div class="notification-list-header">
+              <div class="notification-item-header unread">
+                <div class="notification-icon-header success">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                  </svg>
+                </div>
+                <div class="notification-content-header">
+                  <strong>Surat Sehat Anda telah diterbitkan</strong>
+                  <p>Silakan unduh di menu Riwayat Surat</p>
+                  <div class="notification-time-header">10 menit lalu</div>
+                </div>
+              </div>
+              
+              <div class="notification-item-header unread">
+                <div class="notification-icon-header info">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+                  </svg>
+                </div>
+                <div class="notification-content-header">
+                  <strong>Nomor antrean Anda: A-012</strong>
+                  <p>Silakan menunggu, saat ini posisi ke-3</p>
+                  <div class="notification-time-header">25 menit lalu</div>
+                </div>
+              </div>
+              
+              <div class="notification-item-header">
+                <div class="notification-icon-header warning">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/>
+                  </svg>
+                </div>
+                <div class="notification-content-header">
+                  <strong>Jadwal kontrol: 5 Desember 2025</strong>
+                  <p>Jangan lupa jadwal kontrol dengan dr. Siti Aminah</p>
+                  <div class="notification-time-header">2 hari lalu</div>
+                </div>
+              </div>
+              
+              <div class="notification-item-header">
+                <div class="notification-icon-header info">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+                  </svg>
+                </div>
+                <div class="notification-content-header">
+                  <strong>Permohonan surat sakit diproses</strong>
+                  <p>Tenaga medis sedang memvalidasi permohonan Anda</p>
+                  <div class="notification-time-header">3 hari lalu</div>
+                </div>
+              </div>
+            </div>
+            <div class="notification-footer">
+              <a href="#">Lihat Semua</a>
+            </div>
+          </div>
+        </div>
+        
+        <!-- User Profile Dropdown -->
+        <div class="user-profile" id="userProfile">
+          <button class="user-profile-toggle" onclick="toggleUserDropdown()">
+            <div class="user-avatar">DP</div>
+            <div class="user-info">
+              <span class="user-name" id="headerUserName">Demo Pasien</span>
+              <span class="user-role">Pasien</span>
+            </div>
+            <svg class="dropdown-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path d="M7 10l5 5 5-5z"/>
+            </svg>
+          </button>
+          
+          <div class="user-dropdown" id="userDropdown">
+            <a href="profil.html" class="user-dropdown-item">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+              </svg>
+              Profil Saya
+            </a>
+            <div style="border-top: 1px solid #f0f0f0; margin: 0.5rem 0;"></div>
+            <a href="antrean.html" class="user-dropdown-item">
+              <span>📋</span> Daftar Antrean
+            </a>
+            <a href="status-antrean.html" class="user-dropdown-item">
+              <span>⏱️</span> Status Antrean
+            </a>
+            <a href="permohonan-surat.html" class="user-dropdown-item">
+              <span>📄</span> Permohonan Surat
+            </a>
+            <a href="riwayat-surat.html" class="user-dropdown-item">
+              <span>📚</span> Riwayat Surat
+            </a>
+            <a href="jadwal-dokter.html" class="user-dropdown-item">
+              <span>👨‍⚕️</span> Jadwal Dokter
+            </a>
+            <a href="chatbot.html" class="user-dropdown-item">
+              <span>💬</span> Chatbot
+            </a>
+            <div style="border-top: 1px solid #f0f0f0; margin: 0.5rem 0;"></div>
+            <a href="#" class="user-dropdown-item">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94L14.4 2.81c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
+              </svg>
+              Pengaturan
+            </a>
+            <a href="../logout.html" class="user-dropdown-item logout">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/>
+              </svg>
+              Logout
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <nav style=" border-bottom: 1px solid #e0e0e0; padding: 0;">
+    <div class="header-container" style="padding: 0.75rem 2rem;">
+      <div style="display: flex; align-items: center; gap: 2rem;">
+        <a href="dashboard.html" style="color: #2c4964; text-decoration: none; font-weight: 500; padding: 0.5rem 0;">
+          🏠 Dashboard
+        </a>
+      </div>
+    </div>
+  </nav>
+
+
+  <main>
+    <div class="page-header">
+      <h2>📚 Riwayat Surat</h2>
+      <p>Lihat dan unduh surat yang telah diterbitkan</p>
+    </div>
+
+    <!-- Statistik -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <h3>12</h3>
+        <p>Total Surat Diterbitkan</p>
+      </div>
+      <div class="stat-card warning">
+        <h3>2</h3>
+        <p>Menunggu Validasi</p>
+      </div>
+      <div class="stat-card success">
+        <h3>10</h3>
+        <p>Surat Selesai</p>
+      </div>
+      <div class="stat-card info">
+        <h3>1</h3>
+        <p>Surat Bulan Ini</p>
+      </div>
+    </div>
+
+    <!-- Filter & Search -->
+    <div class="card">
+      <h3>🔍 Filter & Pencarian</h3>
+      <div class="form-row" style="margin-top: 1rem;">
+        <div class="form-group">
+          <label for="filterJenis">Jenis Surat</label>
+          <select id="filterJenis" onchange="filterSurat()">
+            <option value="">Semua Jenis</option>
+            <option value="sehat">Surat Keterangan Sehat</option>
+            <option value="sakit">Surat Keterangan Sakit</option>
+            <option value="rujukan">Surat Rujukan</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="filterStatus">Status</label>
+          <select id="filterStatus" onchange="filterSurat()">
+            <option value="">Semua Status</option>
+            <option value="menunggu">Menunggu Validasi</option>
+            <option value="disetujui">Disetujui</option>
+            <option value="ditolak">Ditolak</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="filterBulan">Bulan</label>
+          <select id="filterBulan" onchange="filterSurat()">
+            <option value="">Semua Bulan</option>
+            <option value="2025-11">November 2025</option>
+            <option value="2025-10">Oktober 2025</option>
+            <option value="2025-09">September 2025</option>
+            <option value="2025-08">Agustus 2025</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="searchSurat">Pencarian</label>
+          <input type="text" id="searchSurat" placeholder="Cari berdasarkan keperluan..." onkeyup="filterSurat()">
+        </div>
+      </div>
+    </div>
+
+    <!-- Surat Menunggu Validasi -->
+    <div class="card">
+      <h3>⏳ Menunggu Validasi <span class="badge badge-warning">2</span></h3>
+      <table>
+        <thead>
+          <tr>
+            <th>No. Permohonan</th>
+            <th>Tanggal Pengajuan</th>
+            <th>Jenis Surat</th>
+            <th>Keperluan</th>
+            <th>Status</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>REQ-2025-112</strong></td>
+            <td>27 Nov 2025, 09:15</td>
+            <td>Surat Keterangan Sakit</td>
+            <td>Izin Tidak Masuk Kerja</td>
+            <td><span class="badge badge-warning">Menunggu Validasi</span></td>
+            <td>
+              <div class="btn-group">
+                <button class="btn btn-secondary" style="padding: 0.5rem 1rem;" onclick="lihatDetail('REQ-2025-112')">👁️ Detail</button>
+                <button class="btn btn-danger" style="padding: 0.5rem 1rem;" onclick="batalPermohonan('REQ-2025-112')">❌</button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td><strong>REQ-2025-111</strong></td>
+            <td>26 Nov 2025, 14:30</td>
+            <td>Surat Rujukan</td>
+            <td>Spesialis Jantung - RSUD</td>
+            <td><span class="badge badge-info">Sedang Diverifikasi</span></td>
+            <td>
+              <div class="btn-group">
+                <button class="btn btn-secondary" style="padding: 0.5rem 1rem;" onclick="lihatDetail('REQ-2025-111')">👁️ Detail</button>
+                <button class="btn btn-danger" style="padding: 0.5rem 1rem;" onclick="batalPermohonan('REQ-2025-111')">❌</button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Surat yang Sudah Diterbitkan -->
+    <div class="card">
+      <h3>✅ Surat yang Sudah Diterbitkan <span class="badge badge-success">10</span></h3>
+      <table id="tableSurat">
+        <thead>
+          <tr>
+            <th>No. Surat</th>
+            <th>Tanggal Terbit</th>
+            <th>Jenis Surat</th>
+            <th>Keperluan</th>
+            <th>Ditandatangani Oleh</th>
+            <th>Status</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-jenis="sehat" data-status="disetujui" data-bulan="2025-11">
+            <td><strong>SKS/2025/1125/045</strong></td>
+            <td>25 Nov 2025</td>
+            <td>Surat Keterangan Sehat</td>
+            <td>Lamaran Kerja - PT. ABC</td>
+            <td>dr. Ahmad Fauzi</td>
+            <td><span class="badge badge-success">Valid</span></td>
+            <td>
+              <div class="btn-group">
+                <button class="btn btn-primary" style="padding: 0.5rem 1rem;" onclick="unduhSurat('SKS/2025/1125/045')">📥 Unduh PDF</button>
+                <button class="btn btn-secondary" style="padding: 0.5rem 1rem;" onclick="lihatSurat('SKS/2025/1125/045')">👁️ Lihat</button>
+              </div>
+            </td>
+          </tr>
+          <tr data-jenis="sakit" data-status="disetujui" data-bulan="2025-11">
+            <td><strong>SKSK/2025/1120/089</strong></td>
+            <td>20 Nov 2025</td>
+            <td>Surat Keterangan Sakit</td>
+            <td>Izin Kerja (3 hari)</td>
+            <td>dr. Budi Santoso</td>
+            <td><span class="badge badge-success">Valid</span></td>
+            <td>
+              <div class="btn-group">
+                <button class="btn btn-primary" style="padding: 0.5rem 1rem;" onclick="unduhSurat('SKSK/2025/1120/089')">📥 Unduh PDF</button>
+                <button class="btn btn-secondary" style="padding: 0.5rem 1rem;" onclick="lihatSurat('SKSK/2025/1120/089')">👁️ Lihat</button>
+              </div>
+            </td>
+          </tr>
+          <tr data-jenis="rujukan" data-status="disetujui" data-bulan="2025-11">
+            <td><strong>SR/2025/1118/023</strong></td>
+            <td>18 Nov 2025</td>
+            <td>Surat Rujukan</td>
+            <td>Sp. Penyakit Dalam - RSUD</td>
+            <td>dr. Siti Aminah, Sp.PD</td>
+            <td><span class="badge badge-success">Valid</span></td>
+            <td>
+              <div class="btn-group">
+                <button class="btn btn-primary" style="padding: 0.5rem 1rem;" onclick="unduhSurat('SR/2025/1118/023')">📥 Unduh PDF</button>
+                <button class="btn btn-secondary" style="padding: 0.5rem 1rem;" onclick="lihatSurat('SR/2025/1118/023')">👁️ Lihat</button>
+              </div>
+            </td>
+          </tr>
+          <tr data-jenis="sehat" data-status="disetujui" data-bulan="2025-10">
+            <td><strong>SKS/2025/1015/112</strong></td>
+            <td>15 Okt 2025</td>
+            <td>Surat Keterangan Sehat</td>
+            <td>Pembuatan SIM</td>
+            <td>dr. Ahmad Fauzi</td>
+            <td><span class="badge badge-success">Valid</span></td>
+            <td>
+              <div class="btn-group">
+                <button class="btn btn-primary" style="padding: 0.5rem 1rem;" onclick="unduhSurat('SKS/2025/1015/112')">📥 Unduh PDF</button>
+                <button class="btn btn-secondary" style="padding: 0.5rem 1rem;" onclick="lihatSurat('SKS/2025/1015/112')">👁️ Lihat</button>
+              </div>
+            </td>
+          </tr>
+          <tr data-jenis="sakit" data-status="disetujui" data-bulan="2025-10">
+            <td><strong>SKSK/2025/1010/078</strong></td>
+            <td>10 Okt 2025</td>
+            <td>Surat Keterangan Sakit</td>
+            <td>Izin Kerja (2 hari)</td>
+            <td>dr. Dewi Lestari</td>
+            <td><span class="badge badge-success">Valid</span></td>
+            <td>
+              <div class="btn-group">
+                <button class="btn btn-primary" style="padding: 0.5rem 1rem;" onclick="unduhSurat('SKSK/2025/1010/078')">📥 Unduh PDF</button>
+                <button class="btn btn-secondary" style="padding: 0.5rem 1rem;" onclick="lihatSurat('SKSK/2025/1010/078')">👁️ Lihat</button>
+              </div>
+            </td>
+          </tr>
+          <tr data-jenis="sehat" data-status="disetujui" data-bulan="2025-09">
+            <td><strong>SKS/2025/0925/089</strong></td>
+            <td>25 Sep 2025</td>
+            <td>Surat Keterangan Sehat</td>
+            <td>Pendaftaran Kuliah</td>
+            <td>dr. Ahmad Fauzi</td>
+            <td><span class="badge badge-success">Valid</span></td>
+            <td>
+              <div class="btn-group">
+                <button class="btn btn-primary" style="padding: 0.5rem 1rem;" onclick="unduhSurat('SKS/2025/0925/089')">📥 Unduh PDF</button>
+                <button class="btn btn-secondary" style="padding: 0.5rem 1rem;" onclick="lihatSurat('SKS/2025/0925/089')">👁️ Lihat</button>
+              </div>
+            </td>
+          </tr>
+          <tr data-jenis="rujukan" data-status="disetujui" data-bulan="2025-09">
+            <td><strong>SR/2025/0920/015</strong></td>
+            <td>20 Sep 2025</td>
+            <td>Surat Rujukan</td>
+            <td>Sp. Mata - RS Mata</td>
+            <td>dr. Hasan Basri</td>
+            <td><span class="badge badge-success">Valid</span></td>
+            <td>
+              <div class="btn-group">
+                <button class="btn btn-primary" style="padding: 0.5rem 1rem;" onclick="unduhSurat('SR/2025/0920/015')">📥 Unduh PDF</button>
+                <button class="btn btn-secondary" style="padding: 0.5rem 1rem;" onclick="lihatSurat('SR/2025/0920/015')">👁️ Lihat</button>
+              </div>
+            </td>
+          </tr>
+          <tr data-jenis="sehat" data-status="disetujui" data-bulan="2025-09">
+            <td><strong>SKS/2025/0915/056</strong></td>
+            <td>15 Sep 2025</td>
+            <td>Surat Keterangan Sehat</td>
+            <td>Kegiatan Olahraga Marathon</td>
+            <td>dr. Budi Santoso</td>
+            <td><span class="badge badge-success">Valid</span></td>
+            <td>
+              <div class="btn-group">
+                <button class="btn btn-primary" style="padding: 0.5rem 1rem;" onclick="unduhSurat('SKS/2025/0915/056')">📥 Unduh PDF</button>
+                <button class="btn btn-secondary" style="padding: 0.5rem 1rem;" onclick="lihatSurat('SKS/2025/0915/056')">👁️ Lihat</button>
+              </div>
+            </td>
+          </tr>
+          <tr data-jenis="sakit" data-status="disetujui" data-bulan="2025-08">
+            <td><strong>SKSK/2025/0828/123</strong></td>
+            <td>28 Agu 2025</td>
+            <td>Surat Keterangan Sakit</td>
+            <td>Izin Kerja (1 hari)</td>
+            <td>dr. Siti Aminah, Sp.PD</td>
+            <td><span class="badge badge-success">Valid</span></td>
+            <td>
+              <div class="btn-group">
+                <button class="btn btn-primary" style="padding: 0.5rem 1rem;" onclick="unduhSurat('SKSK/2025/0828/123')">📥 Unduh PDF</button>
+                <button class="btn btn-secondary" style="padding: 0.5rem 1rem;" onclick="lihatSurat('SKSK/2025/0828/123')">👁️ Lihat</button>
+              </div>
+            </td>
+          </tr>
+          <tr data-jenis="sehat" data-status="disetujui" data-bulan="2025-08">
+            <td><strong>SKS/2025/0820/078</strong></td>
+            <td>20 Agu 2025</td>
+            <td>Surat Keterangan Sehat</td>
+            <td>Lamaran Kerja - PT. XYZ</td>
+            <td>dr. Ahmad Fauzi</td>
+            <td><span class="badge badge-success">Valid</span></td>
+            <td>
+              <div class="btn-group">
+                <button class="btn btn-primary" style="padding: 0.5rem 1rem;" onclick="unduhSurat('SKS/2025/0820/078')">📥 Unduh PDF</button>
+                <button class="btn btn-secondary" style="padding: 0.5rem 1rem;" onclick="lihatSurat('SKS/2025/0820/078')">👁️ Lihat</button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Surat Ditolak -->
+    <div class="card">
+      <h3>❌ Permohonan Ditolak</h3>
+      <p class="text-muted">Tidak ada permohonan yang ditolak</p>
+    </div>
+
+    <!-- Informasi -->
+    <div class="card-grid">
+      <div class="card" style="background: #e3f2fd; border-left: 4px solid #1976d2;">
+        <h3 style="color: #1565c0;">ℹ️ Informasi Surat</h3>
+        <ul style="line-height: 2; color: #666;">
+          <li>Surat yang sudah diterbitkan dapat <strong>diunduh dalam format PDF</strong></li>
+          <li>Simpan surat digital dengan baik untuk keperluan di masa depan</li>
+          <li>Surat asli dapat diambil di <strong>loket puskesmas</strong></li>
+          <li>Surat yang sudah diterbitkan <strong>tidak dapat diubah</strong></li>
+          <li>Jika ada kesalahan, ajukan permohonan baru</li>
+        </ul>
+      </div>
+
+      <div class="card" style="background: #fff3cd; border-left: 4px solid #f57c00;">
+        <h3 style="color: #e65100;">⚠️ Masa Berlaku</h3>
+        <ul style="line-height: 2; color: #666;">
+          <li><strong>Surat Keterangan Sehat:</strong> 1-3 bulan (tergantung keperluan)</li>
+          <li><strong>Surat Keterangan Sakit:</strong> Sesuai tanggal yang tertera</li>
+          <li><strong>Surat Rujukan:</strong> Maksimal 3 bulan</li>
+          <li>Perhatikan tanggal berlaku pada setiap surat</li>
+          <li>Ajukan surat baru jika sudah kadaluarsa</li>
+        </ul>
+      </div>
+    </div>
+  </main>
+
+  <!-- Modal Preview PDF -->
+  <div id="pdfModal" class="pdf-modal">
+    <div class="pdf-modal-content">
+      <div class="pdf-modal-header">
+        <h3 id="pdfTitle">
+          <span>📄</span>
+          <span id="pdfTitleText">Preview Surat</span>
+        </h3>
+        <button class="close-modal" onclick="closePdfModal()">&times;</button>
+      </div>
+      <div class="pdf-modal-body">
+        <div class="pdf-viewer-container">
+          <div class="pdf-page-counter">
+            <span id="pageCounter">Halaman 1/2</span>
+          </div>
+          <div id="pdfPreview" class="pdf-preview"></div>
+        </div>
+        <div class="pdf-toolbar">
+          <button class="btn-download" onclick="downloadCurrentPdf()">
+            <span>📥</span>
+            <span>Download PDF</span>
+          </button>
+          <button class="btn-print" onclick="printCurrentPdf()">
+            <span>🖨️</span>
+            <span>Print</span>
+          </button>
+          <button class="btn-close" onclick="closePdfModal()">
+            <span>❌</span>
+            <span>Tutup</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 Smart Health Center Service. All Rights Reserved.</p>
+  </footer>
+
+  <script>
+    const { jsPDF } = window.jspdf;
+    let currentPdfDoc = null;
+    let currentPdfName = '';
+
+    // Data surat (simulasi)
+    const suratData = {
+      'SKS/2025/1125/045': {
+        jenis: 'Surat Keterangan Sehat',
+        noSurat: 'SKS/2025/1125/045',
+        tanggal: '25 November 2025',
+        pasien: {
+          nama: 'Ahmad Ridwan',
+          nik: '3201012345678901',
+          ttl: 'Bandung, 15 Januari 1990',
+          alamat: 'Jl. Merdeka No. 123, Bandung',
+          pekerjaan: 'Karyawan Swasta'
+        },
+        pemeriksaan: {
+          tensiDarah: '120/80 mmHg',
+          nadi: '78 x/menit',
+          suhu: '36.5°C',
+          beratBadan: '68 kg',
+          tinggiBadan: '170 cm'
+        },
+        hasil: 'Berdasarkan hasil pemeriksaan fisik, yang bersangkutan dalam keadaan SEHAT dan tidak ditemukan kelainan fisik.',
+        keperluan: 'Lamaran Kerja - PT. ABC Indonesia',
+        dokter: 'dr. Ahmad Fauzi',
+        sip: 'SIP.123/DINKES/2020'
+      },
+      'SKSK/2025/1120/089': {
+        jenis: 'Surat Keterangan Sakit',
+        noSurat: 'SKSK/2025/1120/089',
+        tanggal: '20 November 2025',
+        pasien: {
+          nama: 'Ahmad Ridwan',
+          nik: '3201012345678901',
+          ttl: 'Bandung, 15 Januari 1990',
+          alamat: 'Jl. Merdeka No. 123, Bandung',
+          pekerjaan: 'Karyawan Swasta'
+        },
+        diagnosis: 'Infeksi Saluran Pernapasan Atas (ISPA)',
+        lamaSakit: '3 hari',
+        mulai: '20 November 2025',
+        selesai: '22 November 2025',
+        keperluan: 'Izin Tidak Masuk Kerja',
+        ditujukan: 'PT. XYZ Teknologi Indonesia',
+        dokter: 'dr. Budi Santoso',
+        sip: 'SIP.456/DINKES/2020'
+      },
+      'SR/2025/1118/023': {
+        jenis: 'Surat Rujukan',
+        noSurat: 'SR/2025/1118/023',
+        tanggal: '18 November 2025',
+        pasien: {
+          nama: 'Ahmad Ridwan',
+          nik: '3201012345678901',
+          ttl: 'Bandung, 15 Januari 1990',
+          alamat: 'Jl. Merdeka No. 123, Bandung'
+        },
+        diagnosaSementara: 'Hipertensi Stage II',
+        tindakan: 'Pemeriksaan EKG, Echocardiography',
+        rujukanKe: 'RSUD Kota Bandung',
+        bagian: 'Spesialis Penyakit Dalam',
+        alasan: 'Diperlukan pemeriksaan lanjutan dan penanganan spesialistik',
+        dokter: 'dr. Siti Aminah, Sp.PD',
+        sip: 'SIP.789/DINKES/2020'
+      },
+      'SKS/2025/1015/112': {
+        jenis: 'Surat Keterangan Sehat',
+        noSurat: 'SKS/2025/1015/112',
+        tanggal: '15 Oktober 2025',
+        pasien: {
+          nama: 'Ahmad Ridwan',
+          nik: '3201012345678901',
+          ttl: 'Bandung, 15 Januari 1990',
+          alamat: 'Jl. Merdeka No. 123, Bandung',
+          pekerjaan: 'Karyawan Swasta'
+        },
+        pemeriksaan: {
+          tensiDarah: '118/78 mmHg',
+          nadi: '76 x/menit',
+          suhu: '36.4°C',
+          beratBadan: '67 kg',
+          tinggiBadan: '170 cm'
+        },
+        hasil: 'Berdasarkan hasil pemeriksaan fisik, yang bersangkutan dalam keadaan SEHAT dan tidak ditemukan kelainan fisik maupun penyakit menular.',
+        keperluan: 'Pembuatan SIM',
+        dokter: 'dr. Ahmad Fauzi',
+        sip: 'SIP.123/DINKES/2020'
+      },
+      'SKSK/2025/1010/078': {
+        jenis: 'Surat Keterangan Sakit',
+        noSurat: 'SKSK/2025/1010/078',
+        tanggal: '10 Oktober 2025',
+        pasien: {
+          nama: 'Ahmad Ridwan',
+          nik: '3201012345678901',
+          ttl: 'Bandung, 15 Januari 1990',
+          alamat: 'Jl. Merdeka No. 123, Bandung',
+          pekerjaan: 'Karyawan Swasta'
+        },
+        diagnosis: 'Gastritis Akut',
+        lamaSakit: '2 hari',
+        mulai: '10 Oktober 2025',
+        selesai: '11 Oktober 2025',
+        keperluan: 'Izin Tidak Masuk Kerja',
+        ditujukan: 'PT. XYZ Teknologi Indonesia',
+        dokter: 'dr. Dewi Lestari',
+        sip: 'SIP.234/DINKES/2020'
+      },
+      'SKS/2025/0925/089': {
+        jenis: 'Surat Keterangan Sehat',
+        noSurat: 'SKS/2025/0925/089',
+        tanggal: '25 September 2025',
+        pasien: {
+          nama: 'Ahmad Ridwan',
+          nik: '3201012345678901',
+          ttl: 'Bandung, 15 Januari 1990',
+          alamat: 'Jl. Merdeka No. 123, Bandung',
+          pekerjaan: 'Karyawan Swasta'
+        },
+        pemeriksaan: {
+          tensiDarah: '115/75 mmHg',
+          nadi: '72 x/menit',
+          suhu: '36.6°C',
+          beratBadan: '66 kg',
+          tinggiBadan: '170 cm'
+        },
+        hasil: 'Berdasarkan hasil pemeriksaan fisik dan laboratorium, yang bersangkutan dalam kondisi SEHAT dan layak mengikuti kegiatan akademik.',
+        keperluan: 'Pendaftaran Kuliah',
+        dokter: 'dr. Ahmad Fauzi',
+        sip: 'SIP.123/DINKES/2020'
+      },
+      'SR/2025/0920/015': {
+        jenis: 'Surat Rujukan',
+        noSurat: 'SR/2025/0920/015',
+        tanggal: '20 September 2025',
+        pasien: {
+          nama: 'Ahmad Ridwan',
+          nik: '3201012345678901',
+          ttl: 'Bandung, 15 Januari 1990',
+          alamat: 'Jl. Merdeka No. 123, Bandung'
+        },
+        diagnosaSementara: 'Katarak Senilis',
+        tindakan: 'Pemeriksaan Visus, Tonometri',
+        rujukanKe: 'RS Mata Cicendo Bandung',
+        bagian: 'Spesialis Mata',
+        alasan: 'Diperlukan tindakan operasi katarak oleh dokter spesialis mata',
+        dokter: 'dr. Hasan Basri',
+        sip: 'SIP.567/DINKES/2020'
+      },
+      'SKS/2025/0915/056': {
+        jenis: 'Surat Keterangan Sehat',
+        noSurat: 'SKS/2025/0915/056',
+        tanggal: '15 September 2025',
+        pasien: {
+          nama: 'Ahmad Ridwan',
+          nik: '3201012345678901',
+          ttl: 'Bandung, 15 Januari 1990',
+          alamat: 'Jl. Merdeka No. 123, Bandung',
+          pekerjaan: 'Karyawan Swasta'
+        },
+        pemeriksaan: {
+          tensiDarah: '120/80 mmHg',
+          nadi: '70 x/menit',
+          suhu: '36.5°C',
+          beratBadan: '66 kg',
+          tinggiBadan: '170 cm'
+        },
+        hasil: 'Berdasarkan hasil pemeriksaan fisik, yang bersangkutan dalam kondisi SEHAT dan layak mengikuti kegiatan olahraga marathon.',
+        keperluan: 'Kegiatan Olahraga Marathon',
+        dokter: 'dr. Budi Santoso',
+        sip: 'SIP.456/DINKES/2020'
+      },
+      'SKSK/2025/0828/123': {
+        jenis: 'Surat Keterangan Sakit',
+        noSurat: 'SKSK/2025/0828/123',
+        tanggal: '28 Agustus 2025',
+        pasien: {
+          nama: 'Ahmad Ridwan',
+          nik: '3201012345678901',
+          ttl: 'Bandung, 15 Januari 1990',
+          alamat: 'Jl. Merdeka No. 123, Bandung',
+          pekerjaan: 'Karyawan Swasta'
+        },
+        diagnosis: 'Demam Dengue',
+        lamaSakit: '1 hari',
+        mulai: '28 Agustus 2025',
+        selesai: '28 Agustus 2025',
+        keperluan: 'Izin Tidak Masuk Kerja',
+        ditujukan: 'PT. XYZ Teknologi Indonesia',
+        dokter: 'dr. Siti Aminah, Sp.PD',
+        sip: 'SIP.789/DINKES/2020'
+      },
+      'SKS/2025/0820/078': {
+        jenis: 'Surat Keterangan Sehat',
+        noSurat: 'SKS/2025/0820/078',
+        tanggal: '20 Agustus 2025',
+        pasien: {
+          nama: 'Ahmad Ridwan',
+          nik: '3201012345678901',
+          ttl: 'Bandung, 15 Januari 1990',
+          alamat: 'Jl. Merdeka No. 123, Bandung',
+          pekerjaan: 'Karyawan Swasta'
+        },
+        pemeriksaan: {
+          tensiDarah: '118/78 mmHg',
+          nadi: '74 x/menit',
+          suhu: '36.5°C',
+          beratBadan: '65 kg',
+          tinggiBadan: '170 cm'
+        },
+        hasil: 'Berdasarkan hasil pemeriksaan fisik dan laboratorium, yang bersangkutan dalam keadaan SEHAT dan tidak ditemukan kelainan fisik.',
+        keperluan: 'Lamaran Kerja - PT. XYZ',
+        dokter: 'dr. Ahmad Fauzi',
+        sip: 'SIP.123/DINKES/2020'
+      }
+    };
+
+    function generatePDF(data) {
+      const doc = new jsPDF();
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const margin = 20;
+      let y = 20;
+
+      // Header
+      doc.setFontSize(16);
+      doc.setFont('helvetica', 'bold');
+      doc.text('PUSKESMAS SMART HEALTH CENTER', pageWidth/2, y, { align: 'center' });
+      y += 7;
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'normal');
+      doc.text('Jl. Kesehatan No. 1, Bandung - Telp. (022) 1234567', pageWidth/2, y, { align: 'center' });
+      y += 3;
+      doc.text('Email: info@smarthealthcenter.id', pageWidth/2, y, { align: 'center' });
+      
+      y += 5;
+      doc.setLineWidth(0.5);
+      doc.line(margin, y, pageWidth - margin, y);
+      
+      y += 15;
+      doc.setFontSize(14);
+      doc.setFont('helvetica', 'bold');
+      doc.text(data.jenis.toUpperCase(), pageWidth/2, y, { align: 'center' });
+      y += 5;
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'normal');
+      doc.text('Nomor: ' + data.noSurat, pageWidth/2, y, { align: 'center' });
+      
+      y += 15;
+      doc.setFontSize(11);
+      
+      if (data.jenis === 'Surat Keterangan Sehat') {
+        doc.text('Yang bertanda tangan di bawah ini menerangkan bahwa:', margin, y);
+        y += 10;
+        doc.text('Nama: ' + data.pasien.nama, margin + 10, y);
+        y += 7;
+        doc.text('NIK: ' + data.pasien.nik, margin + 10, y);
+        y += 7;
+        doc.text('Tempat/Tgl Lahir: ' + data.pasien.ttl, margin + 10, y);
+        y += 7;
+        doc.text('Alamat: ' + data.pasien.alamat, margin + 10, y);
+        y += 12;
+        doc.setFont('helvetica', 'bold');
+        doc.text('Hasil Pemeriksaan:', margin, y);
+        y += 7;
+        doc.setFont('helvetica', 'normal');
+        doc.text('TD: ' + data.pemeriksaan.tensiDarah + ', Nadi: ' + data.pemeriksaan.nadi, margin + 10, y);
+        y += 7;
+        doc.text('Suhu: ' + data.pemeriksaan.suhu + ', BB: ' + data.pemeriksaan.beratBadan, margin + 10, y);
+        y += 12;
+        const hasilLines = doc.splitTextToSize(data.hasil, pageWidth - 2 * margin);
+        doc.text(hasilLines, margin, y);
+        y += hasilLines.length * 7 + 10;
+        doc.text('Keperluan: ' + data.keperluan, margin, y);
+      } else if (data.jenis === 'Surat Keterangan Sakit') {
+        doc.text('Yang bertanda tangan di bawah ini menerangkan bahwa:', margin, y);
+        y += 10;
+        doc.text('Nama: ' + data.pasien.nama, margin + 10, y);
+        y += 7;
+        doc.text('NIK: ' + data.pasien.nik, margin + 10, y);
+        y += 12;
+        doc.text('Diagnosis: ' + data.diagnosis, margin, y);
+        y += 10;
+        doc.text('Perlu istirahat ' + data.lamaSakit + ' (' + data.mulai + ' - ' + data.selesai + ')', margin, y);
+        y += 10;
+        doc.text('Keperluan: ' + data.keperluan, margin, y);
+        y += 7;
+        doc.text('Ditujukan: ' + data.ditujukan, margin, y);
+      } else if (data.jenis === 'Surat Rujukan') {
+        doc.text('Kepada Yth. ' + data.bagian, margin, y);
+        y += 7;
+        doc.text(data.rujukanKe, margin, y);
+        y += 12;
+        doc.text('Dengan hormat, kami rujuk pasien:', margin, y);
+        y += 10;
+        doc.text('Nama: ' + data.pasien.nama, margin + 10, y);
+        y += 7;
+        doc.text('NIK: ' + data.pasien.nik, margin + 10, y);
+        y += 12;
+        doc.text('Diagnosis: ' + data.diagnosaSementara, margin, y);
+        y += 7;
+        doc.text('Tindakan: ' + data.tindakan, margin, y);
+      }
+      
+      y += 20;
+      doc.text('Bandung, ' + data.tanggal, pageWidth - margin - 50, y);
+      y += 7;
+      doc.text('Dokter,', pageWidth - margin - 50, y);
+      y += 25;
+      doc.setFont('helvetica', 'bold');
+      doc.text(data.dokter, pageWidth - margin - 50, y);
+      
+      return doc;
+    }
+
+    function lihatSurat(noSurat) {
+      const data = suratData[noSurat];
+      if (!data) {
+        alert('Data surat tidak ditemukan!');
+        return;
+      }
+
+      data.noSurat = noSurat;
+      const today = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+
+      let previewHtml = `
+        <div style="max-width: 210mm; margin: 0 auto; padding: 2rem; background: #fff;">
+          <!-- Kop Surat -->
+          <div style="text-align: center; border-bottom: 3px double #000; padding-bottom: 1rem; margin-bottom: 2rem;">
+            <div style="display: flex; align-items: center; justify-content: center; gap: 1rem; margin-bottom: 0.5rem;">
+              <img src="../img/Smarthealth-Logo.png" alt="Logo" style="height: 60px;">
+              <div style="text-align: left;">
+                <h2 style="margin: 0; font-size: 1.4rem; color: #000;">PUSKESMAS SMART HEALTH CENTER</h2>
+                <p style="margin: 0.25rem 0 0 0; font-size: 0.85rem;">Jl. Kesehatan No. 1, Bandung 40123</p>
+                <p style="margin: 0; font-size: 0.85rem;">Telp: (022) 1234567 | Email: info@smarthealthcenter.id</p>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Judul Surat -->
+          <div style="text-align: center; margin: 2rem 0 2.5rem 0;">
+            <h3 style="margin: 0; text-decoration: underline; font-size: 1.2rem; letter-spacing: 1px;">${data.jenis.toUpperCase()}</h3>
+            <p style="margin: 0.5rem 0 0 0; font-size: 0.95rem;">Nomor: ${noSurat}</p>
+          </div>
+          
+          <!-- Isi Surat -->
+          <div style="font-size: 1rem; text-align: justify;">
+      `;
+      
+      if (data.jenis === 'Surat Keterangan Sehat') {
+        previewHtml += `
+            <p style="text-indent: 2rem; line-height: 1.8;">
+              Yang bertanda tangan di bawah ini, dokter pada Puskesmas Smart Health Center, 
+              dengan ini menerangkan bahwa:
+            </p>
+            
+            <table style="margin: 1.5rem 0; width: 100%; border: none;">
+              <tr>
+                <td style="width: 35%; padding: 0.4rem 0; border: none;">Nama</td>
+                <td style="width: 5%; border: none;">:</td>
+                <td style="border: none;"><strong>${data.pasien.nama}</strong></td>
+              </tr>
+              <tr>
+                <td style="padding: 0.4rem 0; border: none;">NIK</td>
+                <td style="border: none;">:</td>
+                <td style="border: none;">${data.pasien.nik}</td>
+              </tr>
+              <tr>
+                <td style="padding: 0.4rem 0; border: none;">Tempat/Tanggal Lahir</td>
+                <td style="border: none;">:</td>
+                <td style="border: none;">${data.pasien.ttl}</td>
+              </tr>
+              <tr>
+                <td style="padding: 0.4rem 0; border: none;">Alamat</td>
+                <td style="border: none;">:</td>
+                <td style="border: none;">${data.pasien.alamat}</td>
+              </tr>
+              <tr>
+                <td style="padding: 0.4rem 0; border: none;">Pekerjaan</td>
+                <td style="border: none;">:</td>
+                <td style="border: none;">${data.pasien.pekerjaan}</td>
+              </tr>
+            </table>
+            
+            <p style="text-indent: 2rem; line-height: 1.8; margin-top: 1.5rem;">
+              Telah dilakukan pemeriksaan kesehatan pada tanggal ${data.tanggal} dengan hasil sebagai berikut:
+            </p>
+            
+            <div style="margin: 1.5rem 0; padding: 1rem; background: #f8f9fa; border-radius: 4px;">
+              <table style="width: 100%; border: none;">
+                <tr>
+                  <td style="width: 35%; padding: 0.5rem; border: none;">Tekanan Darah</td>
+                  <td style="width: 5%; border: none;">:</td>
+                  <td style="border: none;"><strong>${data.pemeriksaan.tensiDarah}</strong></td>
+                </tr>
+                <tr>
+                  <td style="padding: 0.5rem; border: none;">Nadi</td>
+                  <td style="border: none;">:</td>
+                  <td style="border: none;"><strong>${data.pemeriksaan.nadi}</strong></td>
+                </tr>
+                <tr>
+                  <td style="padding: 0.5rem; border: none;">Suhu Badan</td>
+                  <td style="border: none;">:</td>
+                  <td style="border: none;"><strong>${data.pemeriksaan.suhu}</strong></td>
+                </tr>
+                <tr>
+                  <td style="padding: 0.5rem; border: none;">Berat Badan</td>
+                  <td style="border: none;">:</td>
+                  <td style="border: none;"><strong>${data.pemeriksaan.beratBadan}</strong></td>
+                </tr>
+                <tr>
+                  <td style="padding: 0.5rem; border: none;">Tinggi Badan</td>
+                  <td style="border: none;">:</td>
+                  <td style="border: none;"><strong>${data.pemeriksaan.tinggiBadan}</strong></td>
+                </tr>
+              </table>
+            </div>
+            
+            <div style="margin: 1.5rem 0; padding: 1rem; background: #e8f5e9; border-left: 4px solid #4caf50; border-radius: 4px;">
+              <p style="margin: 0; font-weight: bold; color: #2e7d32;">KESIMPULAN:</p>
+              <p style="margin: 0.5rem 0 0 0; line-height: 1.8;">${data.hasil}</p>
+            </div>
+            
+            <table style="margin: 1.5rem 0; width: 100%; border: none;">
+              <tr>
+                <td style="width: 35%; padding: 0.4rem 0; border: none;">Keperluan</td>
+                <td style="width: 5%; border: none;">:</td>
+                <td style="border: none;">${data.keperluan}</td>
+              </tr>
+            </table>
+            
+            <p style="text-indent: 2rem; line-height: 1.8; margin-top: 1.5rem;">
+              Demikian surat keterangan sehat ini dibuat dengan sebenarnya berdasarkan hasil 
+              pemeriksaan kesehatan, untuk dapat dipergunakan sebagaimana mestinya.
+            </p>
+        `;
+      } else if (data.jenis === 'Surat Keterangan Sakit') {
+        previewHtml += `
+            <p style="text-indent: 2rem; line-height: 1.8;">
+              Yang bertanda tangan di bawah ini, dokter pada Puskesmas Smart Health Center, 
+              dengan ini menerangkan bahwa:
+            </p>
+            
+            <table style="margin: 1.5rem 0; width: 100%; border: none;">
+              <tr>
+                <td style="width: 35%; padding: 0.4rem 0; border: none;">Nama</td>
+                <td style="width: 5%; border: none;">:</td>
+                <td style="border: none;"><strong>${data.pasien.nama}</strong></td>
+              </tr>
+              <tr>
+                <td style="padding: 0.4rem 0; border: none;">NIK</td>
+                <td style="border: none;">:</td>
+                <td style="border: none;">${data.pasien.nik}</td>
+              </tr>
+              <tr>
+                <td style="padding: 0.4rem 0; border: none;">Tempat/Tanggal Lahir</td>
+                <td style="border: none;">:</td>
+                <td style="border: none;">${data.pasien.ttl}</td>
+              </tr>
+              <tr>
+                <td style="padding: 0.4rem 0; border: none;">Alamat</td>
+                <td style="border: none;">:</td>
+                <td style="border: none;">${data.pasien.alamat}</td>
+              </tr>
+              <tr>
+                <td style="padding: 0.4rem 0; border: none;">Pekerjaan</td>
+                <td style="border: none;">:</td>
+                <td style="border: none;">${data.pasien.pekerjaan}</td>
+              </tr>
+            </table>
+            
+            <p style="text-indent: 2rem; line-height: 1.8; margin-top: 1.5rem;">
+              Setelah dilakukan pemeriksaan kesehatan pada tanggal ${data.mulai}, 
+              yang bersangkutan didiagnosis:
+            </p>
+            
+            <div style="margin: 1rem 0; padding: 1rem; background: #f8f9fa; border-left: 4px solid #00796b; border-radius: 4px;">
+              <p style="margin: 0; font-weight: bold; color: #00796b;">${data.diagnosis}</p>
+            </div>
+            
+            <p style="text-indent: 2rem; line-height: 1.8;">
+              Sehubungan dengan kondisi kesehatan tersebut, yang bersangkutan memerlukan istirahat 
+              selama <strong>${data.lamaSakit}</strong>, terhitung mulai tanggal 
+              <strong>${data.mulai}</strong> sampai dengan <strong>${data.selesai}</strong>.
+            </p>
+            
+            <table style="margin: 1.5rem 0; width: 100%; border: none;">
+              <tr>
+                <td style="width: 35%; padding: 0.4rem 0; border: none;">Keperluan</td>
+                <td style="width: 5%; border: none;">:</td>
+                <td style="border: none;">${data.keperluan}</td>
+              </tr>
+              <tr>
+                <td style="padding: 0.4rem 0; border: none;">Ditujukan kepada</td>
+                <td style="border: none;">:</td>
+                <td style="border: none;">${data.ditujukan}</td>
+              </tr>
+            </table>
+            
+            <p style="text-indent: 2rem; line-height: 1.8; margin-top: 1.5rem;">
+              Demikian surat keterangan ini dibuat dengan sebenarnya untuk dapat dipergunakan 
+              sebagaimana mestinya.
+            </p>
+        `;
+      } else if (data.jenis === 'Surat Rujukan') {
+        previewHtml += `
+            <p style="margin: 0 0 1rem 0;">Kepada Yth.</p>
+            <p style="margin: 0 0 0.5rem 0; font-weight: bold;">${data.bagian}</p>
+            <p style="margin: 0 0 2rem 0; font-weight: bold;">${data.rujukanKe}</p>
+            
+            <p style="text-indent: 2rem; line-height: 1.8;">
+              Dengan hormat, kami rujuk pasien:
+            </p>
+            
+            <table style="margin: 1.5rem 0; width: 100%; border: none;">
+              <tr>
+                <td style="width: 35%; padding: 0.4rem 0; border: none;">Nama</td>
+                <td style="width: 5%; border: none;">:</td>
+                <td style="border: none;"><strong>${data.pasien.nama}</strong></td>
+              </tr>
+              <tr>
+                <td style="padding: 0.4rem 0; border: none;">NIK</td>
+                <td style="border: none;">:</td>
+                <td style="border: none;">${data.pasien.nik}</td>
+              </tr>
+              <tr>
+                <td style="padding: 0.4rem 0; border: none;">Tempat/Tanggal Lahir</td>
+                <td style="border: none;">:</td>
+                <td style="border: none;">${data.pasien.ttl}</td>
+              </tr>
+              <tr>
+                <td style="padding: 0.4rem 0; border: none;">Alamat</td>
+                <td style="border: none;">:</td>
+                <td style="border: none;">${data.pasien.alamat}</td>
+              </tr>
+            </table>
+            
+            <div style="margin: 1.5rem 0; padding: 1rem; background: #fff3cd; border-left: 4px solid #f57c00; border-radius: 4px;">
+              <p style="margin: 0 0 0.5rem 0; font-weight: bold; color: #e65100;">Diagnosis Sementara:</p>
+              <p style="margin: 0;">${data.diagnosaSementara}</p>
+            </div>
+            
+            <table style="margin: 1.5rem 0; width: 100%; border: none;">
+              <tr>
+                <td style="width: 35%; padding: 0.4rem 0; border: none;">Tindakan yang telah dilakukan</td>
+                <td style="width: 5%; border: none;">:</td>
+                <td style="border: none;">${data.tindakan}</td>
+              </tr>
+              <tr>
+                <td style="padding: 0.4rem 0; border: none;">Alasan Rujukan</td>
+                <td style="border: none;">:</td>
+                <td style="border: none;">${data.alasan}</td>
+              </tr>
+            </table>
+            
+            <p style="text-indent: 2rem; line-height: 1.8; margin-top: 1.5rem;">
+              Demikian surat rujukan ini kami sampaikan. Atas perhatian dan kerjasamanya, 
+              kami ucapkan terima kasih.
+            </p>
+        `;
+      }
+      
+      previewHtml += `
+          </div>
+          
+          <!-- Tanda Tangan -->
+          <div style="margin-top: 3rem;">
+            <table style="width: 100%; border: none;">
+              <tr>
+                <td style="width: 50%; border: none;"></td>
+                <td style="text-align: center; border: none;">
+                  <p style="margin: 0;">Bandung, ${data.tanggal}</p>
+                  <p style="margin: 0.5rem 0;">Dokter Pemeriksa,</p>
+                  <div style="height: 60px;"></div>
+                  <p style="margin: 0; font-weight: bold; text-decoration: underline;">${data.dokter}</p>
+                  <p style="margin: 0.25rem 0 0 0;">${data.sip}</p>
+                </td>
+              </tr>
+            </table>
+          </div>
+          
+          <!-- Footer -->
+          <div style="margin-top: 3rem; padding-top: 1rem; border-top: 1px solid #ddd; font-size: 0.75rem; color: #666; text-align: center;">
+            <p style="margin: 0;">Dokumen ini dicetak secara digital oleh Sistem Informasi Puskesmas Smart Health Center</p>
+            <p style="margin: 0.25rem 0 0 0;">Verifikasi dokumen: smarthealthcenter.id/verify/${noSurat}</p>
+          </div>
+        </div>
+      `;
+      
+      currentPdfDoc = generatePDF(data);
+      currentPdfName = noSurat.replace(/\//g, '-') + '.pdf';
+      
+      document.getElementById('pdfTitleText').textContent = data.jenis;
+      document.getElementById('pageCounter').textContent = noSurat + ' | Halaman 1/2';
+      document.getElementById('pdfPreview').innerHTML = previewHtml;
+      document.getElementById('pdfModal').style.display = 'block';
+    }
+
+    function unduhSurat(noSurat) {
+      const data = suratData[noSurat];
+      if (!data) {
+        alert('Data surat tidak ditemukan!');
+        return;
+      }
+
+      const doc = generatePDF(data);
+      const fileName = noSurat.replace(/\//g, '-') + '.pdf';
+      doc.save(fileName);
+      alert('✅ Surat berhasil diunduh!');
+    }
+
+    function downloadCurrentPdf() {
+      if (currentPdfDoc) {
+        currentPdfDoc.save(currentPdfName);
+        alert('✅ PDF berhasil diunduh: ' + currentPdfName);
+      } else {
+        alert('❌ Tidak ada dokumen untuk diunduh');
+      }
+    }
+
+    function printCurrentPdf() {
+      if (currentPdfDoc) {
+        window.print();
+      } else {
+        alert('❌ Tidak ada dokumen untuk dicetak');
+      }
+    }
+
+    function closePdfModal() {
+      document.getElementById('pdfModal').style.display = 'none';
+      currentPdfDoc = null;
+      currentPdfName = '';
+    }
+
+    window.onclick = function(event) {
+      const modal = document.getElementById('pdfModal');
+      if (event.target === modal) {
+        closePdfModal();
+      }
+    }
+
+    // ESC key to close modal
+    document.addEventListener('keydown', function(event) {
+      if (event.key === 'Escape' && document.getElementById('pdfModal').style.display === 'block') {
+        closePdfModal();
+      }
+    });
+
+    function filterSurat() {
+      const jenis = document.getElementById('filterJenis').value;
+      const status = document.getElementById('filterStatus').value;
+      const bulan = document.getElementById('filterBulan').value;
+      const search = document.getElementById('searchSurat').value.toLowerCase();
+      
+      const rows = document.querySelectorAll('#tableSurat tbody tr');
+      
+      rows.forEach(row => {
+        const rowJenis = row.getAttribute('data-jenis');
+        const rowStatus = row.getAttribute('data-status');
+        const rowBulan = row.getAttribute('data-bulan');
+        const rowText = row.textContent.toLowerCase();
+        
+        let show = true;
+        
+        if (jenis && rowJenis !== jenis) show = false;
+        if (status && rowStatus !== status) show = false;
+        if (bulan && rowBulan !== bulan) show = false;
+        if (search && !rowText.includes(search)) show = false;
+        
+        row.style.display = show ? '' : 'none';
+      });
+    }
+
+    function lihatDetail(reqNo) {
+      alert('Detail Permohonan: ' + reqNo + '\n\nTanggal: 27 Nov 2025\nStatus: Menunggu Validasi\nEstimasi Selesai: 28 Nov 2025\n\nPermohonan Anda sedang dalam antrian untuk divalidasi oleh tenaga medis.');
+    }
+
+    function batalPermohonan(reqNo) {
+      if (confirm('❌ Batalkan permohonan ' + reqNo + '?\n\nAnda dapat mengajukan permohonan baru jika diperlukan.')) {
+        alert('✅ Permohonan berhasil dibatalkan.');
+        location.reload();
+      }
+    }
+  </script>
+  <script src="../js/chatbot-knowledge-base.js"></script>
+  <script src="../js/chatbot-widget.js"></script>
+</body>
+</html>

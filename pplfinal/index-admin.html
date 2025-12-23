@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal Administrator - Smart Health Center Service</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header>
+    <div class="header-container">
+      <div class="logo" style="flex-direction: column; align-items: flex-start; gap: 0.25rem;">
+        <img src="img/Smarthealth-Logo.png" alt="Smart Health Logo" style="height: 45px;">
+        <p style="font-size: 0.75rem; margin: 0; color: #5f7a95;">Layanan Digital Puskesmas - Portal Admin</p>
+      </div>
+      <div class="btn-group">
+        <a href="index.html" class="btn btn-secondary">Portal Pasien</a>
+        <a href="index-staff.html" class="btn btn-secondary">Portal Staff</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero Section -->
+    <section class="hero" style="position: relative; background: linear-gradient(135deg, rgba(26, 139, 211, 0.85) 0%, rgba(44, 73, 100, 0.85) 100%), url('https://images.unsplash.com/photo-1551836022-deb4988cc6c0?w=1200&q=80') center/cover; background-attachment: fixed; min-height: 500px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+      <h1 style="font-size: 2.5rem; margin-bottom: 1rem;">Portal Administrator</h1>
+      <p style="font-size: 1.2rem;">Sistem manajemen dan pengaturan Smart Health Center</p>
+      <div class="btn-group" style="justify-content: center;">
+        <button onclick="loginAdmin()" class="btn btn-success" style="font-size: 1.1rem; padding: 1rem 2.5rem;">
+          ⚙️ Login Administrator
+        </button>
+      </div>
+    </section>
+
+    <script>
+      function loginAdmin() {
+        sessionStorage.setItem('selectedPortal', 'admin');
+        window.location.href = 'login.html';
+      }
+    </script>
+
+    <!-- Features untuk Admin -->
+    <section>
+      <h2 class="text-center mb-2">Fitur Manajemen Sistem</h2>
+      <div class="features-grid">
+        <div class="feature-card card">
+          <div class="feature-icon">👥</div>
+          <h3>Kelola Pengguna</h3>
+          <p>Manajemen akun pasien, dokter, tenaga medis, dan admin</p>
+        </div>
+        <div class="feature-card card">
+          <div class="feature-icon">📅</div>
+          <h3>Kelola Jadwal</h3>
+          <p>Atur jadwal praktik dokter dan operasional puskesmas</p>
+        </div>
+        <div class="feature-card card">
+          <div class="feature-icon">📢</div>
+          <h3>Kelola Pengumuman</h3>
+          <p>Publikasi informasi dan pengumuman untuk pasien</p>
+        </div>
+        <div class="feature-card card">
+          <div class="feature-icon">📊</div>
+          <h3>Laporan & Statistik</h3>
+          <p>Analisis data dan laporan aktivitas sistem</p>
+        </div>
+        <div class="feature-card card">
+          <div class="feature-icon">⚙️</div>
+          <h3>Pengaturan Sistem</h3>
+          <p>Konfigurasi dan pengaturan sistem secara menyeluruh</p>
+        </div>
+        <div class="feature-card card">
+          <div class="feature-icon">🔒</div>
+          <h3>Keamanan & Backup</h3>
+          <p>Monitoring keamanan dan backup data sistem</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Dashboard Preview -->
+    <section class="mt-2">
+      <div class="page-header">
+        <h2>📈 Ringkasan Sistem</h2>
+        <p>Overview aktivitas Smart Health Center</p>
+      </div>
+      
+      <div class="stats-grid">
+        <div class="stat-card">
+          <h3>1,234</h3>
+          <p>Total Pasien Terdaftar</p>
+        </div>
+        <div class="stat-card warning">
+          <h3>45</h3>
+          <p>Antrean Hari Ini</p>
+        </div>
+        <div class="stat-card success">
+          <h3>12</h3>
+          <p>Dokter Aktif</p>
+        </div>
+        <div class="stat-card info">
+          <h3>98%</h3>
+          <p>Uptime Sistem</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Admin Info -->
+    <section class="mt-2">
+      <div class="card">
+        <h3>🔐 Akses Administrator</h3>
+        <div class="alert alert-info">
+          <strong>Informasi Penting:</strong>
+          <ul style="margin-top: 1rem; line-height: 2;">
+            <li>Gunakan kredensial administrator yang diberikan oleh IT Manager</li>
+            <li>Jangan berbagi password administrator dengan siapapun</li>
+            <li>Semua aktivitas administrator tercatat dalam log sistem</li>
+            <li>Hubungi IT Security untuk reset password</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Info -->
+    <section class="mt-2">
+      <div class="card-grid">
+        <div class="card">
+          <h3>📞 IT Manager</h3>
+          <p>Email: itmanager@smarthealthcenter.id<br>
+          Telepon: (021) 1234-5678<br>
+          WhatsApp: 0812-3456-7892</p>
+        </div>
+        <div class="card">
+          <h3>🔒 IT Security</h3>
+          <p>Email: security@smarthealthcenter.id<br>
+          Emergency: 0811-1111-1111<br>
+          24/7 Support</p>
+        </div>
+        <div class="card">
+          <h3>📖 Dokumentasi</h3>
+          <p><a href="panduan.html" style="color: #1a8bd3; text-decoration: none;">Panduan Administrator</a><br>
+          <a href="pemisahan-role.html" style="color: #1a8bd3; text-decoration: none;">Hak Akses Sistem</a><br>
+          <a href="#" style="color: #1a8bd3; text-decoration: none;">API Documentation</a></p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Smart Health Center Service. All Rights Reserved.</p>
+    <p style="font-size: 0.9rem; margin-top: 0.5rem; opacity: 0.8;">
+      Sistem Informasi Layanan Kesehatan Digital - Portal Administrator
+    </p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,757 @@
+﻿<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Status Antrean Real-time - Smart Health Center Service</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/header-styles.css">
+  <script src="../js/header-common.js"></script>
+  <style>
+    body {
+      display: flex;
+      min-height: 100vh;
+      flex-direction: column;
+      margin: 0;
+    }
+
+    /* Sidebar Styles */
+    .sidebar {
+      width: 260px;
+      background: #ffffff;
+      color: #2c3e50;
+      position: fixed;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      overflow-y: auto;
+      overflow-x: hidden;
+      z-index: 1000;
+      transition: all 0.3s ease;
+      box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    }
+
+    .sidebar-header {
+      padding: 0.875rem;
+      background: #ffffff;
+      border-bottom: 1px solid #e0e0e0;
+      text-align: center;
+    }
+
+    .sidebar-menu {
+      padding: 1rem 0;
+    }
+
+    .menu-item {
+      margin: 0.25rem 0;
+    }
+
+    .menu-link {
+      display: flex;
+      align-items: center;
+      padding: 0.75rem 0.875rem;
+      color: #2c3e50;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      user-select: none;
+      font-size: 0.95rem;
+    }
+
+    .menu-link:hover {
+      background: rgba(0,0,0,0.08);
+      padding-left: 1rem;
+    }
+
+    .menu-link.active {
+      background: #3498db;
+      color: #fff;
+      border-left: 4px solid #2980b9;
+      padding-left: 0.625rem;
+    }
+
+    .menu-link i {
+      margin-right: 0.625rem;
+      font-size: 1rem;
+      width: 18px;
+      text-align: center;
+      font-style: normal;
+    }
+
+    .main-content {
+      margin-left: 260px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: #f5f7fa;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      background: #fff;
+    }
+
+    main {
+      padding: 2rem;
+      flex: 1;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+      }
+      .sidebar.mobile-open {
+        transform: translateX(0);
+      }
+      .main-content {
+        margin-left: 0;
+      }
+    }
+
+    .pulse {
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    /* Tab Styles */
+    .tabs {
+      display: flex;
+      gap: 0.5rem;
+      border-bottom: 2px solid #e0e0e0;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .tab-btn {
+      padding: 0.75rem 1.5rem;
+      background: none;
+      border: none;
+      border-bottom: 3px solid transparent;
+      color: #666;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.3s;
+      white-space: nowrap;
+    }
+    .tab-btn:hover {
+      color: #2c3e50;
+      background: rgba(52, 152, 219, 0.05);
+    }
+    .tab-btn.active {
+      color: #3498db;
+      border-bottom-color: #3498db;
+      font-weight: 600;
+    }
+    .tab-content {
+      display: none;
+    }
+    .tab-content.active {
+      display: block;
+      animation: fadeIn 0.3s ease-in;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem; text-align: center;">
+        <img src="../img/Smarthealth-Logo.png" alt="Smart Health Logo" style="height: 50px;">
+      </div>
+    </div>
+
+    <div class="sidebar-menu">
+      <!-- Beranda -->
+      <div class="menu-item">
+        <a href="dashboard.html" class="menu-link">
+          <i>🏠</i>
+          <span>Beranda</span>
+        </a>
+      </div>
+
+      <!-- Jadwal Dokter -->
+      <div class="menu-item">
+        <a href="jadwal-dokter.html" class="menu-link">
+          <i>📅</i>
+          <span>Jadwal Dokter</span>
+        </a>
+      </div>
+
+      <!-- Antrean -->
+      <div class="menu-item">
+        <a href="antrean.html" class="menu-link">
+          <i>🎫</i>
+          <span>Antrean</span>
+        </a>
+      </div>
+
+      <!-- Status Antrean -->
+      <div class="menu-item">
+        <a href="status-antrean.html" class="menu-link active">
+          <i>📋</i>
+          <span>Status Antrean</span>
+        </a>
+      </div>
+
+      <!-- Permohonan Surat -->
+      <div class="menu-item">
+        <a href="permohonan-surat.html" class="menu-link">
+          <i>📄</i>
+          <span>Permohonan Surat</span>
+        </a>
+      </div>
+
+      <!-- Riwayat Surat -->
+      <div class="menu-item">
+        <a href="riwayat-surat.html" class="menu-link">
+          <i>📜</i>
+          <span>Riwayat Surat</span>
+        </a>
+      </div>
+
+      <!-- Chatbot -->
+      <div class="menu-item">
+        <a href="chatbot.html" class="menu-link">
+          <i>💬</i>
+          <span>Chatbot</span>
+        </a>
+      </div>
+
+      <hr style="border: none; border-top: 1px solid rgba(0,0,0,0.1); margin: 1rem 0;">
+
+      <!-- Logout -->
+      <div class="menu-item">
+        <a href="../login-pasien.html" class="menu-link" style="color: #e74c3c;">
+          <i>🚪</i>
+          <span>Logout</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+  <header>
+    <div class="header-container">
+      <div class="logo" style="flex-direction: column; align-items: flex-start; gap: 0.25rem;">
+        <h2 style="margin: 0; font-size: 1.5rem; color: #2c3e50;">Status Antrean</h2>
+        <p style="font-size: 0.85rem; margin: 0; color: #7f8c8d;">Portal Pasien SmartHealth</p>
+      </div>
+
+      <nav style="flex: 1; margin-left: 2rem;">
+      </nav>
+      
+      <div class="header-right">
+        <!-- Notification Bell -->
+        <div class="notification-bell" onclick="toggleNotification()">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/>
+          </svg>
+          <span class="notification-badge">4</span>
+          
+          <div class="notification-dropdown" id="notificationDropdown">
+            <div class="notification-header">
+              <h4>Notifikasi</h4>
+              <a href="#" class="mark-read">Tandai Sudah Dibaca</a>
+            </div>
+            <div class="notification-list-header">
+              <div class="notification-item-header unread">
+                <div class="notification-icon-header success">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                  </svg>
+                </div>
+                <div class="notification-content-header">
+                  <strong>Surat Sehat Anda telah diterbitkan</strong>
+                  <p>Silakan unduh di menu Riwayat Surat</p>
+                  <div class="notification-time-header">10 menit lalu</div>
+                </div>
+              </div>
+              
+              <div class="notification-item-header unread">
+                <div class="notification-icon-header info">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+                  </svg>
+                </div>
+                <div class="notification-content-header">
+                  <strong>Nomor antrean Anda: A-012</strong>
+                  <p>Silakan menunggu, saat ini posisi ke-3</p>
+                  <div class="notification-time-header">25 menit lalu</div>
+                </div>
+              </div>
+              
+              <div class="notification-item-header">
+                <div class="notification-icon-header warning">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/>
+                  </svg>
+                </div>
+                <div class="notification-content-header">
+                  <strong>Jadwal kontrol: 5 Desember 2025</strong>
+                  <p>Jangan lupa jadwal kontrol dengan dr. Siti Aminah</p>
+                  <div class="notification-time-header">2 hari lalu</div>
+                </div>
+              </div>
+              
+              <div class="notification-item-header">
+                <div class="notification-icon-header info">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+                  </svg>
+                </div>
+                <div class="notification-content-header">
+                  <strong>Permohonan surat sakit diproses</strong>
+                  <p>Tenaga medis sedang memvalidasi permohonan Anda</p>
+                  <div class="notification-time-header">3 hari lalu</div>
+                </div>
+              </div>
+            </div>
+            <div class="notification-footer">
+              <a href="#">Lihat Semua</a>
+            </div>
+          </div>
+        </div>
+        
+        <!-- User Profile Dropdown -->
+        <div class="user-profile" id="userProfile">
+          <button class="user-profile-toggle" onclick="toggleUserDropdown()">
+            <div class="user-avatar">DP</div>
+            <div class="user-info">
+              <span class="user-name" id="headerUserName">Demo Pasien</span>
+              <span class="user-role">Pasien</span>
+            </div>
+            <svg class="dropdown-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path d="M7 10l5 5 5-5z"/>
+            </svg>
+          </button>
+          
+          <div class="user-dropdown" id="userDropdown">
+            <a href="profil.html" class="user-dropdown-item">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+              </svg>
+              Profil Saya
+            </a>
+            <div style="border-top: 1px solid #f0f0f0; margin: 0.5rem 0;"></div>
+            <a href="../logout.html" class="user-dropdown-item logout">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/>
+              </svg>
+              Logout
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+
+
+  <main>
+    <div class="page-header">
+      <h2>Status Antrean Real-time</h2>
+      <p>Pantau posisi antrean Anda secara langsung</p>
+    </div>
+
+    <!-- Antrean Aktif Anda -->
+    <div class="queue-display">
+      <p style="font-size: 1rem; opacity: 0.9; margin-bottom: 0.5rem;">Nomor Antrean Anda</p>
+      <div class="queue-number pulse" style="font-size: 3.5rem; font-weight: 700;">A-012</div>
+      <div class="queue-status" style="font-size: 1.1rem;">Menunggu</div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; margin-top: 2.5rem;">
+        <div>
+          <p style="font-size: 0.9rem; opacity: 0.9; margin-bottom: 0.5rem;">Posisi Antrean</p>
+          <p style="font-size: 1.8rem; font-weight: bold;">3 / 15</p>
+          <p style="font-size: 0.85rem;">2 orang di depan Anda</p>
+        </div>
+        <div>
+          <p style="font-size: 0.9rem; opacity: 0.9; margin-bottom: 0.5rem;">Estimasi Waktu Tunggu</p>
+          <p style="font-size: 1.8rem; font-weight: bold;">~15 menit</p>
+          <p style="font-size: 0.85rem;">Perkiraan dipanggil: 10:15 WIB</p>
+        </div>
+        <div>
+          <p style="font-size: 0.9rem; opacity: 0.9; margin-bottom: 0.5rem;">Poli Tujuan</p>
+          <p style="font-size: 1.8rem; font-weight: bold;">Poli Umum</p>
+          <p style="font-size: 0.85rem;">dr. Ahmad Fauzi</p>
+        </div>
+      </div>
+      <div style="margin-top: 2rem;">
+        <button class="btn btn-danger" onclick="batalkanAntrean()">Batalkan Antrean</button>
+      </div>
+    </div>
+
+    <!-- Tab Navigation -->
+    <div class="card">
+      <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('detail')">
+          📋 Detail Antrean Anda
+        </button>
+        <button class="tab-btn" onclick="switchTab('poli-umum')">
+          📊 Antrean Saat Ini - Poli Umum
+        </button>
+        <button class="tab-btn" onclick="switchTab('semua-poli')">
+          🏥 Status Antrean Semua Poli
+        </button>
+        <button class="tab-btn" onclick="switchTab('riwayat')">
+          📜 Riwayat Antrean Anda
+        </button>
+      </div>
+
+      <!-- Tab Content: Detail Antrean Anda -->
+      <div id="tab-detail" class="tab-content active">
+        <table>
+          <tr>
+            <td style="width: 30%; font-weight: 600;">Nomor Antrean</td>
+            <td>A-012</td>
+          </tr>
+          <tr>
+            <td style="font-weight: 600;">Tanggal Kunjungan</td>
+            <td>27 November 2025</td>
+          </tr>
+          <tr>
+            <td style="font-weight: 600;">Waktu Daftar</td>
+            <td>09:30 WIB</td>
+          </tr>
+          <tr>
+            <td style="font-weight: 600;">Poli/Layanan</td>
+            <td>Poli Umum</td>
+          </tr>
+          <tr>
+            <td style="font-weight: 600;">Dokter</td>
+            <td>dr. Ahmad Fauzi</td>
+          </tr>
+          <tr>
+            <td style="font-weight: 600;">Waktu Preferensi</td>
+            <td>Pagi (08:00 - 10:00)</td>
+          </tr>
+          <tr>
+            <td style="font-weight: 600;">Jenis Pasien</td>
+            <td>Pasien BPJS</td>
+          </tr>
+          <tr>
+            <td style="font-weight: 600;">Keluhan</td>
+            <td>Demam 3 hari, batuk dan pilek</td>
+          </tr>
+          <tr>
+            <td style="font-weight: 600;">Status</td>
+            <td><span class="badge badge-warning">Menunggu</span></td>
+          </tr>
+        </table>
+
+        <!-- Timeline Proses -->
+        <div style="margin-top: 2rem;">
+          <h3 style="font-size: 1.1rem; margin-bottom: 1.5rem;">Timeline Proses Antrean</h3>
+          <div style="position: relative; padding-left: 50px;">
+            <div style="position: absolute; left: 20px; top: 0; bottom: 0; width: 3px; background: linear-gradient(180deg, #27AE60 0%, #27AE60 20%, #F39C12 20%, #F39C12 40%, #ddd 40%, #ddd 100%);"></div>
+            
+            <!-- Item 1: Pendaftaran Berhasil -->
+            <div style="position: relative; margin-bottom: 2rem;">
+              <div style="position: absolute; left: -38px; top: 8px; width: 20px; height: 20px; background: white; border: 4px solid #27AE60; border-radius: 50%; z-index: 1;"></div>
+              <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; border-left: 3px solid #27AE60;">
+                <h4 style="color: #27AE60; font-size: 1rem; margin-bottom: 0.5rem;">✅ Pendaftaran Berhasil</h4>
+                <p style="margin: 0.5rem 0; color: #666;">Antrean Anda telah terdaftar dalam sistem</p>
+                <p style="margin: 0; font-size: 0.85rem; color: #999;">09:30 WIB</p>
+              </div>
+            </div>
+            
+            <!-- Item 2: Menunggu Dipanggil -->
+            <div style="position: relative; margin-bottom: 2rem;">
+              <div style="position: absolute; left: -38px; top: 8px; width: 20px; height: 20px; background: white; border: 4px solid #F39C12; border-radius: 50%; z-index: 1;"></div>
+              <div style="background: #fff8e1; padding: 1.5rem; border-radius: 8px; border-left: 3px solid #F39C12;">
+                <h4 style="color: #F39C12; font-size: 1rem; margin-bottom: 0.5rem;">⏳ Menunggu Dipanggil</h4>
+                <p style="margin: 0.5rem 0; color: #666;">Anda sedang dalam antrean, posisi ke-3</p>
+                <p style="margin: 0; font-size: 0.85rem; color: #999;">Estimasi: 10:15 WIB</p>
+              </div>
+            </div>
+            
+            <!-- Item 3: Dipanggil -->
+            <div style="position: relative; margin-bottom: 2rem; opacity: 0.5;">
+              <div style="position: absolute; left: -38px; top: 8px; width: 20px; height: 20px; background: white; border: 4px solid #ddd; border-radius: 50%; z-index: 1;"></div>
+              <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; border-left: 3px solid #ddd;">
+                <h4 style="color: #999; font-size: 1rem; margin-bottom: 0.5rem;">🔔 Dipanggil</h4>
+                <p style="margin: 0.5rem 0; color: #999;">Nomor Anda akan dipanggil untuk masuk ke ruang pemeriksaan</p>
+                <p style="margin: 0; font-size: 0.85rem; color: #999;">Menunggu...</p>
+              </div>
+            </div>
+            
+            <!-- Item 4: Sedang Dilayani -->
+            <div style="position: relative; margin-bottom: 2rem; opacity: 0.5;">
+              <div style="position: absolute; left: -38px; top: 8px; width: 20px; height: 20px; background: white; border: 4px solid #ddd; border-radius: 50%; z-index: 1;"></div>
+              <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; border-left: 3px solid #ddd;">
+                <h4 style="color: #999; font-size: 1rem; margin-bottom: 0.5rem;">👨‍⚕️ Sedang Dilayani</h4>
+                <p style="margin: 0.5rem 0; color: #999;">Pemeriksaan oleh dokter sedang berlangsung</p>
+                <p style="margin: 0; font-size: 0.85rem; color: #999;">Menunggu...</p>
+              </div>
+            </div>
+            
+            <!-- Item 5: Selesai -->
+            <div style="position: relative; opacity: 0.5;">
+              <div style="position: absolute; left: -38px; top: 8px; width: 20px; height: 20px; background: white; border: 4px solid #ddd; border-radius: 50%; z-index: 1;"></div>
+              <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; border-left: 3px solid #ddd;">
+                <h4 style="color: #999; font-size: 1rem; margin-bottom: 0.5rem;">✅ Selesai</h4>
+                <p style="margin: 0.5rem 0; color: #999;">Pemeriksaan selesai, silakan ke apotek jika ada resep</p>
+                <p style="margin: 0; font-size: 0.85rem; color: #999;">Menunggu...</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab Content: Antrean Saat Ini - Poli Umum -->
+      <div id="tab-poli-umum" class="tab-content">
+        <p class="text-muted mb-1">Update terakhir: <span id="lastUpdate">10:00:15 WIB</span></p>
+        <table>
+          <thead>
+            <tr>
+              <th>Nomor Antrean</th>
+              <th>Nama Pasien</th>
+              <th>Status</th>
+              <th>Estimasi</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="background: #c8e6c9;">
+              <td><strong>A-009</strong></td>
+              <td>Budi Santoso</td>
+              <td><span class="badge badge-info">Sedang Dilayani</span></td>
+              <td>-</td>
+            </tr>
+            <tr>
+              <td><strong>A-010</strong></td>
+              <td>Siti Aminah</td>
+              <td><span class="badge badge-warning">Menunggu</span></td>
+              <td>~5 menit</td>
+            </tr>
+            <tr>
+              <td><strong>A-011</strong></td>
+              <td>Dewi Lestari</td>
+              <td><span class="badge badge-warning">Menunggu</span></td>
+              <td>~10 menit</td>
+            </tr>
+            <tr style="background: #fff3cd; font-weight: bold;">
+              <td><strong>A-012</strong></td>
+              <td>Ahmad Ridwan (Anda)</td>
+              <td><span class="badge badge-warning">Menunggu</span></td>
+              <td>~15 menit</td>
+            </tr>
+            <tr>
+              <td><strong>A-013</strong></td>
+              <td>Hasan Basri</td>
+              <td><span class="badge badge-warning">Menunggu</span></td>
+              <td>~20 menit</td>
+            </tr>
+            <tr>
+              <td><strong>A-014</strong></td>
+              <td>Ratna Sari</td>
+              <td><span class="badge badge-warning">Menunggu</span></td>
+              <td>~25 menit</td>
+            </tr>
+            <tr>
+              <td><strong>A-015</strong></td>
+              <td>Anton Wijaya</td>
+              <td><span class="badge badge-secondary">Terdaftar</span></td>
+              <td>~30 menit</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Tab Content: Status Antrean Semua Poli -->
+      <div id="tab-semua-poli" class="tab-content">
+        <div class="card-grid">
+          <div class="card" style="border-left: 4px solid #00796b;">
+            <h4 style="color: #00796b;">Poli Umum</h4>
+            <p style="font-size: 2rem; font-weight: bold; margin: 1rem 0;">A-012</p>
+            <p>Sedang Dilayani: A-009</p>
+            <p>Menunggu: 6 orang</p>
+            <p class="badge badge-success">Buka</p>
+          </div>
+          <div class="card" style="border-left: 4px solid #1976d2;">
+            <h4 style="color: #1976d2;">Poli Gigi</h4>
+            <p style="font-size: 2rem; font-weight: bold; margin: 1rem 0;">B-008</p>
+            <p>Sedang Dilayani: B-007</p>
+            <p>Menunggu: 2 orang</p>
+            <p class="badge badge-success">Buka</p>
+          </div>
+          <div class="card" style="border-left: 4px solid #388e3c;">
+            <h4 style="color: #388e3c;">Poli KIA</h4>
+            <p style="font-size: 2rem; font-weight: bold; margin: 1rem 0;">C-005</p>
+            <p>Sedang Dilayani: C-004</p>
+            <p>Menunggu: 1 orang</p>
+            <p class="badge badge-success">Buka</p>
+          </div>
+          <div class="card" style="border-left: 4px solid #f57c00;">
+            <h4 style="color: #f57c00;">Poli Lansia</h4>
+            <p style="font-size: 2rem; font-weight: bold; margin: 1rem 0;">D-015</p>
+            <p>Sedang Dilayani: D-010</p>
+            <p>Menunggu: 5 orang</p>
+            <p class="badge badge-warning">Penuh</p>
+          </div>
+          <div class="card" style="border-left: 4px solid #7b1fa2;">
+            <h4 style="color: #7b1fa2;">Laboratorium</h4>
+            <p style="font-size: 2rem; font-weight: bold; margin: 1rem 0;">L-020</p>
+            <p>Sedang Dilayani: L-016</p>
+            <p>Menunggu: 4 orang</p>
+            <p class="badge badge-success">Buka</p>
+          </div>
+          <div class="card" style="border-left: 4px solid #d32f2f;">
+            <h4 style="color: #d32f2f;">Apotek</h4>
+            <p style="font-size: 2rem; font-weight: bold; margin: 1rem 0;">R-018</p>
+            <p>Sedang Dilayani: R-012</p>
+            <p>Menunggu: 6 orang</p>
+            <p class="badge badge-success">Buka</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab Content: Riwayat Antrean Anda -->
+      <div id="tab-riwayat" class="tab-content">
+        <table>
+          <thead>
+            <tr>
+              <th>Tanggal</th>
+              <th>Nomor</th>
+              <th>Poli</th>
+              <th>Dokter</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>27 Nov 2025</td>
+              <td>A-012</td>
+              <td>Poli Umum</td>
+              <td>dr. Ahmad Fauzi</td>
+              <td><span class="badge badge-warning">Menunggu</span></td>
+            </tr>
+            <tr>
+              <td>25 Nov 2025</td>
+              <td>A-008</td>
+              <td>Poli Umum</td>
+              <td>dr. Ahmad Fauzi</td>
+              <td><span class="badge badge-success">Selesai</span></td>
+            </tr>
+            <tr>
+              <td>20 Nov 2025</td>
+              <td>B-005</td>
+              <td>Poli Gigi</td>
+              <td>drg. Siti Nurhaliza</td>
+              <td><span class="badge badge-success">Selesai</span></td>
+            </tr>
+            <tr>
+              <td>18 Nov 2025</td>
+              <td>A-015</td>
+              <td>Poli Umum</td>
+              <td>dr. Budi Santoso</td>
+              <td><span class="badge badge-danger">Dibatalkan</span></td>
+            </tr>
+            <tr>
+              <td>15 Nov 2025</td>
+              <td>A-010</td>
+              <td>Poli Umum</td>
+              <td>dr. Budi Santoso</td>
+              <td><span class="badge badge-success">Selesai</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Info & Tips -->
+    <div class="card-grid">
+      <div class="card" style="background: #e3f2fd; border-left: 4px solid #1976d2;">
+        <h3 style="color: #1565c0;">💡 Tips Menunggu Antrean</h3>
+        <ul style="line-height: 2; color: #666;">
+          <li>Pantau status secara berkala melalui halaman ini</li>
+          <li>Halaman akan <strong>auto-refresh setiap 30 detik</strong></li>
+          <li>Datang <strong>10-15 menit sebelum</strong> nomor Anda dipanggil</li>
+          <li>Siapkan <strong>KTP dan Kartu BPJS</strong> (jika ada)</li>
+          <li>Jika berhalangan, segera <strong>batalkan antrean</strong></li>
+        </ul>
+      </div>
+
+      <div class="card" style="background: #fff3cd; border-left: 4px solid #f57c00;">
+        <h3 style="color: #e65100;">⚠️ Perhatian!</h3>
+        <ul style="line-height: 2; color: #666;">
+          <li>Estimasi waktu dapat berubah sesuai kondisi</li>
+          <li>Datang <strong>tepat waktu</strong> untuk menghindari antrean terlewat</li>
+          <li>Antrean otomatis <strong>dibatalkan</strong> jika tidak hadir >30 menit</li>
+          <li>Untuk gawat darurat, langsung ke <strong>IGD</strong></li>
+          <li>Hubungi petugas jika ada kendala: <strong>(021) 1234-5678</strong></li>
+        </ul>
+      </div>
+    </div>
+  </main>  </div>
+
+
+
+  <footer>
+    <p>&copy; 2025 Smart Health Center Service. All Rights Reserved.</p>
+  </footer>
+
+  <script>
+    // Tab switching function
+    function switchTab(tabName) {
+      // Remove active class from all buttons and contents
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      document.querySelectorAll('.tab-content').forEach(content => {
+        content.classList.remove('active');
+      });
+      
+      // Add active class to clicked button and corresponding content
+      event.target.classList.add('active');
+      document.getElementById('tab-' + tabName).classList.add('active');
+    }
+
+    // Auto refresh setiap 30 detik
+    let countdown = 30;
+    const updateInterval = setInterval(function() {
+      countdown--;
+      if (countdown <= 0) {
+        updateStatus();
+        countdown = 30;
+      }
+    }, 1000);
+
+    function updateStatus() {
+      // In production, fetch from API
+      const now = new Date();
+      const timeString = now.toLocaleTimeString('id-ID');
+      document.getElementById('lastUpdate').textContent = timeString;
+      console.log('Status updated at ' + timeString);
+      
+      // Simulate status change (in production, use real-time data)
+      // Example: update queue position, status, etc.
+    }
+
+    function batalkanAntrean() {
+      if (confirm('⚠️ Apakah Anda yakin ingin membatalkan antrean ini?\n\nNomor: A-012\nPoli: Poli Umum\n\nAnda dapat mendaftar ulang jika diperlukan.')) {
+        // In production, send cancellation request to backend
+        alert('✅ Antrean berhasil dibatalkan.\n\nAnda dapat mendaftar antrean baru kapan saja.');
+        window.location.href = 'dashboard.html';
+      }
+    }
+
+    // Notification API (if supported)
+    if ('Notification' in window && Notification.permission === 'granted') {
+      // In production, show notification when queue status changes
+      // Example: when "Dipanggil" status is reached
+    }
+  </script>
+  <script src="../js/chatbot-knowledge-base.js"></script>
+  <script src="../js/chatbot-widget.js"></script>
+</body>
+</html>

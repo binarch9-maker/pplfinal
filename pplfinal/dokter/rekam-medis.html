@@ -1,0 +1,1211 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rekam Medis - Smart Health Center Service</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    body {
+      display: flex;
+      min-height: 100vh;
+      flex-direction: column;
+      margin: 0;
+    }
+
+    /* Sidebar Styles */
+    .sidebar {
+      width: 260px;
+      background: #ffffff;
+      color: #2c3e50;
+      position: fixed;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      overflow-y: auto;
+      overflow-x: hidden;
+      z-index: 1000;
+      transition: all 0.3s ease;
+      box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    }
+
+    .sidebar-header {
+      padding: 1.5rem 0.875rem;
+      background: #ffffff;
+      border-bottom: 1px solid #e0e0e0;
+      text-align: center;
+    }
+
+    .sidebar-menu {
+      padding: 1rem 0;
+    }
+
+    .menu-item {
+      margin: 0.25rem 0;
+    }
+
+    .menu-link {
+      display: flex;
+      align-items: center;
+      padding: 0.75rem 0.875rem;
+      color: #2c3e50;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      user-select: none;
+      font-size: 0.95rem;
+    }
+
+    .menu-link:hover {
+      background: rgba(0,0,0,0.08);
+      padding-left: 1rem;
+    }
+
+    .menu-link.active {
+      background: #3498db;
+      color: #fff;
+      border-left: 4px solid #2980b9;
+      padding-left: 0.625rem;
+    }
+
+    .menu-link i {
+      margin-right: 0.625rem;
+      font-size: 1rem;
+      width: 18px;
+      text-align: center;
+      font-style: normal;
+    }
+
+    .main-content {
+      margin-left: 260px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: #f5f7fa;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      background: #fff;
+    }
+
+    main {
+      padding: 2rem;
+      flex: 1;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+      }
+      .sidebar.mobile-open {
+        transform: translateX(0);
+      }
+      .main-content {
+        margin-left: 0;
+      }
+    }
+
+    .notification-bell {
+      position: relative;
+      cursor: pointer;
+      padding: 0.5rem;
+      border-radius: 8px;
+      transition: background 0.3s;
+    }
+    .notification-bell:hover {
+      background: rgba(26, 139, 211, 0.1);
+    }
+    .notification-bell svg {
+      width: 24px;
+      height: 24px;
+      fill: #2c4964;
+    }
+    .notification-badge {
+      position: absolute;
+      top: 0;
+      right: 0;
+      background: #d32f2f;
+      color: white;
+      font-size: 0.65rem;
+      font-weight: bold;
+      padding: 0.15rem 0.4rem;
+      border-radius: 10px;
+      min-width: 18px;
+      text-align: center;
+    }
+    .notification-dropdown {
+      position: absolute;
+      top: calc(100% + 0.5rem);
+      right: 0;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+      width: 380px;
+      max-height: 500px;
+      overflow-y: auto;
+      display: none;
+      z-index: 1000;
+    }
+    .notification-dropdown.show {
+      display: block;
+    }
+    .notification-header {
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid #e0e0e0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .notification-header h4 {
+      margin: 0;
+      font-size: 1rem;
+      color: #2c4964;
+    }
+    .mark-read {
+      color: #1a8bd3;
+      font-size: 0.85rem;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .mark-read:hover {
+      text-decoration: underline;
+    }
+    .notification-item {
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid #f0f0f0;
+      transition: background 0.2s;
+      cursor: pointer;
+    }
+    .notification-item:hover {
+      background: #f8f9fa;
+    }
+    .notification-item.unread {
+      background: #e3f2fd;
+    }
+    .notification-time {
+      font-size: 0.8rem;
+      color: #999;
+      margin-bottom: 0.3rem;
+    }
+    .notification-message {
+      font-size: 0.9rem;
+      color: #2c4964;
+      line-height: 1.4;
+    }
+
+    .record-tabs {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+      border-bottom: 2px solid #e0e0e0;
+      flex-wrap: wrap;
+    }
+    .tab-btn {
+      padding: 0.75rem 1.5rem;
+      background: none;
+      border: none;
+      border-bottom: 3px solid transparent;
+      cursor: pointer;
+      font-size: 1rem;
+      color: #666;
+      transition: all 0.3s ease;
+    }
+    .tab-btn.active {
+      color: #00796b;
+      border-bottom-color: #00796b;
+      font-weight: bold;
+    }
+    .tab-btn:hover {
+      color: #00796b;
+      background: #f5f5f5;
+    }
+    .tab-content {
+      display: none;
+    }
+    .tab-content.active {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    .visit-card {
+      background: #fff;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      transition: all 0.3s ease;
+    }
+    .visit-card:hover {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .visit-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .diagnosis-tag {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      background: #e3f2fd;
+      border-left: 4px solid #1976d2;
+      border-radius: 4px;
+      margin: 0.5rem 0;
+    }
+    .prescription-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem;
+      background: #f5f5f5;
+      border-radius: 4px;
+      margin-bottom: 0.5rem;
+    }
+    .timeline-item {
+      position: relative;
+      padding-left: 2rem;
+      padding-bottom: 1.5rem;
+      border-left: 2px solid #e0e0e0;
+    }
+    .timeline-item:last-child {
+      border-left-color: transparent;
+    }
+    .timeline-dot {
+      position: absolute;
+      left: -6px;
+      top: 0;
+      width: 12px;
+      height: 12px;
+      background: #00796b;
+      border-radius: 50%;
+    }
+    .vital-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1rem;
+    }
+    .vital-box {
+      padding: 1rem;
+      background: #f5f5f5;
+      border-radius: 8px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
+        <img src="../img/Smarthealth-Logo.png" alt="Smart Health Logo" style="height: 50px;">
+      </div>
+    </div>
+
+    <div class="sidebar-menu">
+      <!-- Beranda -->
+      <div class="menu-item">
+        <a href="dashboard-dokter.html" class="menu-link">
+          <i>🏠</i>
+          <span>Beranda</span>
+        </a>
+      </div>
+
+      <!-- Daftar Pasien -->
+      <div class="menu-item">
+        <a href="daftar-pasien.html" class="menu-link">
+          <i>👥</i>
+          <span>Daftar Pasien</span>
+        </a>
+      </div>
+
+      <!-- Rekam Medis -->
+      <div class="menu-item">
+        <a href="rekam-medis.html" class="menu-link active">
+          <i>📋</i>
+          <span>Rekam Medis</span>
+        </a>
+      </div>
+
+      <!-- Jadwal Praktik -->
+      <div class="menu-item">
+        <a href="jadwal-praktik.html" class="menu-link">
+          <i>📅</i>
+          <span>Jadwal Praktik</span>
+        </a>
+      </div>
+
+      <hr style="border: none; border-top: 1px solid rgba(0,0,0,0.1); margin: 1rem 0;">
+
+      <!-- Logout -->
+      <div class="menu-item">
+        <a href="../login-dokter.html" class="menu-link" style="color: #e74c3c;">
+          <i>🚪</i>
+          <span>Logout</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <header>
+      <div class="header-container">
+        <div class="logo" style="flex-direction: column; align-items: flex-start; gap: 0.25rem;">
+          <h2 style="margin: 0; font-size: 1.5rem; color: #2c3e50;">Rekam Medis</h2>
+          <p style="font-size: 0.85rem; margin: 0; color: #7f8c8d;">Kelola rekam medis pasien</p>
+        </div>
+        <nav style="margin-left: auto;">
+          <div class="nav-container">
+            <div class="nav-actions" style="display: flex; align-items: center; gap: 1.5rem;">
+              <div class="notification-bell" onclick="toggleNotification()">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                  <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2zm-2 1H8v-6c0-2.48 1.51-4.5 4-4.5s4 2.02 4 4.5v6z"/>
+                </svg>
+                <span class="notification-badge">1</span>
+                <div class="notification-dropdown" id="notificationDropdown">
+                  <div class="notification-header">
+                    <h4>🔔 Notifikasi</h4>
+                    <a href="#" class="mark-read" onclick="markAllRead(event)">Tandai semua dibaca</a>
+                  </div>
+                  <div class="notification-item unread" onclick="handleNotificationClick(this, 'record-updated')">
+                    <div class="notification-time">11:05 WIB</div>
+                    <div class="notification-message">📝 Rekam medis RM-2025-0234 telah diperbarui</div>
+                  </div>
+                </div>
+              </div>
+              <div class="nav-dropdown">
+                <button class="dropdown-toggle">👨‍⚕️ dr. Ahmad Wijaya ▼</button>
+                <div class="dropdown-menu">
+                  <a href="../login-dokter.html" style="color: #d32f2f; font-weight: 700;">🚪 Logout</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+    <div class="page-header">
+      <h2>📋 Rekam Medis Pasien</h2>
+      <p>Data lengkap riwayat kesehatan pasien</p>
+    </div>
+
+    <!-- Search Patient -->
+    <div class="card">
+      <h3>🔍 Cari Pasien</h3>
+      <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+        <div class="form-group" style="flex: 1; min-width: 300px; margin: 0;">
+          <input type="text" id="searchRM" placeholder="Cari berdasarkan No. RM atau Nama Pasien..." onkeyup="searchPatient()">
+        </div>
+        <button class="btn btn-primary" onclick="searchPatient()">🔍 Cari</button>
+        <button class="btn btn-secondary" onclick="showAllPatients()">📋 Lihat Semua</button>
+      </div>
+    </div>
+
+    <!-- Patient Info -->
+    <div class="card" id="patientInfo">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem;">
+        <div style="flex: 1; min-width: 300px;">
+          <h3 style="margin: 0 0 1rem 0;">👤 Informasi Pasien</h3>
+          <table style="width: 100%; border: none;">
+            <tr style="border: none;">
+              <td style="border: none; padding: 0.5rem 0; width: 150px;"><strong>No. Rekam Medis</strong></td>
+              <td style="border: none; padding: 0.5rem 0;">: 2025-001234</td>
+            </tr>
+            <tr style="border: none;">
+              <td style="border: none; padding: 0.5rem 0;"><strong>Nama Lengkap</strong></td>
+              <td style="border: none; padding: 0.5rem 0;">: Siti Rahmawati</td>
+            </tr>
+            <tr style="border: none;">
+              <td style="border: none; padding: 0.5rem 0;"><strong>NIK</strong></td>
+              <td style="border: none; padding: 0.5rem 0;">: 3174012504900001</td>
+            </tr>
+            <tr style="border: none;">
+              <td style="border: none; padding: 0.5rem 0;"><strong>Tanggal Lahir</strong></td>
+              <td style="border: none; padding: 0.5rem 0;">: 25 April 1990 (35 tahun)</td>
+            </tr>
+            <tr style="border: none;">
+              <td style="border: none; padding: 0.5rem 0;"><strong>Jenis Kelamin</strong></td>
+              <td style="border: none; padding: 0.5rem 0;">: Perempuan</td>
+            </tr>
+            <tr style="border: none;">
+              <td style="border: none; padding: 0.5rem 0;"><strong>Golongan Darah</strong></td>
+              <td style="border: none; padding: 0.5rem 0;">: O+</td>
+            </tr>
+            <tr style="border: none;">
+              <td style="border: none; padding: 0.5rem 0;"><strong>No. Telepon</strong></td>
+              <td style="border: none; padding: 0.5rem 0;">: 0812-3456-7890</td>
+            </tr>
+            <tr style="border: none;">
+              <td style="border: none; padding: 0.5rem 0;"><strong>Alamat</strong></td>
+              <td style="border: none; padding: 0.5rem 0;">: Jl. Merdeka No. 45, Jakarta Pusat</td>
+            </tr>
+          </table>
+        </div>
+        <div style="flex: 1; min-width: 300px;">
+          <h3 style="margin: 0 0 1rem 0;">⚠️ Informasi Penting</h3>
+          <div style="padding: 1rem; background: #ffebee; border-left: 4px solid #d32f2f; border-radius: 4px; margin-bottom: 1rem;">
+            <strong>🚫 Alergi Obat:</strong>
+            <p style="margin: 0.5rem 0 0 0;">Penisilin, Sulfa</p>
+          </div>
+          <div style="padding: 1rem; background: #fff3cd; border-left: 4px solid #f57c00; border-radius: 4px; margin-bottom: 1rem;">
+            <strong>🩺 Riwayat Penyakit:</strong>
+            <p style="margin: 0.5rem 0 0 0;">Diabetes Mellitus Tipe 2 (sejak 2020)</p>
+          </div>
+          <div style="padding: 1rem; background: #e3f2fd; border-left: 4px solid #1976d2; border-radius: 4px;">
+            <strong>📊 Status Jaminan:</strong>
+            <p style="margin: 0.5rem 0 0 0;"><span class="badge badge-info">BPJS Kesehatan</span> No. 0001234567890</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Medical Record Tabs -->
+    <div class="card">
+      <div class="record-tabs">
+        <button class="tab-btn active" onclick="showTab('riwayat')">📜 Riwayat Kunjungan</button>
+        <button class="tab-btn" onclick="showTab('pemeriksaan')">📝 Input Pemeriksaan Baru</button>
+        <button class="tab-btn" onclick="showTab('resep')">💊 Riwayat Resep</button>
+        <button class="tab-btn" onclick="showTab('lab')">🔬 Hasil Lab</button>
+        <button class="tab-btn" onclick="showTab('surat')">📄 Surat Keterangan</button>
+      </div>
+
+      <!-- Riwayat Kunjungan Tab -->
+      <div id="riwayat" class="tab-content active">
+        <h3>📜 Riwayat Kunjungan (15 kunjungan)</h3>
+        
+        <div class="visit-card">
+          <div class="visit-header">
+            <div>
+              <h4 style="margin: 0 0 0.5rem 0;">Kunjungan #15 - Hari Ini</h4>
+              <p style="margin: 0; color: #666;">27 November 2025, 10:30 WIB | dr. Ahmad Wijaya, Sp.PD</p>
+            </div>
+            <span class="badge badge-warning">Sedang Berlangsung</span>
+          </div>
+
+          <div class="vital-grid">
+            <div class="vital-box">
+              <div style="font-size: 1.5rem; font-weight: bold; color: #00796b;">120/80</div>
+              <div style="color: #666; font-size: 0.9rem;">Tekanan Darah</div>
+            </div>
+            <div class="vital-box">
+              <div style="font-size: 1.5rem; font-weight: bold; color: #00796b;">72 bpm</div>
+              <div style="color: #666; font-size: 0.9rem;">Nadi</div>
+            </div>
+            <div class="vital-box">
+              <div style="font-size: 1.5rem; font-weight: bold; color: #00796b;">36.5°C</div>
+              <div style="color: #666; font-size: 0.9rem;">Suhu</div>
+            </div>
+            <div class="vital-box">
+              <div style="font-size: 1.5rem; font-weight: bold; color: #00796b;">65 kg</div>
+              <div style="color: #666; font-size: 0.9rem;">Berat Badan</div>
+            </div>
+          </div>
+
+          <div style="margin-top: 1rem;">
+            <strong>Keluhan Utama:</strong>
+            <p>Kontrol rutin diabetes mellitus. Pasien mengeluh sering merasa lelah dan haus.</p>
+          </div>
+
+          <button class="btn btn-primary" onclick="continueExamination()">▶️ Lanjutkan Pemeriksaan</button>
+        </div>
+
+        <div class="visit-card">
+          <div class="visit-header">
+            <div>
+              <h4 style="margin: 0 0 0.5rem 0;">Kunjungan #14</h4>
+              <p style="margin: 0; color: #666;">20 November 2025, 09:15 WIB | dr. Ahmad Wijaya, Sp.PD</p>
+            </div>
+            <span class="badge badge-success">Selesai</span>
+          </div>
+
+          <div class="diagnosis-tag">
+            <strong>Diagnosis:</strong> Diabetes Mellitus Tipe 2 (E11.9) - Kontrol rutin
+          </div>
+
+          <div style="margin: 1rem 0;">
+            <strong>Anamnesa:</strong>
+            <p>Pasien kontrol rutin DM. Gula darah puasa 140 mg/dL. Keluhan: kadang pusing, penglihatan agak kabur.</p>
+          </div>
+
+          <div style="margin: 1rem 0;">
+            <strong>Pemeriksaan Fisik:</strong>
+            <p>TD: 130/85 mmHg, Nadi: 80x/menit, Suhu: 36.7°C, BB: 66 kg</p>
+          </div>
+
+          <div style="margin: 1rem 0;">
+            <strong>Terapi:</strong>
+            <div class="prescription-item">
+              <div>
+                <strong>Metformin 500mg</strong>
+                <div style="color: #666; font-size: 0.9rem;">2x1 tablet (pagi & malam setelah makan)</div>
+              </div>
+              <span class="badge badge-info">30 hari</span>
+            </div>
+            <div class="prescription-item">
+              <div>
+                <strong>Glimepiride 2mg</strong>
+                <div style="color: #666; font-size: 0.9rem;">1x1 tablet (pagi sebelum makan)</div>
+              </div>
+              <span class="badge badge-info">30 hari</span>
+            </div>
+          </div>
+
+          <div style="margin: 1rem 0; padding: 1rem; background: #e8f5e9; border-radius: 4px;">
+            <strong>Anjuran:</strong> Diet rendah gula, olahraga rutin 3x/minggu, kontrol gula darah setiap minggu
+          </div>
+
+          <button class="btn btn-secondary" onclick="viewFullRecord(14)">👁️ Lihat Detail Lengkap</button>
+        </div>
+
+        <div class="visit-card">
+          <div class="visit-header">
+            <div>
+              <h4 style="margin: 0 0 0.5rem 0;">Kunjungan #13</h4>
+              <p style="margin: 0; color: #666;">13 November 2025, 10:00 WIB | dr. Ahmad Wijaya, Sp.PD</p>
+            </div>
+            <span class="badge badge-success">Selesai</span>
+          </div>
+
+          <div class="diagnosis-tag">
+            <strong>Diagnosis:</strong> Diabetes Mellitus Tipe 2 (E11.9) - Kontrol rutin
+          </div>
+
+          <div style="margin: 1rem 0;">
+            <strong>Catatan Singkat:</strong>
+            <p>Kontrol rutin DM. GD puasa 135 mg/dL. Kondisi stabil. Terapi dilanjutkan.</p>
+          </div>
+
+          <button class="btn btn-secondary" onclick="viewFullRecord(13)">👁️ Lihat Detail Lengkap</button>
+        </div>
+
+        <div style="text-align: center; margin-top: 1rem;">
+          <button class="btn btn-secondary" onclick="loadMoreVisits()">📋 Muat Lebih Banyak (12 kunjungan lagi)</button>
+        </div>
+      </div>
+
+      <!-- Input Pemeriksaan Baru Tab -->
+      <div id="pemeriksaan" class="tab-content">
+        <h3>📝 Input Pemeriksaan Baru</h3>
+        <form onsubmit="saveMedicalRecord(event)">
+          <div class="form-group">
+            <label>Tanggal & Waktu Pemeriksaan</label>
+            <input type="datetime-local" value="2025-11-27T10:30" required>
+          </div>
+
+          <h4>Tanda Vital</h4>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Tekanan Darah (mmHg)</label>
+              <div style="display: flex; gap: 0.5rem; align-items: center;">
+                <input type="number" placeholder="Sistolik" style="width: 100px;">
+                <span>/</span>
+                <input type="number" placeholder="Diastolik" style="width: 100px;">
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Nadi (bpm)</label>
+              <input type="number" placeholder="72">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Suhu (°C)</label>
+              <input type="number" step="0.1" placeholder="36.5">
+            </div>
+            <div class="form-group">
+              <label>Berat Badan (kg)</label>
+              <input type="number" step="0.1" placeholder="65">
+            </div>
+            <div class="form-group">
+              <label>Tinggi Badan (cm)</label>
+              <input type="number" placeholder="160">
+            </div>
+          </div>
+
+          <h4>Subjektif (Keluhan Pasien)</h4>
+          <div class="form-group">
+            <label>Keluhan Utama</label>
+            <textarea rows="3" placeholder="Tuliskan keluhan utama pasien..." required></textarea>
+          </div>
+
+          <div class="form-group">
+            <label>Riwayat Penyakit Sekarang</label>
+            <textarea rows="4" placeholder="Detail riwayat penyakit yang sedang dialami..."></textarea>
+          </div>
+
+          <h4>Objektif (Pemeriksaan Fisik)</h4>
+          <div class="form-group">
+            <label>Keadaan Umum</label>
+            <select>
+              <option>Baik</option>
+              <option>Sedang</option>
+              <option>Lemah</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Kesadaran</label>
+            <select>
+              <option>Compos Mentis</option>
+              <option>Apatis</option>
+              <option>Somnolen</option>
+              <option>Sopor</option>
+              <option>Koma</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Hasil Pemeriksaan Fisik</label>
+            <textarea rows="5" placeholder="Kepala: Normocefali
+Mata: Konjungtiva tidak anemis, sklera tidak ikterik
+Thorax: Simetris, suara napas vesikuler
+Jantung: S1-S2 reguler, murmur (-)
+Abdomen: Supel, bising usus (+) normal
+Ekstremitas: Akral hangat, edema (-)"></textarea>
+          </div>
+
+          <h4>Assessment (Diagnosis)</h4>
+          <div class="form-group">
+            <label>Diagnosis Utama</label>
+            <input type="text" placeholder="Contoh: Diabetes Mellitus Tipe 2" required>
+          </div>
+
+          <div class="form-group">
+            <label>Kode ICD-10</label>
+            <input type="text" placeholder="Contoh: E11.9">
+          </div>
+
+          <div class="form-group">
+            <label>Diagnosis Tambahan (jika ada)</label>
+            <textarea rows="2" placeholder="Diagnosis sekunder atau penyakit penyerta..."></textarea>
+          </div>
+
+          <h4>Plan (Rencana Tindakan)</h4>
+          <div class="form-group">
+            <label>Terapi / Tindakan</label>
+            <textarea rows="4" placeholder="Tuliskan terapi obat, tindakan medis, atau prosedur yang dilakukan..." required></textarea>
+          </div>
+
+          <div class="form-group">
+            <label>Anjuran & Edukasi</label>
+            <textarea rows="3" placeholder="Anjuran diet, aktivitas, gaya hidup, dan edukasi kepada pasien..."></textarea>
+          </div>
+
+          <div class="form-group">
+            <label>Rencana Tindak Lanjut</label>
+            <select>
+              <option value="">Pilih tindak lanjut...</option>
+              <option>Kontrol ulang 1 minggu</option>
+              <option>Kontrol ulang 2 minggu</option>
+              <option>Kontrol ulang 1 bulan</option>
+              <option>Rujuk ke spesialis</option>
+              <option>Rawat inap</option>
+              <option>Selesai (tidak perlu kontrol)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Catatan Tambahan</label>
+            <textarea rows="3" placeholder="Catatan khusus atau informasi tambahan..."></textarea>
+          </div>
+
+          <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+            <button type="submit" class="btn btn-primary">💾 Simpan Rekam Medis</button>
+            <button type="button" class="btn btn-secondary" onclick="addPrescription()">💊 Tambah Resep</button>
+            <button type="button" class="btn btn-secondary" onclick="requestLab()">🔬 Minta Pemeriksaan Lab</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Riwayat Resep Tab -->
+      <div id="resep" class="tab-content">
+        <h3>💊 Riwayat Resep Obat</h3>
+        
+        <div class="visit-card">
+          <div class="visit-header">
+            <div>
+              <h4 style="margin: 0 0 0.5rem 0;">Resep - 20 November 2025</h4>
+              <p style="margin: 0; color: #666;">dr. Ahmad Wijaya, Sp.PD</p>
+            </div>
+            <span class="badge badge-success">Sudah Diambil</span>
+          </div>
+
+          <div class="prescription-item">
+            <div>
+              <strong>Metformin 500mg</strong>
+              <div style="color: #666; font-size: 0.9rem;">2x1 tablet (pagi & malam setelah makan) - 30 hari</div>
+            </div>
+            <span class="badge badge-primary">30 tablet</span>
+          </div>
+
+          <div class="prescription-item">
+            <div>
+              <strong>Glimepiride 2mg</strong>
+              <div style="color: #666; font-size: 0.9rem;">1x1 tablet (pagi sebelum makan) - 30 hari</div>
+            </div>
+            <span class="badge badge-primary">30 tablet</span>
+          </div>
+
+          <button class="btn btn-secondary" onclick="printPrescription('20251120')">🖨️ Cetak Resep</button>
+        </div>
+
+        <div class="visit-card">
+          <div class="visit-header">
+            <div>
+              <h4 style="margin: 0 0 0.5rem 0;">Resep - 13 November 2025</h4>
+              <p style="margin: 0; color: #666;">dr. Ahmad Wijaya, Sp.PD</p>
+            </div>
+            <span class="badge badge-success">Sudah Diambil</span>
+          </div>
+
+          <div class="prescription-item">
+            <div>
+              <strong>Metformin 500mg</strong>
+              <div style="color: #666; font-size: 0.9rem;">2x1 tablet (pagi & malam setelah makan) - 30 hari</div>
+            </div>
+            <span class="badge badge-primary">30 tablet</span>
+          </div>
+
+          <div class="prescription-item">
+            <div>
+              <strong>Glimepiride 2mg</strong>
+              <div style="color: #666; font-size: 0.9rem;">1x1 tablet (pagi sebelum makan) - 30 hari</div>
+            </div>
+            <span class="badge badge-primary">30 tablet</span>
+          </div>
+
+          <button class="btn btn-secondary" onclick="printPrescription('20251113')">🖨️ Cetak Resep</button>
+        </div>
+      </div>
+
+      <!-- Hasil Lab Tab -->
+      <div id="lab" class="tab-content">
+        <h3>🔬 Hasil Pemeriksaan Laboratorium</h3>
+        
+        <div class="visit-card">
+          <div class="visit-header">
+            <div>
+              <h4 style="margin: 0 0 0.5rem 0;">Pemeriksaan Lab - 20 November 2025</h4>
+              <p style="margin: 0; color: #666;">Lab Klinik Smart Health</p>
+            </div>
+            <span class="badge badge-success">Hasil Tersedia</span>
+          </div>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Parameter</th>
+                <th>Hasil</th>
+                <th>Satuan</th>
+                <th>Nilai Normal</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Gula Darah Puasa</strong></td>
+                <td style="color: #d32f2f; font-weight: bold;">140</td>
+                <td>mg/dL</td>
+                <td>70-100</td>
+                <td><span class="badge badge-danger">Tinggi</span></td>
+              </tr>
+              <tr>
+                <td><strong>HbA1c</strong></td>
+                <td style="color: #d32f2f; font-weight: bold;">7.2</td>
+                <td>%</td>
+                <td>< 5.7</td>
+                <td><span class="badge badge-danger">Tinggi</span></td>
+              </tr>
+              <tr>
+                <td><strong>Kolesterol Total</strong></td>
+                <td>185</td>
+                <td>mg/dL</td>
+                <td>< 200</td>
+                <td><span class="badge badge-success">Normal</span></td>
+              </tr>
+              <tr>
+                <td><strong>HDL</strong></td>
+                <td>45</td>
+                <td>mg/dL</td>
+                <td>> 40</td>
+                <td><span class="badge badge-success">Normal</span></td>
+              </tr>
+              <tr>
+                <td><strong>LDL</strong></td>
+                <td>110</td>
+                <td>mg/dL</td>
+                <td>< 130</td>
+                <td><span class="badge badge-success">Normal</span></td>
+              </tr>
+              <tr>
+                <td><strong>Trigliserida</strong></td>
+                <td>150</td>
+                <td>mg/dL</td>
+                <td>< 150</td>
+                <td><span class="badge badge-success">Normal</span></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div style="margin-top: 1rem; padding: 1rem; background: #fff3cd; border-left: 4px solid #f57c00; border-radius: 4px;">
+            <strong>Catatan Dokter:</strong> Kadar gula darah masih tinggi. Perlu penyesuaian dosis obat dan kontrol diet lebih ketat.
+          </div>
+
+          <button class="btn btn-secondary" onclick="printLabResult('20251120')">🖨️ Cetak Hasil Lab</button>
+        </div>
+
+        <div class="visit-card">
+          <div class="visit-header">
+            <div>
+              <h4 style="margin: 0 0 0.5rem 0;">Pemeriksaan Lab - 13 November 2025</h4>
+              <p style="margin: 0; color: #666;">Lab Klinik Smart Health</p>
+            </div>
+            <span class="badge badge-success">Hasil Tersedia</span>
+          </div>
+
+          <p style="color: #666;">Pemeriksaan: Gula Darah Puasa, Kolesterol, Fungsi Ginjal</p>
+          <button class="btn btn-secondary" onclick="viewLabDetail('20251113')">👁️ Lihat Detail</button>
+        </div>
+      </div>
+
+      <!-- Surat Keterangan Tab -->
+      <div id="surat" class="tab-content">
+        <h3>📄 Surat Keterangan</h3>
+        
+        <div class="visit-card">
+          <div class="visit-header">
+            <div>
+              <h4 style="margin: 0 0 0.5rem 0;">Surat Keterangan Sehat</h4>
+              <p style="margin: 0; color: #666;">20 Oktober 2025 | dr. Ahmad Wijaya, Sp.PD</p>
+            </div>
+            <span class="badge badge-success">Diterbitkan</span>
+          </div>
+
+          <p><strong>Keperluan:</strong> Melamar Pekerjaan</p>
+          <p><strong>Nomor Surat:</strong> SKS/001/X/2025</p>
+
+          <button class="btn btn-secondary" onclick="viewLetter('SKS001')">👁️ Lihat Surat</button>
+          <button class="btn btn-secondary" onclick="printLetter('SKS001')">🖨️ Cetak</button>
+        </div>
+
+        <div class="visit-card">
+          <div class="visit-header">
+            <div>
+              <h4 style="margin: 0 0 0.5rem 0;">Surat Rujukan</h4>
+              <p style="margin: 0; color: #666;">5 September 2025 | dr. Ahmad Wijaya, Sp.PD</p>
+            </div>
+            <span class="badge badge-success">Diterbitkan</span>
+          </div>
+
+          <p><strong>Tujuan:</strong> RS Pusat - Poli Endokrin</p>
+          <p><strong>Diagnosis:</strong> Diabetes Mellitus dengan komplikasi</p>
+
+          <button class="btn btn-secondary" onclick="viewLetter('SR001')">👁️ Lihat Surat</button>
+          <button class="btn btn-secondary" onclick="printLetter('SR001')">🖨️ Cetak</button>
+        </div>
+
+      </div>
+    </div>
+    </main>
+
+    <footer>
+      <p>&copy; 2025 Smart Health Center Service. All Rights Reserved.</p>
+    </footer>
+  </div>
+
+  <script>
+    function showTab(tabName) {
+      // Hide all tabs
+      const tabs = document.querySelectorAll('.tab-content');
+      tabs.forEach(tab => tab.classList.remove('active'));
+
+      // Remove active from all buttons
+      const buttons = document.querySelectorAll('.tab-btn');
+      buttons.forEach(btn => btn.classList.remove('active'));
+
+      // Show selected tab
+      document.getElementById(tabName).classList.add('active');
+      event.target.classList.add('active');
+    }
+
+    function searchPatient() {
+      const search = document.getElementById('searchRM').value;
+      if (search.trim() === '') {
+        alert('⚠️ Masukkan No. RM atau Nama Pasien untuk mencari.');
+        return;
+      }
+      alert(`🔍 Mencari pasien: "${search}"\n\n[Hasil pencarian akan ditampilkan]`);
+    }
+
+    function showAllPatients() {
+      alert('📋 Menampilkan daftar semua pasien...\n\n[Daftar lengkap pasien akan ditampilkan]');
+    }
+
+    function continueExamination() {
+      showTab('pemeriksaan');
+      const tabBtn = document.querySelectorAll('.tab-btn')[1];
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      tabBtn.classList.add('active');
+    }
+
+    function viewFullRecord(visitNum) {
+      alert(`👁️ Menampilkan detail lengkap kunjungan #${visitNum}\n\n[Rekam medis lengkap akan ditampilkan]`);
+    }
+
+    function loadMoreVisits() {
+      alert('📋 Memuat 12 kunjungan lagi...\n\n[Data kunjungan sebelumnya akan ditampilkan]');
+    }
+
+    function saveMedicalRecord(e) {
+      e.preventDefault();
+      if (confirm('💾 Simpan rekam medis ini?\n\nPastikan semua data sudah benar dan lengkap.')) {
+        alert('✅ Rekam medis berhasil disimpan!\n\nData tersimpan di sistem dan dapat dilihat di riwayat kunjungan.');
+        showTab('riwayat');
+        const tabBtn = document.querySelectorAll('.tab-btn')[0];
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        tabBtn.classList.add('active');
+      }
+    }
+
+    function addPrescription() {
+      alert('💊 Form Resep Obat\n\n[Form input resep akan dibuka]\n\nFitur:\n- Pilih obat dari database\n- Atur dosis & aturan pakai\n- Durasi pemberian\n- Catatan khusus');
+    }
+
+    function createLetter() {
+      alert('📄 Buat Surat Keterangan\n\n[Form pembuatan surat akan dibuka]\n\nJenis surat:\n- Surat Sakit\n- Surat Sehat\n- Surat Rujukan\n- Surat Keterangan Lainnya');
+    }
+
+    function requestLab() {
+      alert('🔬 Permintaan Pemeriksaan Lab\n\n[Form permintaan lab akan dibuka]\n\nPemeriksaan yang tersedia:\n- Darah lengkap\n- Gula darah\n- Fungsi hati\n- Fungsi ginjal\n- Profil lipid\n- dll');
+    }
+
+    function printPrescription(id) {
+      alert(`🖨️ Mencetak resep ${id}...\n\nResep akan dicetak dalam format standar.`);
+    }
+
+    function printLabResult(id) {
+      alert(`🖨️ Mencetak hasil lab ${id}...\n\nHasil lab akan dicetak.`);
+    }
+
+    function viewLabDetail(id) {
+      alert(`👁️ Menampilkan detail hasil lab ${id}...\n\n[Detail lengkap akan ditampilkan]`);
+    }
+
+    function viewLetter(id) {
+      // Create and show modal with PDF preview
+      showLetterModal(id);
+    }
+
+    function printLetter(id) {
+      // Create print content and trigger print
+      const content = generateLetterHTML(id);
+      const printWindow = window.open('', '_blank');
+      printWindow.document.write(content);
+      printWindow.document.close();
+      printWindow.onload = function() {
+        printWindow.focus();
+        printWindow.print();
+      };
+    }
+
+    function showLetterModal(id) {
+      const content = generateLetterHTML(id);
+      
+      // Create modal
+      const modal = document.createElement('div');
+      modal.style.cssText = 'position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); z-index: 10000; display: flex; align-items: center; justify-content: center; padding: 2rem;';
+      
+      const modalContent = document.createElement('div');
+      modalContent.style.cssText = 'background: white; border-radius: 8px; max-width: 900px; max-height: 90vh; overflow: auto; position: relative;';
+      
+      const closeBtn = document.createElement('button');
+      closeBtn.innerHTML = '✕ Tutup';
+      closeBtn.className = 'btn btn-secondary';
+      closeBtn.style.cssText = 'position: sticky; top: 0; right: 0; margin: 1rem; float: right; z-index: 10;';
+      closeBtn.onclick = () => document.body.removeChild(modal);
+      
+      const printBtn = document.createElement('button');
+      printBtn.innerHTML = '🖨️ Cetak';
+      printBtn.className = 'btn btn-primary';
+      printBtn.style.cssText = 'position: sticky; top: 0; right: 120px; margin: 1rem; float: right; z-index: 10;';
+      printBtn.onclick = () => printLetter(id);
+      
+      const iframe = document.createElement('iframe');
+      iframe.style.cssText = 'width: 100%; height: 80vh; border: none;';
+      iframe.srcdoc = content;
+      
+      modalContent.appendChild(closeBtn);
+      modalContent.appendChild(printBtn);
+      modalContent.appendChild(iframe);
+      modal.appendChild(modalContent);
+      document.body.appendChild(modal);
+      
+      // Close on outside click
+      modal.onclick = (e) => {
+        if (e.target === modal) document.body.removeChild(modal);
+      };
+    }
+
+    function generateLetterHTML(id) {
+      let data = {};
+      let jenis = '';
+      
+      if (id === 'SKS001') {
+        jenis = 'Surat Keterangan Sehat';
+        data = {
+          nomor: 'SKS/001/X/2025',
+          tanggal: '20 Oktober 2025',
+          nama: 'Siti Nurhaliza',
+          umur: '4 tahun',
+          keperluan: 'Melamar Pekerjaan',
+          kondisi: 'Sehat jasmani dan rohani, tidak menderita penyakit menular',
+          dokter: 'dr. Ahmad Wijaya, Sp.PD'
+        };
+      } else if (id === 'SR001') {
+        jenis = 'Surat Rujukan';
+        data = {
+          nomor: 'SR/001/IX/2025',
+          tanggal: '5 September 2025',
+          nama: 'Siti Nurhaliza',
+          umur: '4 tahun',
+          tujuan: 'RS Pusat - Poli Endokrin',
+          diagnosis: 'Diabetes Mellitus dengan komplikasi',
+          tindakan: 'Konsultasi dan penanganan lanjutan',
+          dokter: 'dr. Ahmad Wijaya, Sp.PD'
+        };
+      }
+      
+      return `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <title>${jenis}</title>
+          <style>
+            body {
+              font-family: 'Times New Roman', serif;
+              padding: 2cm;
+              max-width: 21cm;
+              margin: 0 auto;
+              background: #fff;
+            }
+            .header {
+              text-align: center;
+              border-bottom: 3px solid #000;
+              padding-bottom: 1rem;
+              margin-bottom: 2rem;
+            }
+            .header h2 {
+              margin: 0;
+              font-size: 18pt;
+            }
+            .header p {
+              margin: 0.25rem 0;
+              font-size: 11pt;
+            }
+            .title {
+              text-align: center;
+              margin: 2rem 0;
+              text-decoration: underline;
+              font-weight: bold;
+              font-size: 14pt;
+            }
+            .nomor {
+              text-align: center;
+              margin-bottom: 2rem;
+            }
+            .content {
+              line-height: 1.8;
+              text-align: justify;
+              font-size: 12pt;
+            }
+            .signature {
+              margin-top: 3rem;
+              float: right;
+              text-align: center;
+            }
+            table {
+              width: 100%;
+              margin: 1rem 0;
+            }
+            td {
+              padding: 0.25rem 0;
+              vertical-align: top;
+            }
+            td:first-child {
+              width: 150px;
+            }
+            @media print {
+              body { padding: 1cm; }
+            }
+          </style>
+        </head>
+        <body>
+          <div class="header">
+            <h2>PUSKESMAS SMART HEALTH CENTER</h2>
+            <p>Jl. Kesehatan No. 123, Jakarta Selatan 12345</p>
+            <p>Telp: (021) 1234-5678 | Email: info@smarthealth.id</p>
+          </div>
+          
+          <div class="title">${jenis.toUpperCase()}</div>
+          <div class="nomor">Nomor: ${data.nomor}</div>
+          
+          <div class="content">
+            <p>Yang bertanda tangan di bawah ini, dokter pemeriksa di Puskesmas Smart Health Center, menerangkan bahwa:</p>
+            
+            <table>
+              <tr>
+                <td>Nama</td>
+                <td>: ${data.nama}</td>
+              </tr>
+              <tr>
+                <td>Umur</td>
+                <td>: ${data.umur}</td>
+              </tr>
+              <tr>
+                <td>Alamat</td>
+                <td>: Jl. Merdeka No. 45, Jakarta</td>
+              </tr>
+              ${data.keperluan ? `<tr><td>Keperluan</td><td>: ${data.keperluan}</td></tr>` : ''}
+              ${data.tujuan ? `<tr><td>Tujuan Rujukan</td><td>: ${data.tujuan}</td></tr>` : ''}
+              ${data.diagnosis ? `<tr><td>Diagnosis</td><td>: ${data.diagnosis}</td></tr>` : ''}
+            </table>
+            
+            ${data.kondisi ? `<p>Berdasarkan pemeriksaan yang dilakukan pada tanggal ${data.tanggal}, yang bersangkutan dalam keadaan <strong>${data.kondisi}</strong>.</p>` : ''}
+            
+            ${data.tindakan ? `<p>Mohon dapat diberikan penanganan lebih lanjut: ${data.tindakan}.</p>` : ''}
+            
+            <p>Demikian surat keterangan ini dibuat dengan sebenarnya untuk dapat dipergunakan sebagaimana mestinya.</p>
+          </div>
+          
+          <div class="signature">
+            <p>Jakarta, ${data.tanggal}</p>
+            <p>Dokter Pemeriksa,</p>
+            <br><br><br>
+            <p><strong><u>${data.dokter}</u></strong></p>
+            <p>SIP: 123/456/789/2024</p>
+          </div>
+        </body>
+        </html>
+      `;
+    }
+
+    function createNewLetter() {
+      alert('📄 Buat Surat Keterangan Baru\n\n[Form pembuatan surat akan dibuka]\n\nPilih jenis surat yang akan dibuat.');
+    }
+  </script>
+  <script src="../js/header-common.js"></script>
+</body>
+</html>
