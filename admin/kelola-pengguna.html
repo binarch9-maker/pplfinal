@@ -547,27 +547,28 @@
       <div id="tab-admin" class="tab-content" style="display: none; padding: 1.5rem;">
         <h3 style="margin-top: 0;">👨‍💼 Daftar Administrator (3)</h3>
       
-      <div class="user-card" data-role="admin" data-status="aktif" data-name="Admin Utama">
-        <div class="user-avatar" style="background: linear-gradient(135deg, #d32f2f 0%, #b71c1c 100%);">AU</div>
-        <div style="flex: 1;">
-          <h4 style="margin: 0 0 0.5rem 0;">Admin Utama</h4>
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.5rem; margin: 0.5rem 0; color: #666;">
-            <p style="margin: 0;">📧 admin@hospital.com</p>
-            <p style="margin: 0;">📞 081234567895</p>
-            <p style="margin: 0;">🔐 Super Admin</p>
-            <p style="margin: 0;">📅 Terdaftar: 01 Jan 2024</p>
+        <div class="user-card" data-role="admin" data-status="aktif" data-name="Admin Utama">
+          <div class="user-avatar" style="background: linear-gradient(135deg, #d32f2f 0%, #b71c1c 100%);">AU</div>
+          <div style="flex: 1;">
+            <h4 style="margin: 0 0 0.5rem 0;">Admin Utama</h4>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.5rem; margin: 0.5rem 0; color: #666;">
+              <p style="margin: 0;">📧 admin@hospital.com</p>
+              <p style="margin: 0;">📞 081234567895</p>
+              <p style="margin: 0;">🔐 Super Admin</p>
+              <p style="margin: 0;">📅 Terdaftar: 01 Jan 2024</p>
+            </div>
+            <div style="margin-top: 0.5rem;">
+              <span class="badge badge-success">Aktif</span>
+              <span class="badge badge-danger">Super Admin</span>
+            </div>
           </div>
-          <div style="margin-top: 0.5rem;">
-            <span class="badge badge-success">Aktif</span>
-            <span class="badge badge-danger">Super Admin</span>
+          <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+            <button class="btn btn-primary" onclick="editUser('au')">✏️ Edit</button>
+            <button class="btn btn-secondary" onclick="viewUser('au')">👁️ Detail</button>
           </div>
         </div>
-        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-          <button class="btn btn-primary" onclick="editUser('au')">✏️ Edit</button>
-          <button class="btn btn-secondary" onclick="viewUser('au')">👁️ Detail</button>
-        </div>
       </div>
-      </div>
+    </div>
 
     <!-- User List - Patients -->
     <div class="card" style="box-shadow: none; padding: 0; margin: 0;">
