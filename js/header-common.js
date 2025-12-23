@@ -4,9 +4,17 @@
 function toggleNotification() {
   const dropdown = document.getElementById('notificationDropdown');
   const userDropdown = document.getElementById('userDropdown');
-  dropdown.classList.toggle('show');
-  userDropdown.classList.remove('show');
-  document.getElementById('userProfile').classList.remove('active');
+  const userProfile = document.getElementById('userProfile');
+  
+  if (dropdown) {
+    dropdown.classList.toggle('active');
+  }
+  if (userDropdown) {
+    userDropdown.classList.remove('active');
+  }
+  if (userProfile) {
+    userProfile.classList.remove('active');
+  }
 }
 
 // Toggle user dropdown
@@ -14,9 +22,16 @@ function toggleUserDropdown() {
   const dropdown = document.getElementById('userDropdown');
   const notifDropdown = document.getElementById('notificationDropdown');
   const userProfile = document.getElementById('userProfile');
-  dropdown.classList.toggle('show');
-  userProfile.classList.toggle('active');
-  notifDropdown.classList.remove('show');
+  
+  if (dropdown) {
+    dropdown.classList.toggle('active');
+  }
+  if (userProfile) {
+    userProfile.classList.toggle('active');
+  }
+  if (notifDropdown) {
+    notifDropdown.classList.remove('active');
+  }
 }
 
 // Close all nav dropdowns except the provided one
@@ -37,12 +52,12 @@ document.addEventListener('click', function(event) {
   
   if (notifBell && !notifBell.contains(event.target)) {
     const notifDropdown = document.getElementById('notificationDropdown');
-    if (notifDropdown) notifDropdown.classList.remove('show');
+    if (notifDropdown) notifDropdown.classList.remove('active');
   }
   
   if (userProfile && !userProfile.contains(event.target)) {
     const userDropdown = document.getElementById('userDropdown');
-    if (userDropdown) userDropdown.classList.remove('show');
+    if (userDropdown) userDropdown.classList.remove('active');
     userProfile.classList.remove('active');
   }
 

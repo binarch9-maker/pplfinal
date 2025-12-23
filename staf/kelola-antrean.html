@@ -650,41 +650,6 @@
   </div>
 
   <script>
-    // Notification toggle
-    function toggleNotification() {
-      const dropdown = document.getElementById('notificationDropdown');
-      const userDropdown = document.getElementById('userDropdown');
-      if (userDropdown && userDropdown.classList.contains('active')) {
-        userDropdown.classList.remove('active');
-      }
-      dropdown.classList.toggle('active');
-    }
-
-    // User dropdown toggle
-    function toggleUserDropdown() {
-      const dropdown = document.getElementById('userDropdown');
-      const notifDropdown = document.getElementById('notificationDropdown');
-      if (notifDropdown && notifDropdown.classList.contains('active')) {
-        notifDropdown.classList.remove('active');
-      }
-      dropdown.classList.toggle('active');
-    }
-
-    // Close dropdowns when clicking outside
-    document.addEventListener('click', function(event) {
-      const notificationBell = document.querySelector('.notification-bell');
-      const userProfile = document.querySelector('.user-profile');
-      const notifDropdown = document.getElementById('notificationDropdown');
-      const userDropdown = document.getElementById('userDropdown');
-      
-      if (!notificationBell?.contains(event.target) && notifDropdown) {
-        notifDropdown.classList.remove('active');
-      }
-      if (!userProfile?.contains(event.target) && userDropdown) {
-        userDropdown.classList.remove('active');
-      }
-    });
-
     // Update current time
     function updateTime() {
       const now = new Date();

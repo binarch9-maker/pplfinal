@@ -232,6 +232,16 @@
           <span>Validasi Surat</span>
         </a>
       </div>
+
+      <hr style="border: none; border-top: 1px solid rgba(255,255,255,0.1); margin: 1rem 0;">
+
+      <!-- Logout -->
+      <div class="menu-item">
+        <a href="../login-staf.html" class="menu-link" style="color: #e74c3c;">
+          <i>🚪</i>
+          <span>Logout</span>
+        </a>
+      </div>
     </div>
   </div>
 
@@ -334,6 +344,13 @@
               </a>
               <a href="validasi-surat.html" class="user-dropdown-item">
                 <span>✅</span> Validasi Surat
+              </a>
+              <div style="border-top: 1px solid #f0f0f0; margin: 0.5rem 0;"></div>
+              <a href="../login-staf.html" class="user-dropdown-item logout">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/>
+                </svg>
+                Logout
               </a>
             </div>
           </div>
@@ -605,41 +622,6 @@
   </div>
 
   <script>
-    // Notification toggle
-    function toggleNotification() {
-      const dropdown = document.getElementById('notificationDropdown');
-      const userDropdown = document.getElementById('userDropdown');
-      if (userDropdown && userDropdown.classList.contains('active')) {
-        userDropdown.classList.remove('active');
-      }
-      dropdown.classList.toggle('active');
-    }
-
-    // User dropdown toggle
-    function toggleUserDropdown() {
-      const dropdown = document.getElementById('userDropdown');
-      const notifDropdown = document.getElementById('notificationDropdown');
-      if (notifDropdown && notifDropdown.classList.contains('active')) {
-        notifDropdown.classList.remove('active');
-      }
-      dropdown.classList.toggle('active');
-    }
-
-    // Close dropdowns when clicking outside
-    document.addEventListener('click', function(event) {
-      const notificationBell = document.querySelector('.notification-bell');
-      const userProfile = document.querySelector('.user-profile');
-      const notifDropdown = document.getElementById('notificationDropdown');
-      const userDropdown = document.getElementById('userDropdown');
-      
-      if (!notificationBell?.contains(event.target) && notifDropdown) {
-        notifDropdown.classList.remove('active');
-      }
-      if (!userProfile?.contains(event.target) && userDropdown) {
-        userDropdown.classList.remove('active');
-      }
-    });
-
     // Tab switching function
     function switchTab(tabName) {
       // Remove active class from all buttons and contents
