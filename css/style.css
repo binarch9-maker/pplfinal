@@ -443,11 +443,11 @@ main {
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 1.5rem;
+  gap: 1rem;
   margin-bottom: 2rem;
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1400px) {
   .stats-grid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -460,14 +460,14 @@ main {
 }
 
 .stat-box {
-  padding: 1.5rem;
+  padding: 1.25rem 1rem;
   border-radius: 12px;
   color: #fff;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
-  min-height: 140px;
+  min-height: 120px;
   justify-content: center;
 }
 
