@@ -17,7 +17,7 @@
       if (!isLoggedIn) {
         sessionStorage.setItem('userRole', 'admin');
         sessionStorage.setItem('isLoggedIn', 'true');
-        sessionStorage.setItem('username', 'Demo Admin');
+        sessionStorage.setItem('username', 'Admin');
       }
       // Jika login sebagai role lain, redirect
       else if (userRole !== 'admin') {
@@ -438,7 +438,7 @@
               </div>
               
               <div class="nav-dropdown">
-                <button class="dropdown-toggle">👤 Demo Admin ▼</button>
+                <button class="dropdown-toggle">👤 Admin ▼</button>
                 <div class="dropdown-menu">
                   <a href="../login-admin.html" style="color: #d32f2f; font-weight: 700;">🚪 Logout</a>
                 </div>
