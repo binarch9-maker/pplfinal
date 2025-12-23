@@ -156,6 +156,9 @@
     main {
       padding: 2rem;
       flex: 1;
+      width: 100%;
+      max-width: 100%;
+      overflow-x: auto;
     }
 
     /* Responsive */
@@ -240,17 +243,10 @@
 
       <!-- Kelola Pengguna -->
       <div class="menu-item">
-        <div class="menu-link active expanded" onclick="toggleSubmenu(this)">
+        <a href="kelola-pengguna.html" class="menu-link active">
           <i>👥</i>
           <span>Kelola Pengguna</span>
-          <span class="arrow">▸</span>
-        </div>
-        <div class="submenu open">
-          <a href="kelola-pengguna.html?tab=pasien" class="submenu-link" id="menu-pasien">Daftar Pasien</a>
-          <a href="kelola-pengguna.html?tab=dokter" class="submenu-link" id="menu-dokter">Dokter</a>
-          <a href="kelola-pengguna.html?tab=tenaga-medis" class="submenu-link" id="menu-tenaga-medis">Tenaga Medis</a>
-          <a href="kelola-pengguna.html?tab=admin" class="submenu-link" id="menu-admin">Administrator</a>
-        </div>
+        </a>
       </div>
 
       <!-- Kelola Pengajuan -->
@@ -814,15 +810,6 @@
         event.target.style.background = '#fff';
         event.target.style.borderBottomColor = '#00796b';
         event.target.style.color = '#00796b';
-      }
-      
-      // Update sidebar submenu active state
-      document.querySelectorAll('.submenu-link').forEach(link => {
-        link.classList.remove('active');
-      });
-      const activeMenuLink = document.getElementById('menu-' + tabName);
-      if (activeMenuLink) {
-        activeMenuLink.classList.add('active');
       }
     }
 
