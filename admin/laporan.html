@@ -301,39 +301,54 @@
                 <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/>
               </svg>
               <span class="notification-badge">3</span>
+              
               <div class="notification-dropdown" id="notificationDropdown">
                 <div class="notification-header">
                   <h4>Notifikasi</h4>
-                  <span class="notification-count">3 baru</span>
+                  <a href="#" class="mark-read">Tandai Sudah Dibaca</a>
                 </div>
-                <div class="notification-list">
-                  <a href="#" class="notification-item-header unread">
-                    <div class="notification-icon" style="background: #4CAF50;">👤</div>
-                    <div class="notification-content">
-                      <div class="notification-title">Pengguna Baru Terdaftar</div>
-                      <div class="notification-text">5 pengguna baru mendaftar hari ini</div>
-                      <div class="notification-time">10 menit yang lalu</div>
+                <div class="notification-list-header">
+                  <div class="notification-item-header unread">
+                    <div class="notification-icon-header warning">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/>
+                      </svg>
                     </div>
-                  </a>
-                  <a href="#" class="notification-item-header unread">
-                    <div class="notification-icon" style="background: #FF9800;">📄</div>
-                    <div class="notification-content">
-                      <div class="notification-title">Surat Menunggu Validasi</div>
-                      <div class="notification-text">8 surat perlu divalidasi</div>
-                      <div class="notification-time">1 jam yang lalu</div>
+                    <div class="notification-content-header">
+                      <strong>Pengguna baru mendaftar</strong>
+                      <p>5 pengguna baru menunggu approval</p>
+                      <div class="notification-time-header">10 menit lalu</div>
                     </div>
-                  </a>
-                  <a href="#" class="notification-item-header">
-                    <div class="notification-icon" style="background: #2196F3;">💾</div>
-                    <div class="notification-content">
-                      <div class="notification-title">Backup Berhasil</div>
-                      <div class="notification-text">Backup sistem berhasil dilakukan</div>
-                      <div class="notification-time">2 jam yang lalu</div>
+                  </div>
+                  
+                  <div class="notification-item-header unread">
+                    <div class="notification-icon-header info">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+                      </svg>
                     </div>
-                  </a>
+                    <div class="notification-content-header">
+                      <strong>Surat perlu validasi</strong>
+                      <p>12 surat keterangan menunggu</p>
+                      <div class="notification-time-header">30 menit lalu</div>
+                    </div>
+                  </div>
+                  
+                  <div class="notification-item-header">
+                    <div class="notification-icon-header success">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                      </svg>
+                    </div>
+                    <div class="notification-content-header">
+                      <strong>Backup berhasil</strong>
+                      <p>Backup sistem selesai</p>
+                      <div class="notification-time-header">2 jam lalu</div>
+                    </div>
+                  </div>
                 </div>
                 <div class="notification-footer">
-                  <a href="#">Lihat Semua Notifikasi</a>
+                  <a href="#">Lihat Semua</a>
                 </div>
               </div>
             </div>
