@@ -103,11 +103,12 @@
       max-height: 0;
       overflow: hidden;
       transition: max-height 0.3s ease;
-      background: rgba(0,0,0,0.08);
+      background: rgba(0,0,0,0.03);
     }
 
     .submenu.open {
       max-height: 500px;
+      overflow: visible;
     }
 
     .submenu-link {
@@ -117,9 +118,9 @@
       text-decoration: none;
       transition: all 0.2s ease;
       font-size: 0.85rem;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      white-space: normal;
+      word-wrap: break-word;
+      line-height: 1.4;
     }
 
     .submenu-link:hover {
@@ -129,10 +130,11 @@
     }
 
     .submenu-link.active {
-      background: rgba(52, 152, 219, 0.3);
-      color: #3498db;
+      background: rgba(52, 152, 219, 0.2);
+      color: #1976d2;
       border-left: 3px solid #3498db;
       padding-left: 2.625rem;
+      font-weight: 600;
     }
 
     .main-content {
