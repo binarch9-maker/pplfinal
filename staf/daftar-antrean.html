@@ -8,9 +8,10 @@
   <link rel="stylesheet" href="../css/header-styles.css">
   <style>
     body {
-      margin: 0;
+      display: flex;
       min-height: 100vh;
-      background: #f5f7fa;
+      flex-direction: column;
+      margin: 0;
     }
 
     /* Sidebar Styles */
@@ -75,19 +76,12 @@
       font-style: normal;
     }
 
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 1.5rem;
-      margin-bottom: 2rem;
-    }
-
     .main-content {
       margin-left: 260px;
-      width: calc(100% - 260px);
-      min-height: 100vh;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
       background: #f5f7fa;
-      box-sizing: border-box;
     }
 
     header {
@@ -96,14 +90,18 @@
       z-index: 999;
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
       background: #fff;
-      width: 100%;
-      box-sizing: border-box;
     }
 
     main {
       padding: 2rem;
-      width: 100%;
-      box-sizing: border-box;
+      flex: 1;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 2rem;
     }
 
     /* Tab Styles */
@@ -355,13 +353,6 @@
             </div>
           </div>
         </div>
-      </div>
-    </header>
-                </div>
-              </div>
-            </div>
-          </div>
-        </nav>
       </div>
     </header>
 
