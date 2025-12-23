@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Laporan - Smart Health Center Service</title>
   <link rel="stylesheet" href="../css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <style>
     body {
       display: flex;
@@ -254,17 +255,10 @@
 
       <!-- Laporan -->
       <div class="menu-item">
-        <div class="menu-link active expanded" onclick="toggleSubmenu(this)">
+        <a href="laporan.html" class="menu-link active">
           <i>📊</i>
           <span>Laporan</span>
-          <span class="arrow">▸</span>
-        </div>
-        <div class="submenu open">
-          <a href="laporan.html" class="submenu-link active">Laporan Kunjungan</a>
-          <a href="laporan.html?type=surat" class="submenu-link">Laporan Surat</a>
-          <a href="laporan.html?type=keuangan" class="submenu-link">Laporan Keuangan</a>
-          <a href="laporan.html?type=kepuasan" class="submenu-link">Survei Kepuasan</a>
-        </div>
+        </a>
       </div>
 
       <!-- Pengaturan -->
@@ -427,10 +421,8 @@
     <!-- Visit Chart -->
     <div class="card">
       <h3>📈 Grafik Kunjungan Pasien (30 Hari Terakhir)</h3>
-      <div class="chart-placeholder">
-        <p style="font-size: 3rem; margin: 0;">📊</p>
-        <p style="margin: 1rem 0;">Line Chart - Kunjungan Harian</p>
-        <p style="font-size: 0.9rem;">[Akan diisi dengan Chart.js atau library grafik lainnya]</p>
+      <div style="padding: 1rem;">
+        <canvas id="visitChart" style="max-height: 400px;"></canvas>
       </div>
       <table>
         <thead>
@@ -479,10 +471,8 @@
     <div class="card">
       <h3>🏥 Distribusi Kunjungan per Poli</h3>
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
-        <div class="chart-placeholder">
-          <p style="font-size: 3rem; margin: 0;">🍩</p>
-          <p style="margin: 1rem 0;">Pie Chart - Distribusi Poli</p>
-          <p style="font-size: 0.9rem;">[Chart Placeholder]</p>
+        <div style="padding: 1rem;">
+          <canvas id="poliChart"></canvas>
         </div>
         <div>
           <table>
@@ -848,6 +838,130 @@
     function exportExcel() {
       alert('📊 Exporting laporan ke Excel...\n\nFile akan diunduh otomatis.');
     }
+
+    // Initialize Charts
+    window.addEventListener('load', function() {
+      // Grafik Kunjungan Pasien (Line Chart)
+      const visitCtx = document.getElementById('visitChart');
+      if (visitCtx) {
+        new Chart(visitCtx, {
+          type: 'line',
+          data: {
+            labels: Array.from({length: 30}, (_, i) => (i + 1) + ' Nov'),
+            datasets: [{
+              label: 'Kunjungan Pasien',
+              data: [28, 32, 35, 29, 42, 38, 45, 31, 36, 40, 33, 37, 41, 35, 38, 44, 36, 39, 42, 37, 40, 43, 38, 41, 45, 39, 42, 46, 40, 43],
+              borderColor: '#00796b',
+              backgroundColor: 'rgba(0, 121, 107, 0.1)',
+              tension: 0.4,
+              fill: true,
+              pointBackgroundColor: '#00796b',
+              pointBorderColor: '#fff',
+              pointBorderWidth: 2,
+              pointRadius: 4,
+              pointHoverRadius: 6
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+              legend: {
+                display: true,
+                position: 'top'
+              },
+              tooltip: {
+                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                padding: 12,
+                titleFont: { size: 14 },
+                bodyFont: { size: 13 },
+                callbacks: {
+                  label: function(context) {
+                    return 'Pasien: ' + context.parsed.y + ' orang';
+                  }
+                }
+              }
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                ticks: {
+                  stepSize: 10,
+                  font: { size: 11 }
+                },
+                grid: {
+                  color: 'rgba(0, 0, 0, 0.05)'
+                }
+              },
+              x: {
+                ticks: {
+                  font: { size: 10 },
+                  maxRotation: 45,
+                  minRotation: 45
+                },
+                grid: {
+                  display: false
+                }
+              }
+            }
+          }
+        });
+      }
+
+      // Grafik Distribusi Poli (Doughnut Chart)
+      const poliCtx = document.getElementById('poliChart');
+      if (poliCtx) {
+        new Chart(poliCtx, {
+          type: 'doughnut',
+          data: {
+            labels: ['Poli Umum', 'Poli Gigi', 'Poli Anak', 'Poli Kandungan', 'Lainnya'],
+            datasets: [{
+              data: [561, 312, 224, 124, 26],
+              backgroundColor: [
+                '#00796b',
+                '#1976d2',
+                '#f57c00',
+                '#7b1fa2',
+                '#c62828'
+              ],
+              borderWidth: 3,
+              borderColor: '#fff',
+              hoverOffset: 15
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+              legend: {
+                position: 'bottom',
+                labels: {
+                  padding: 15,
+                  font: { size: 12 },
+                  usePointStyle: true,
+                  pointStyle: 'circle'
+                }
+              },
+              tooltip: {
+                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                padding: 12,
+                titleFont: { size: 14 },
+                bodyFont: { size: 13 },
+                callbacks: {
+                  label: function(context) {
+                    const label = context.label || '';
+                    const value = context.parsed || 0;
+                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                    const percentage = ((value / total) * 100).toFixed(1);
+                    return label + ': ' + value + ' (' + percentage + '%)';
+                  }
+                }
+              }
+            }
+          }
+        });
+      }
+    });
   </script>
   <script src="../js/header-common.js"></script>
 </body>
