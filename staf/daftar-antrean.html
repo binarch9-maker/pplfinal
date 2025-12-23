@@ -84,11 +84,8 @@
 
     .main-content {
       margin-left: 260px;
-      padding-left: 0;
       min-height: 100vh;
       background: #f5f7fa;
-      max-width: calc(100vw - 260px);
-      overflow-x: hidden;
     }
 
     header {
@@ -97,13 +94,11 @@
       z-index: 999;
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
       background: #fff;
-      width: 100%;
     }
 
     main {
       padding: 2rem;
-      width: 100%;
-      box-sizing: border-box;
+      max-width: calc(100vw - 260px - 4rem);
     }
 
     /* Tab Styles */
