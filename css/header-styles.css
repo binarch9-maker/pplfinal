@@ -45,7 +45,8 @@
   display: none;
   z-index: 1000;
 }
-.notification-dropdown.show {
+.notification-dropdown.show,
+.notification-dropdown.active {
   display: block;
 }
 .notification-header {
@@ -213,7 +214,8 @@
   z-index: 1000;
   overflow: hidden;
 }
-.user-dropdown.show {
+.user-dropdown.show,
+.user-dropdown.active {
   display: block;
 }
 .user-dropdown-item {
