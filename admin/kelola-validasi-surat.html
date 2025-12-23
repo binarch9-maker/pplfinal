@@ -579,17 +579,187 @@
           </div>
         </div>
 
-        <!-- Other tabs similar structure... -->
+        <!-- Tab: Surat Sakit -->
         <div id="tab-sakit" class="tab-content">
-          <p style="text-align: center; padding: 2rem; color: #666;">Tab Surat Sakit - Filter khusus surat sakit</p>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <h3>🤒 Surat Sakit Tervalidasi</h3>
+            <div>
+              <button class="btn btn-success">📥 Export Excel</button>
+              <button class="btn btn-primary" onclick="window.print()">🖨️ Cetak</button>
+            </div>
+          </div>
+
+          <div style="overflow-x: auto;">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>No. Surat</th>
+                  <th>Nama Pasien</th>
+                  <th>Tanggal Terbit</th>
+                  <th>Validator</th>
+                  <th>Status</th>
+                  <th style="width: 200px;">Aksi</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>SK-2025-045</strong></td>
+                  <td>Budi Santoso<br><small style="color: #666;">RM-2024-001234</small></td>
+                  <td>23 Des 2025<br><small style="color: #666;">10:30 WIB</small></td>
+                  <td>dr. Ahmad Fauzi<br><small style="color: #666;">Dokter</small></td>
+                  <td><span class="badge badge-success">Tervalidasi</span></td>
+                  <td>
+                    <button class="btn btn-sm btn-primary" onclick="previewSurat('SK-2025-045', 'sakit')">👁️ Preview</button>
+                    <button class="btn btn-sm btn-success" onclick="downloadSurat('SK-2025-045')">📥 Download</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>SK-2025-044</strong></td>
+                  <td>Dewi Lestari<br><small style="color: #666;">RM-2024-001240</small></td>
+                  <td>22 Des 2025<br><small style="color: #666;">14:20 WIB</small></td>
+                  <td>dr. Ahmad Fauzi<br><small style="color: #666;">Dokter</small></td>
+                  <td><span class="badge badge-success">Tervalidasi</span></td>
+                  <td>
+                    <button class="btn btn-sm btn-primary" onclick="previewSurat('SK-2025-044', 'sakit')">👁️ Preview</button>
+                    <button class="btn btn-sm btn-success" onclick="downloadSurat('SK-2025-044')">📥 Download</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>SK-2025-043</strong></td>
+                  <td>Rina Wati<br><small style="color: #666;">RM-2024-001238</small></td>
+                  <td>21 Des 2025<br><small style="color: #666;">09:15 WIB</small></td>
+                  <td>dr. Ahmad Fauzi<br><small style="color: #666;">Dokter</small></td>
+                  <td><span class="badge badge-success">Tervalidasi</span></td>
+                  <td>
+                    <button class="btn btn-sm btn-primary" onclick="previewSurat('SK-2025-043', 'sakit')">👁️ Preview</button>
+                    <button class="btn btn-sm btn-success" onclick="downloadSurat('SK-2025-043')">📥 Download</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
 
+        <!-- Tab: Surat Sehat -->
         <div id="tab-sehat" class="tab-content">
-          <p style="text-align: center; padding: 2rem; color: #666;">Tab Surat Sehat - Filter khusus surat sehat</p>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <h3>✅ Surat Sehat Tervalidasi</h3>
+            <div>
+              <button class="btn btn-success">📥 Export Excel</button>
+              <button class="btn btn-primary" onclick="window.print()">🖨️ Cetak</button>
+            </div>
+          </div>
+
+          <div style="overflow-x: auto;">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>No. Surat</th>
+                  <th>Nama Pasien</th>
+                  <th>Tanggal Terbit</th>
+                  <th>Validator</th>
+                  <th>Status</th>
+                  <th style="width: 200px;">Aksi</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>SH-2025-032</strong></td>
+                  <td>Siti Aminah<br><small style="color: #666;">RM-2024-001235</small></td>
+                  <td>23 Des 2025<br><small style="color: #666;">09:15 WIB</small></td>
+                  <td>dr. Sarah Wijaya<br><small style="color: #666;">Dokter</small></td>
+                  <td><span class="badge badge-success">Tervalidasi</span></td>
+                  <td>
+                    <button class="btn btn-sm btn-primary" onclick="previewSurat('SH-2025-032', 'sehat')">👁️ Preview</button>
+                    <button class="btn btn-sm btn-success" onclick="downloadSurat('SH-2025-032')">📥 Download</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>SH-2025-031</strong></td>
+                  <td>Eko Prasetyo<br><small style="color: #666;">RM-2024-001241</small></td>
+                  <td>22 Des 2025<br><small style="color: #666;">11:50 WIB</small></td>
+                  <td>dr. Sarah Wijaya<br><small style="color: #666;">Dokter</small></td>
+                  <td><span class="badge badge-success">Tervalidasi</span></td>
+                  <td>
+                    <button class="btn btn-sm btn-primary" onclick="previewSurat('SH-2025-031', 'sehat')">👁️ Preview</button>
+                    <button class="btn btn-sm btn-success" onclick="downloadSurat('SH-2025-031')">📥 Download</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>SH-2025-030</strong></td>
+                  <td>Andi Pratama<br><small style="color: #666;">RM-2024-001239</small></td>
+                  <td>21 Des 2025<br><small style="color: #666;">13:30 WIB</small></td>
+                  <td>dr. Sarah Wijaya<br><small style="color: #666;">Dokter</small></td>
+                  <td><span class="badge badge-success">Tervalidasi</span></td>
+                  <td>
+                    <button class="btn btn-sm btn-primary" onclick="previewSurat('SH-2025-030', 'sehat')">👁️ Preview</button>
+                    <button class="btn btn-sm btn-success" onclick="downloadSurat('SH-2025-030')">📥 Download</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
 
+        <!-- Tab: Surat Rujukan -->
         <div id="tab-rujukan" class="tab-content">
-          <p style="text-align: center; padding: 2rem; color: #666;">Tab Surat Rujukan - Filter khusus surat rujukan</p>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <h3>🏥 Surat Rujukan Tervalidasi</h3>
+            <div>
+              <button class="btn btn-success">📥 Export Excel</button>
+              <button class="btn btn-primary" onclick="window.print()">🖨️ Cetak</button>
+            </div>
+          </div>
+
+          <div style="overflow-x: auto;">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>No. Surat</th>
+                  <th>Nama Pasien</th>
+                  <th>Tanggal Terbit</th>
+                  <th>Validator</th>
+                  <th>Status</th>
+                  <th style="width: 200px;">Aksi</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>SR-2025-018</strong></td>
+                  <td>Ahmad Rifai<br><small style="color: #666;">RM-2024-001236</small></td>
+                  <td>22 Des 2025<br><small style="color: #666;">15:45 WIB</small></td>
+                  <td>Staf Medis<br><small style="color: #666;">Tenaga Medis</small></td>
+                  <td><span class="badge badge-success">Tervalidasi</span></td>
+                  <td>
+                    <button class="btn btn-sm btn-primary" onclick="previewSurat('SR-2025-018', 'rujukan')">👁️ Preview</button>
+                    <button class="btn btn-sm btn-success" onclick="downloadSurat('SR-2025-018')">📥 Download</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>SR-2025-017</strong></td>
+                  <td>Fatimah Zahra<br><small style="color: #666;">RM-2024-001237</small></td>
+                  <td>21 Des 2025<br><small style="color: #666;">16:20 WIB</small></td>
+                  <td>Staf Medis<br><small style="color: #666;">Tenaga Medis</small></td>
+                  <td><span class="badge badge-success">Tervalidasi</span></td>
+                  <td>
+                    <button class="btn btn-sm btn-primary" onclick="previewSurat('SR-2025-017', 'rujukan')">👁️ Preview</button>
+                    <button class="btn btn-sm btn-success" onclick="downloadSurat('SR-2025-017')">📥 Download</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>SR-2025-016</strong></td>
+                  <td>Bambang Setiawan<br><small style="color: #666;">RM-2024-001242</small></td>
+                  <td>20 Des 2025<br><small style="color: #666;">10:45 WIB</small></td>
+                  <td>Staf Medis<br><small style="color: #666;">Tenaga Medis</small></td>
+                  <td><span class="badge badge-success">Tervalidasi</span></td>
+                  <td>
+                    <button class="btn btn-sm btn-primary" onclick="previewSurat('SR-2025-016', 'rujukan')">👁️ Preview</button>
+                    <button class="btn btn-sm btn-success" onclick="downloadSurat('SR-2025-016')">📥 Download</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
 
         <!-- Pagination -->
